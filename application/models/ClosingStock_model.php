@@ -35,6 +35,13 @@
 			$view = $this->db->query('SELECT * FROM ClosingStock WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date='.$a.$Date.$a.' ORDER BY id DESC limit 1');
 	    return $view->result();
 		}
+
+		function GetClosingStockByStockpileandDateGrade($Stockpile,$Date){
+				$a="'";
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date='.$a.$Date.$a.' ORDER BY id DESC limit 1');
+	    return $view->result();
+		}
+		
 		
 
 		function GetClosingStockByIDForDel($id){
@@ -80,6 +87,10 @@
       $this->db->insert('ClosingStock',$data);
     }
 
+    function InputClosingStockGrade($data){
+      $this->db->insert('closingstockgrade',$data);
+    }
+
     function DeleteClosingStock($id){
 			$this->db->delete('ClosingStock',array('id'=>$id));
 		}
@@ -101,6 +112,12 @@
 			$this->db->where('Stockpile', $Stockpile);
 			$this->db->where('Date', $Date);
 			$this->db->update('ClosingStock',$Closing);
+		}
+
+	function UpdateClosingStockByDateGrade($Closing,$Stockpile,$Date){
+			$this->db->where('Stockpile', $Stockpile);
+			$this->db->where('Date', $Date);
+			$this->db->update('closingstockgrade',$Closing);
 		}
 
 	function UpdateClosingStockByStockpile($Closing,$Stockpile){
@@ -175,6 +192,14 @@
 																WHERE om.Stockpile = s.id');
 	    return $view->result();
 	}
+
+	function GetGrade($Stockpile,$Date){
+		$a="'";
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE stockpile ='.$a.$Stockpile.$a.' AND date ='.$a.$Date.$a);
+	    return $view->result();
+	}
+
+
 
 }
 

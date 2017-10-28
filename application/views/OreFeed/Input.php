@@ -8,7 +8,7 @@
 		<!-- END HEADLIB -->
 
 	</head>
-	<body class="menubar-hoverable header-fixed ">
+	<body onload="StockpileChange()" class="menubar-hoverable header-fixed ">
 
 		<!-- BEGIN HEADER-->
 		<?php $this->load->view('lib/Header'); ?>
@@ -29,7 +29,7 @@
 
 						<!-- BEGIN BASIC ELEMENTS -->
 						<!-- BEGIN TITLE -->
-            <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Orefeed/Input/InputOreFeed' ?>" method="post">
+            <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Orefeed/Input/GetGrade' ?>" method="post">
   						<div class="row">
   							<div class="col-lg-6">
   								<h2 class="text-primary">Detail Orefeed</h2>
@@ -50,7 +50,7 @@
 														<div class="col-sm-10">
 															<div class="input-group date" id="demo-date">
 																<div class="input-group-content">
-																	<input type="text" class="form-control" id="Date" name="Date" autocomplete="off" onchange="StockpileChange()">
+																	<input type="text" class="form-control" id="Date" name="Date" autocomplete="off" onchange="StockpileChange()" value="<?php echo $Datedetails ?>">
 																</div>
 																<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 															</div>
@@ -62,7 +62,7 @@
 															 <select id="Stockpile1" name="Stockpile1" class="form-control" required="" onchange="StockpileChange()">
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Stockpile as $stockpile): ?>
-                                  <option value="<?php echo $stockpile->id ?>"><?php echo $stockpile->Nama ?></option>
+                                  <option value="<?php echo $stockpile->id ?>" <?php if($stockpile->id == $Stockpiledetails){echo "selected='true'";}?>><?php echo $stockpile->Nama ?></option>
                                 <?php endforeach; ?>
       												</select>
 														</div>
@@ -81,14 +81,13 @@
 														</div>
 													</div>
 													<div class="col-md-6 col-sm-6">
-														<label for="Aggt" class="col-sm-4 control-label">Shift</label>
-														<div class="col-sm-8">
-															<select id="Shift" name="Shift" class="form-control">
-																<option value="AM">AM</option>
-																<option value="PM">PM</option>
-																<option value="DAY">DAY</option>
-															</select>
-													</div>
+														<div class="col-md-4 col-sm-4">
+														</div>
+														<div class="col-md-8 col-sm-8">
+															 <button type="submit" class="btn ink-reaction btn-raised btn-primary" id="button" name="button" onclick="SetValueGrade()"><i class="md md-save"></i>Grade</button>
+														</div>
+
+														
 												</div>
 													
 												</div>
@@ -100,57 +99,78 @@
   														<textarea rows="2" id="Note" name="Note"></textarea>
   													</div>
   												</div>
+  													<div class="col-md-6 col-sm-6">
+														<label for="Aggt" class="col-sm-4 control-label">Shift</label>
+														<div class="col-sm-8">
+															<select id="Shift" name="Shift" class="form-control">
+																<option value="AM">AM</option>
+																<option value="PM">PM</option>
+																<option value="DAY">DAY</option>
+															</select>
+													</div>
 												</div>
+												</div>
+				
 											<br>
 											<br>
-										
-											
-											
 											</div>
   									</div><!--end .card-body -->
   								</div><!--end .card -->
   							</div><!--end .col -->
+  						</form>
+
+  						 <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Orefeed/Input/InputOreFeed' ?>" method="post">
   							<div class="col-md-7 col-sm-7">
   								<div class="card">
   									<div class="card-body">
   										<div class="form-horizontal">
 												<div class="form-group">
+													
 													<div class="col-md-3 col-sm-3">
 														<label for="Au" class="col-sm-2 control-label">Au</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="Au" name="Au" readonly="" autocomplete="off">
+															<?php foreach ($Grade as $grade): ?>
+															<input type="text" class="form-control" id="Au" name="Au" readonly="" autocomplete="off" value="<?php echo $grade->Au ?>">
+															<?php endforeach; ?>
 														</div>
 													</div>
 													<div class="col-md-3 col-sm-3">
 														<label for="Ag" class="col-sm-4 control-label">Ag</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="Ag" name="Ag" readonly="" autocomplete="off">
+															<?php foreach ($Grade as $grade): ?>
+															<input type="text" class="form-control" id="Ag" name="Ag" readonly="" autocomplete="off" value="<?php echo $grade->Ag ?>">
+															<?php endforeach; ?>
 														</div>
 													</div>
 													<div class="col-md-3 col-sm-3">
 														<label for="Ag" class="col-sm-4 control-label">AuEq75</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="AuEq75" name="AuEq75" readonly="" autocomplete="off">
+															<?php foreach ($Grade as $grade): ?>
+															<input type="text" class="form-control" id="AuEq75" name="AuEq75" readonly="" autocomplete="off" value="<?php echo $grade->AuEq75 ?>">
+															<?php endforeach; ?>
 														</div>
 													</div>
 													<div class="col-md-3 col-sm-3">
 														<label for="Ag" class="col-sm-4 control-label">Class</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="Class" name="Class" readonly="" autocomplete="off">
+															<?php foreach ($Grade as $grade): ?>
+															<input type="text" class="form-control" id="Class" name="Class" readonly="" autocomplete="off" value="<?php echo $grade->Class ?>" >
+															<?php endforeach; ?>
 														</div>
 													</div>
+													
 												</div>
 												<div class="form-group">
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Tonnes</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="DryTonBM" name="DryTonBM" readonly="" autocomplete="off">
+															<input type="text" class="form-control" id="DryTonBM" name="DryTonBM" readonly="" autocomplete="off" >
 														</div>
 													</div>
 													<div class="col-md-6 col-sm-6">
 														<label for="Density" class="col-sm-4 control-label">Density</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="Density" name="Density" readonly="" autocomplete="off">
+															<input type="text" class="form-control" id="Density" name="Density" readonly="" autocomplete="off" >
 														</div>
 													</div>
 												</div>
@@ -164,7 +184,7 @@
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Volume</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="Volume" name="Volume" readonly="" autocomplete="off">
+															<input type="text" class="form-control" id="Volume" name="Volume" readonly="" autocomplete="off" >
 														</div>
 													</div>
 													
@@ -206,6 +226,7 @@
 												</div>
 											
   										</div>
+  										<br>
   									</div><!--end .card-body -->
   								</div><!--end .card -->
   							</div><!--end .col -->
@@ -450,15 +471,15 @@
 
       function StockpileChange() {
        	var StockpileVar = document.getElementById("Stockpile1");
-        var Au = document.getElementById("Au");
-        var Ag = document.getElementById("Ag");
+        //var Au = document.getElementById("Au");
+        //var Ag = document.getElementById("Ag");
         var DryTonBM = document.getElementById("DryTonBM");
 		var Density = document.getElementById("Density");
 		var Volume = document.getElementById("Volume");
         var Bucket = document.getElementById("Bucket");
         var Tgl = document.getElementById("Date");
-        var AuEq75 = document.getElementById("AuEq75");
-        var Class = document.getElementById("Class");
+        //var AuEq75 = document.getElementById("AuEq75");
+        //var Class = document.getElementById("Class");
         
         var Dates = "";
         var vAu = 0;
@@ -486,24 +507,11 @@
 
           if ("<?php echo $tostockpile->Stockpile ?>" == StockpileVar.value) {
 
-				Au.value = "<?php echo $tostockpile->Au ?>";
-	   			Ag.value = "<?php echo $tostockpile->Ag ?>";
-	   			AuEq75.value = "<?php echo $tostockpile->AuEq75 ?>";
-	   			Class.value = "<?php echo $tostockpile->Class ?>";
+				//Au.value = "";
+	   			//Ag.value = "";
+	   			//AuEq75.value = "<?php //echo $tostockpile->AuEq75 ?>";
+	   			//Class.value = "<?php //echo $tostockpile->Class ?>";
 
-	   			// vAu = "<?php //echo $tostockpile->Au ?>";
-	   			// vAg = "<?php //echo $tostockpile->Ag ?>";
-
-	      //      	vTonnes = "<?php //echo $tostockpile->Tonnes ?>";
-	      //      	vDensity = "<?php //echo $tostockpile->Density ?>";
-	      //      	vVolume = "<?php //echo $tostockpile->Volume ?>";
-
-	      //      	totAu = ((parseFloat(totAu) + parseFloat(vTonnes * vAu)).toFixed(2));
-	      //      	totAg = ((parseInt(totAg) + parseInt(vTonnes * vAg)).toFixed(2));
-
-	      //      	totTonnes = ((parseInt(totTonnes) + parseInt(vTonnes)).toFixed(2));
-	      //      	totDensity = ((parseFloat(totDensity) + parseFloat(vDensity)).toFixed(2));
-	      //      	totVolume = ((parseFloat(totVolume) + parseFloat(vVolume)).toFixed(2));
 	
 				DryTonBM.value = parseFloat("<?php echo $tostockpile->Tonnes ?>").toFixed(2);
 				Density.value = parseFloat("<?php echo $tostockpile->Density ?>").toFixed(2);
@@ -511,24 +519,15 @@
 				Volume.value = parseFloat(vVolume).toFixed(2) ;
 				return;
           }else {
-            Au.value = "";
-            Ag.value = "";
+            //Au.value = "";
+            //Ag.value = "";
             DryTonBM.value = "";
             Density.value = "";
             Bucket.value = "";
             Volume.value ="";
-            // totAu = "";
-            // totAg = "";
-            // totTonnes = "";
-            // totDensity = "";
-            // totVolume = "";
+
           }
 
-          // Au.value = (parseFloat(totAu)/totTonnes).toFixed(2);
-          // Ag.value = (parseFloat(totAg)/totTonnes).toFixed(2);
-          // DryTonBM.value = totTonnes;
-          // Density.value = totDensity;
-          // Volume.value = totVolume;
 
         <?php endforeach; ?>
       }
@@ -666,6 +665,31 @@
 			  var sanitized = $(this).val().replace(/[^0-9^.]/g, '');
 			  $(this).val(sanitized);
 			});
+
+
+        function SetValueGrade() {
+        var masterAuEq75 = document.getElementById("AuEq75");
+        var masterClass = document.getElementById("Class");
+        var masterTonnes = document.getElementById("Tonnes");
+        var masterVolume = document.getElementById("Volume");
+        var masterDensity = document.getElementById("Density");
+
+        var valueAuEq75 = document.getElementById("valueAuEq75");
+        var valueClass = document.getElementById("valueClass");
+        var valueTonnes = document.getElementById("valueTonnes");
+        var valueDensity = document.getElementById("valueDensity");
+        var valueVolume = document.getElementById("valueVolume");
+
+
+        valueAuEq75.value = masterAuEq75.value;
+        valueClass.value = masterClass.value;
+        valueTonnes.value = masterTonnes.value;
+        valueDensity.value = masterDensity.value;
+        valueVolume.value = masterDensity.value;
+        
+      }
+
+
 </script>
 		<!-- END JAVASCRIPT -->
 
