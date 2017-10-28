@@ -196,6 +196,72 @@ class Table extends CI_Controller {
 
 			$this->Closingstock_model->UpdateClosingStockByDate($Closing,$StockpileClosingstock,$date);
 
+
+			//Update Closing Stock Grade
+			$Closingstock = $this->Closingstock_model->GetClosingStockByStockpileandDateGrade($Stockpile1,$date);
+
+				$AuClosingstock = 0;
+				$AgClosingstock = 0;
+				$TonnesClosingstock = 0;
+				$VolumeClosingstock = 0;
+				$DensityClosingstock = 0;
+
+			foreach ($Closingstock as $closingstock) {
+				$AuClosingstock = $closingstock->Au;
+				$AgClosingstock = $closingstock->Ag;
+				$TonnesClosingstock = $closingstock->Tonnes;
+				//$VolumeClosingstock = $closingstock->Volume;
+				//$DensityClosingstock = $closingstock->Density;
+				$StockpileClosingstock = $closingstock->Stockpile;
+			}
+
+			if($TonnesClosingstock == 0){
+				$TonnesClosingstockUpdate = 0;
+				$AgStockpileUpdate = 0;
+				$AuClosingstockUpdate = 0;
+				//$VolumeClosingstockUpdate = 0;
+				//$DensityClosingstockUpdate = 0;
+				$AuEq75ClosingstockUpdate = 0;
+			}
+			else{
+
+			$TonnesClosingstockUpdate = $TonnesClosingstock-$Tonnes;
+			$AuClosingstockUpdate = round(((($AuClosingstock*$TonnesClosingstock)-($Au*$Tonnes))/$TonnesClosingstockUpdate),2);
+			$AgClosingstockUpdate = round(((($AgClosingstock*$TonnesClosingstock)-($Ag*$Tonnes))/$TonnesClosingstockUpdate),2);
+			//$DensityClosingstockUpdate=$DensityClosingstock;
+			//$VolumeClosingstockUpdate = $TonnesClosingstockUpdate/$DensityClosingstockUpdate;
+			$AuEq75ClosingstockUpdate = round($AuClosingstockUpdate+($AgClosingstockUpdate/75),2);
+
+			if (0.65 <= $AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate < 2.00){
+					$Class="Marginal";
+				}
+				elseif(2<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<4.00){
+					$Class="Medium Grade";
+				}
+				elseif(4<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<6.00){
+					$Class="High Grade";
+				}
+				else{
+					$Class="SHG";
+				}
+
+			}
+
+			$Closing = array(
+				//'Volume' => $VolumeClosingstockUpdate,
+				'Au' => $AuClosingstockUpdate,
+				'Ag' => $AgClosingstockUpdate,
+				'AuEq75' => $AuEq75ClosingstockUpdate,
+				'Class' =>$Class,
+				'Tonnes' => $TonnesClosingstockUpdate,
+				//'Density' => $DensityClosingstockUpdate,
+				'Stockpile' => $StockpileClosingstock,
+				'Date' => $date,
+			);
+
+			$this->Closingstock_model->UpdateClosingStockByDateGrade($Closing,$StockpileClosingstock,$date);
+
+
 			$this->OreInventory_model->DeleteOreInventory($id);
 			redirect('OreInventory/Table');
 		}

@@ -133,10 +133,11 @@ class Table extends CI_Controller {
 				$AuFeed = $orefeed->Au;
 				$AgFeed = $orefeed->Ag;
 				$DensityFeed = $orefeed->Density;
+				$Date = $orefeed->Date;
 				}
 
 
-
+				//Update Closng Stock
 				$Closingstock = $this->Closingstock_model->GetClosingStockTonnesStockpileNew($Stockpile);
 				foreach ($Closingstock as $key) {
 					$IdClosingstock = $key->id;
@@ -185,8 +186,59 @@ class Table extends CI_Controller {
 
 			$this->Closingstock_model->UpdateClosingStock($ClosingstockUpdate,$IdClosingstock);
 
-		
 
+
+			//Update Closng Stock Grade
+				$Closingstock = $this->Closingstock_model->GetClosingStockByStockpileandDateGrade($Stockpile,$Date);
+				foreach ($Closingstock as $key) {
+					$IdClosingstock = $key->id;
+					$TonnesClosingstock = $key->Tonnes;
+					$VolumeClosingstock = $key->Volume;
+					$AuClosingstock = $key->Au;
+					$AgClosingstock = $key->Ag;
+					$DensityClosingstock = $key->Density;
+					$Tonnes = $key->Tonnes;
+				}
+
+			
+
+
+				$UpdateTonnes = $TonnesClosingstock+$Tonnestocrush;
+				$UpdateAu = round(((($AuFeed*$Tonnestocrush)+($AuClosingstock*$Tonnes))/$UpdateTonnes),2);
+				$UpdateAg = round(((($AgFeed*$Tonnestocrush)+($AgClosingstock*$Tonnes))/$UpdateTonnes),2);
+				$UpdateAuEq75 = round((($UpdateAu)+($UpdateAg/75)),2);
+				//$UpdateDensity = round(((($DensityClosingstock*$TonnesClosingstock)+($DensityFeed*$Tonnestocrush))/$UpdateTonnes),2);
+				//$UpdateVolume = round(($UpdateTonnes/$UpdateDensity),2);
+
+				if (0.65 <= $UpdateAuEq75 && $UpdateAuEq75 < 2.00){
+					$Class="Marginal";
+				}
+				elseif(2<=$UpdateAuEq75 && $UpdateAuEq75<4.00){
+					$Class="Medium Grade";
+				}
+				elseif(4<=$UpdateAuEq75 && $UpdateAuEq75<6.00){
+					$Class="High Grade";
+				}
+				else{
+					$Class="SHG";
+				}
+			
+			$ClosingstockUpdate = array(
+				'Tonnes'=>$UpdateTonnes,
+				//'Volume'=>$UpdateVolume,
+				//'Density'=>$UpdateDensity,
+				'Au'=>$UpdateAu,
+				'Ag'=>$UpdateAg,
+				'AuEq75'=>$UpdateAuEq75,
+				'Class'=>$Class,
+				);
+
+			
+
+			$this->Closingstock_model->UpdateClosingStockByDateGrade($ClosingstockUpdate,$IdClosingstock);
+
+		
+			//Update To Stockpile
 			$Stockpile = $this->Stockpile_model->GetStockpileByStockpile($Stockpile);
 			foreach ($Stockpile as $stockpile) {
 				$AuStockpile = $stockpile->Au;

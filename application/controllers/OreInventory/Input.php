@@ -354,6 +354,52 @@ class Input extends CI_Controller {
 				$this->ClosingStock_model->InputClosingStock($Closing);
 
 			}
+
+
+			//Check for Closing Stock Grade
+			$Temp = $this->ClosingStock_model->GetClosingStockByStockpileandDateGrade($Stockpile,$Date);
+			foreach ($Temp as $temp) {
+				$Tonnes = $temp->Tonnes + $OreminedTonnes;
+				//$Density = (($temp->Density*$temp->Tonnes)+($Density*$OreminedTonnes))/$Tonnes;
+				$v_Au = (($temp->Au*$temp->Tonnes)+($Au*$OreminedTonnes))/$Tonnes;
+				$v_Ag = (($temp->Ag*$temp->Tonnes)+($Ag*$OreminedTonnes))/$Tonnes;
+				$AuEq75 = round($Au+($Ag/75),2);
+				if (0.65<=$AuEq75 && $AuEq75<2.00){
+					$Class="Marginal";
+				}
+				elseif(2<=$AuEq75 && $AuEq75<4.00){
+					$Class="Medium Grade";
+				}
+				elseif(4<=$AuEq75 && $AuEq75<6.00){
+					$Class="High Grade";
+				}
+				else{
+					$Class="SHG";
+				}
+				//$Volume = $Tonnes / $Density;
+			}
+
+			$Closing = array(
+				//'Volume' => $Volume,
+				'Au' => $v_Au,
+				'Ag' => $v_Ag,
+				'AuEq75' => round($AuEq75,2),
+				'Class' =>$Class,
+				'Tonnes' => $Tonnes,
+				//'Density' => $Density,
+				'Stockpile' => $this->input->post('Stockpile'),
+				'Date' => $Date,
+				//'Status' => "Pending",
+			);
+
+			if($Temp){
+				$this->ClosingStock_model->UpdateClosingStockByDateGrade($Closing,$Stockpile,$Date);
+				
+			}
+			else{
+				$this->ClosingStock_model->InputClosingStockGrade($Closing);
+
+			}
 			
 			redirect('OreInventory/Table');
 
