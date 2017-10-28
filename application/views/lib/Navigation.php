@@ -66,7 +66,7 @@
             <li><a href="<?php echo base_url().'OreInventory/Input' ;?>"  class="active"><span class="title">Input Oreline Oremined</span></a></li>
             <?php }
             else { ?>
-            <li><a href="<?php echo base_url().'OreInventory/Input' ;?>" ><span class="title">Input Ore Inventory</span></a></li>
+            <li><a href="<?php echo base_url().'OreInventory/Input' ;?>" ><span class="title">Input Oreline Oremined</span></a></li>
           <?php } ?>
           <?php if($main == "OreInventory"){?>
             <li><a href="<?php echo base_url().'OreInventory/Table' ;?>"  class="active"><span class="title">Record</span></a></li>
