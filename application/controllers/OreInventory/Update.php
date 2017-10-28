@@ -375,6 +375,76 @@ class Update extends CI_Controller {
 
 			$this->Closingstock_model->UpdateClosingStockByDate($UpdateClosingstock,$StockpileClosingstock,$date);
 
+
+			//Update Closing Stock Grade
+			$Closingstock = $this->Closingstock_model->GetClosingStockByStockpileandDateGrade($Stockpile1,$date);
+			foreach ($Closingstock as $closingstock) {
+				$AuClosingstock = $closingstock->Au;
+				$AgClosingstock = $closingstock->Ag;
+				$TonnesClosingstock = $closingstock->Tonnes;
+				//$VolumeClosingstock = $closingstock->Volume;
+				//$DensityClosingstock = $closingstock->Density;
+				$StockpileClosingstock = $closingstock->Stockpile;
+			}
+
+			$TonnesUpdate = $this->input->post('DryTonFF');
+			$AchievementUpdate = $this->input->post('Achievement');
+			$StatusUpdate = $this->input->post('Status');
+			$DensityUpdate = $this->input->post('Density');
+
+			if ($Value == "Final Figure"){
+					$Au = $this->input->post('Augt');
+					$Ag = $this->input->post('Aggt');
+					$AuEq75 = $this->input->post('AuEq75gr');
+				}
+			else{
+
+					$Au = $this->input->post('Au');
+					$Ag = $this->input->post('Ag');
+					$AuEq75 = $this->input->post('AuEq75');
+				}
+
+			
+			$TonnesClosingstockNew = $TonnesClosingstock+$TonnesUpdate;
+			$AuClosingstockNew = round(((($AuClosingstock*$TonnesClosingstock)+($AuUpdate*$TonnesUpdate))/$TonnesClosingstockNew),2);
+			$AgClosingstockNew = round(((($AgClosingstock*$TonnesClosingstock)+($AgUpdate*$TonnesUpdate))/$TonnesClosingstockNew),2);
+			$AuEq75New = round(($AuClosingstockNew+($AgClosingstockNew/75)),2);
+
+			if (0.65 <= $AuEq75New && $AuEq75New < 2.00){
+					$ClassNew="Marginal";
+				}
+				elseif(2<=$AuEq75New && $AuEq75New<4.00){
+					$ClassNew="Medium Grade";
+				}
+				elseif(4<=$AuEq75New && $AuEq75New<6.00){
+					$ClassNew="High Grade";
+				}
+				else{
+					$ClassNew="SHG";
+				}
+
+			$StockpileNew = $this->input->post('Stockpile');
+			//$DensityNew = round(((($DensityClosingstock*$TonnesClosingstock)+($DensityUpdate*$TonnesUpdate))/$TonnesClosingstockNew),2);
+			//$VolumeNew = round(($TonnesClosingstockNew/$DensityNew),2);
+			$StatusNew = $this->input->post('Status');
+
+			$UpdateClosingstock = array (
+				
+				'Date' => $date,
+				'Stockpile' => $StockpileNew,
+				//'Volume' => $VolumeNew,
+				//'Density' => $DensityNew,
+				'Tonnes' =>$TonnesClosingstockNew,
+				'Au' => $AuClosingstockNew,
+				'Ag' => $AgClosingstockNew,
+				'AuEq75' => $AuEq75New,
+				'Class' => $ClassNew,
+				'Status' => $StatusNew,
+				);
+
+
+			$this->Closingstock_model->UpdateClosingStockByDateGrade($UpdateClosingstock,$StockpileClosingstock,$date);
+
 			redirect('OreInventory/Table');
 		}else {
 			redirect(base_url());
