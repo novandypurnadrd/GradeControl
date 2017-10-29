@@ -32,7 +32,7 @@
 
 		function GetClosingStockByStockpileandDate($Stockpile,$Date){
 				$a="'";
-			$view = $this->db->query('SELECT * FROM ClosingStock WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date='.$a.$Date.$a.' ORDER BY id DESC limit 1');
+			$view = $this->db->query('SELECT * FROM ClosingStock WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date='.$a.$Date.$a.' ORDER BY id DESC');
 	    return $view->result();
 		}
 
@@ -181,7 +181,27 @@
 		$a="'";
 			$view = $this->db->query('SELECT om.Date,om.Volume as Volume,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag, om.Density as DryTonBM,om.Density as Density, s.Nama as Stockpile, s.id as idStockpile
 																FROM  ClosingStock om, stockpile s
-																WHERE om.Stockpile = s.id AND om.Stockpile ='.$a.$stockpile.$a);
+																WHERE om.Stockpile = s.id AND om.Stockpile ='.$a.$stockpile.$a.'ORDER by Date');
+	    return $view->result();
+	}
+
+	function GetClosingStockByStockpileandDateTable($stockpile,$date){
+		$a="'";
+
+		if($stockpile == "All"){
+
+			$view = $this->db->query('SELECT om.Date,om.Volume as Volume,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag, om.Density as DryTonBM,om.Density as Density, s.Nama as Stockpile, s.id as idStockpile
+																FROM  ClosingStock om, stockpile s
+																WHERE om.Stockpile = s.id AND om.Date='.$a.$date.$a.'Order by Date');
+
+		}else{
+
+			$view = $this->db->query('SELECT om.Date,om.Volume as Volume,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag, om.Density as DryTonBM,om.Density as Density, s.Nama as Stockpile, s.id as idStockpile
+																FROM  ClosingStock om, stockpile s
+																WHERE om.Stockpile = s.id AND om.Stockpile ='.$a.$stockpile.$a.' AND Date='.$a.$date.$a.'Order by Date');
+		}
+
+		
 	    return $view->result();
 	}
 
@@ -189,7 +209,7 @@
 			$a="'";
 			$view = $this->db->query('SELECT om.Date,om.Volume as Volume,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag, om.Density as DryTonBM,om.Density as Density, s.Nama as Stockpile, s.id as idStockpile
 																FROM  ClosingStock om, stockpile s
-																WHERE om.Stockpile = s.id');
+																WHERE om.Stockpile = s.id Order by om.Date DESC');
 	    return $view->result();
 	}
 

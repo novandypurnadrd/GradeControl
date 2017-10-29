@@ -49,8 +49,21 @@
                       <div class="col-md-1">
 
                       </div>
-                      <div class="col-md-2 col-lg-2 col-xl-2">
-                        
+              
+                       <div class="col-md-4 col-lg-4 col-xl-4">
+                        <div class="form-group floating-label">
+  											
+  												<label for="Date" class="col-sm-2 control-label">Date</label>
+														<div class="col-sm-10">
+															<div class="input-group date" id="demo-date">
+																<div class="input-group-content">
+																	<input type="text" class="form-control" id="Date" name="Date" required="" autocomplete="off" value="<?php echo $date?>">
+																</div>
+																<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+															</div>
+														</div>
+
+						     </div>
                       </div>
                       <div class="col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group floating-label">
@@ -59,7 +72,7 @@
                             <label for="Aggt" class="col-sm-3 control-label">Stockpile</label>
                             <div class="col-sm-9">
                               <select id="Stockpile" name="Stockpile" class="form-control" required="">
-                                <option value="">&nbsp;</option>
+                                <option value="All">All</option>
                                 <?php foreach ($Stockpile as $stockpile): ?>
                                   <option value="<?php echo $stockpile->id ?>" <?php if($stockpile->id == $selectedstockpile){echo "selected='true'";}?> ><?php echo $stockpile->Nama ?></option>
                                 <?php endforeach; ?>

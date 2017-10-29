@@ -41,13 +41,20 @@ class Table extends CI_Controller {
 			$data['Stockpile'] = $this->Stockpile_model->getStockpile();
 			$stockpile = $this->input->post('Stockpile');
 			$data['selectedstockpile'] = $stockpile;
-			// $date = explode('/',$data['date'])[2].'-'.explode('/',$data['date'])[0].'-'.explode('/',$data['date'])[1];
-			// $selectedyear = $date;
-			// $data['tgl'] = date("d-F-Y", strtotime($this->input->post('Date')));
+			$date = explode('/',$data['date'])[2].'-'.explode('/',$data['date'])[0].'-'.explode('/',$data['date'])[1];
+			//$selectedyear = $date;
+			//$data['tgl'] = date("d-F-Y", strtotime($this->input->post('Date')));
 
-	   		//$data['selectedyear'] = $date;
+		
+
+	   		if ($date == ""){
+	   			$data['Table'] = $this->Closingstock_model->GetClosingStockByStockpileTable($stockpile);
+	   		}
+	   		else{
+	   			$data['Table'] = $this->Closingstock_model->GetClosingStockByStockpileandDateTable($stockpile,$date);
+	   		}
 	   		
-			$data['Table'] = $this->Closingstock_model->GetClosingStockByStockpileTable($stockpile);
+			
 		
 			
 			$this->load->view('Closingstock/Table', $data);

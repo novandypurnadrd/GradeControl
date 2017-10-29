@@ -1,0 +1,18 @@
+Grade Control Version 1.0.0
+
+Whats new?
+Ore Inventory Menu. Status Done. No Bug
+
+Oreline & Oremined Menu. Status Done. No Bug.
+
+Stockpile Menu. Status Done. No Bug.
+
+Ore Feed Menu. Status Done. No Bug.
+
+Closing Stock Menu. Status Done. No Bug.
+
+Other Daily Sampling Menu. Status Done. No Bug.
+
+References Menu. Status Done. No Bug.
+
+Report Menu. Status Done. No Bug.
