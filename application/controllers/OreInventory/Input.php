@@ -401,7 +401,7 @@ class Input extends CI_Controller {
 
 			}
 			
-			redirect('OreInventory/Table');
+			redirect('OreInventory/Input');
 
 		}
 		else {
