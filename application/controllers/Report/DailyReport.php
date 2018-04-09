@@ -592,6 +592,11 @@ class DailyReport extends CI_Controller {
                     $this->excel->getActiveSheet()->setCellValue('G'.$rowD, 'Auger Sample(AS)');
                 $this->excel->getActiveSheet()->getStyle('G'.$rowD)->applyFromArray($style_subheader);
 
+                $rowSampleCollected = $rowD+2;
+                    $this->excel->getActiveSheet()->setCellValue('C'.$rowSampleCollected, 'Total Sample Collected :');
+                $this->excel->getActiveSheet()->getStyle('C'.$rowSampleCollected)->applyFromArray($style_subheader);
+
+
                 $GrabSample = $this->OtherSampling_model->GetGrabSampleReport($date);
                 $TotalGS =0;
                 foreach ($GrabSample as $gs) {
@@ -622,6 +627,8 @@ class DailyReport extends CI_Controller {
                     $TotalAuger = $aug->TotalSample;
                 }
 
+                $TotalSampleAll = $TotalGS + $TotalSS + $TotalFS + $TotalAS + $TotalAuger + $TotalSample2;
+
 
 
                 $rowE = $rowD+1;
@@ -636,6 +643,11 @@ class DailyReport extends CI_Controller {
                 $this->excel->getActiveSheet()->getStyle('F'.$rowE)->applyFromArray($style_table);
                     $this->excel->getActiveSheet()->setCellValue('G'.$rowE, $TotalAuger);
                 $this->excel->getActiveSheet()->getStyle('G'.$rowE)->applyFromArray($style_table);
+
+
+
+                    $this->excel->getActiveSheet()->setCellValue('D'.$rowSampleCollected, $TotalSampleAll);
+                $this->excel->getActiveSheet()->getStyle('D'.$rowSampleCollected)->applyFromArray($style_table);
                 $rowD++;
                 }
 
@@ -673,22 +685,48 @@ class DailyReport extends CI_Controller {
                 $row5 = $row4+1;
                
                 foreach ($ListStockpile as $ls) {
+
+                   
                     $ToStockpileStatus = $this->Stockpile_model->GetStockpileByDateandStockpileReport($date,$ls->id);
+
 
                     if($ToStockpileStatus != null){
                         foreach ($ToStockpileStatus as $stockstatus) {
 
+                        $Volume = round($stockstatus->Volume,0);
+                      
+                        if($stockstatus->Volume == 0){
+                            $Volume = "-";
+                        }
+                        $Tonnes = round($stockstatus->Tonnes,0);
+
+                        if($stockstatus->Tonnes == 0){
+                            $Tonnes = "-";
+                        }
+                        $Au = round($stockstatus->Au,2);
+                        if($stockstatus->Au == 0){
+                            $Au = "-";
+                        }
+                        $Ag = round($stockstatus->Ag,2);
+                        if($stockstatus->Ag == 0){
+                            $Ag = "-";
+                        }
+                        $AuEq75 = round($stockstatus->AuEq75,2);
+                        if($stockstatus->AuEq75 == 0){
+                            $AuEq75 = "-";
+                        }
+
                         $this->excel->getActiveSheet()->setCellValue('C'.$row5, $stockstatus->Stockpile);
                 $this->excel->getActiveSheet()->getStyle('C'.$row5)->applyFromArray($style_table);
-                    $this->excel->getActiveSheet()->setCellValue('D'.$row5, round($stockstatus->Volume,0));
+                    $this->excel->getActiveSheet()->setCellValue('D'.$row5, $Volume);
                 $this->excel->getActiveSheet()->getStyle('D'.$row5)->applyFromArray($style_table);
-                    $this->excel->getActiveSheet()->setCellValue('E'.$row5, round($stockstatus->Tonnes,0));
+                    $this->excel->getActiveSheet()->setCellValue('E'.$row5, $Tonnes);
                 $this->excel->getActiveSheet()->getStyle('E'.$row5)->applyFromArray($style_table);
-                    $this->excel->getActiveSheet()->setCellValue('F'.$row5, round($stockstatus->Au,2));
+                    $this->excel->getActiveSheet()->setCellValue('F'.$row5, $Au);
                 $this->excel->getActiveSheet()->getStyle('F'.$row5)->applyFromArray($style_table);
-                    $this->excel->getActiveSheet()->setCellValue('G'.$row5, round($stockstatus->Ag,2));
+                    $this->excel->getActiveSheet()->setCellValue('G'.$row5, $Ag);
                 $this->excel->getActiveSheet()->getStyle('G'.$row5)->applyFromArray($style_table);
-                    $this->excel->getActiveSheet()->setCellValue('H'.$row5, round($stockstatus->AuEq75,2));
+                    $this->excel->getActiveSheet()->setCellValue('H'.$row5, $AuEq75);
                 $this->excel->getActiveSheet()->getStyle('H'.$row5)->applyFromArray($style_table);
                 $row5++;
                     }
@@ -789,8 +827,8 @@ class DailyReport extends CI_Controller {
 
                 foreach ($OpeningstockOrefeed as $openingorefeed) {
                     $TonnesOpenOrefeed = $TonnesOpenOrefeed + $openingorefeed->Tonnestocrush;
-                    $AuOpenOrefeed = $AuOpenOrefeed + (($openingorefeed->DryTonFF)*($openingorefeed->Au));
-                    $AgOpenOrefeed = $AgOpenOrefeed + (($openingorefeed->DryTonFF)*($openingorefeed->Ag));
+                    $AuOpenOrefeed = $AuOpenOrefeed + (($openingorefeed->Tonnestocrush)*($openingorefeed->Au));
+                    $AgOpenOrefeed = $AgOpenOrefeed + (($openingorefeed->Tonnestocrush)*($openingorefeed->Ag));
                 }
 
                 if($TonnesOpenOrefeed == 0){
@@ -836,8 +874,8 @@ class DailyReport extends CI_Controller {
 
                 foreach ($OpeningstockOreFeedOld as $openingorefeedOld) {
                     $TonnesOpenOrefeedOld = $TonnesOpenOrefeedOld + $openingorefeedOld->Tonnestocrush;
-                    $AuOpenOrefeedOld = $AuOpenOrefeedOld + (($openingorefeedOld->DryTonFF)*($openingorefeedOld->Au));
-                    $AgOpenOrefeedOld = $AgOpenOrefeedOld + (($openingorefeedOld->DryTonFF)*($openingorefeedOld->Ag));
+                    $AuOpenOrefeedOld = $AuOpenOrefeedOld + (($openingorefeedOld->Tonnestocrush)*($openingorefeedOld->Au));
+                    $AgOpenOrefeedOld = $AgOpenOrefeedOld + (($openingorefeedOld->Tonnestocrush)*($openingorefeedOld->Ag));
                 }
 
                 if($TonnesOpenOrefeedOld == 0){
@@ -862,7 +900,7 @@ class DailyReport extends CI_Controller {
                     $Au = $Au+(($closingstock->Au)*($closingstock->Tonnes));
                 }
 
-                    $this->excel->getActiveSheet()->setCellValue('J4', 'ROM Pad Stockpile');
+                    $this->excel->getActiveSheet()->setCellValue('J4', 'ROMPAD Stockpile');
                     $this->excel->getActiveSheet()->mergeCells('J4:K4');
                 $this->excel->getActiveSheet()->getStyle('J4')->applyFromArray($style_subheader);
                 $this->excel->getActiveSheet()->getStyle('K4')->applyFromArray($style_subheader);
@@ -882,75 +920,61 @@ class DailyReport extends CI_Controller {
                 $this->excel->getActiveSheet()->getStyle('K6')->applyFromArray($style_subheader);
 
 
-                $TonnesOpen = ((($TonnesOpenOremineOld-$TonnesOpenOrefeedOld) + ($TonnesOpenOremine)) - ($TonnesOpenOrefeed));
+            
+                $TonnesOpen = 0;
+                $AuRompadOpen = 0;
+                $AgRompadOpen = 0;
+                $TonnesClosing = 0;
+                $AuRompadClosing = 0;
+                $AgRompadClosing = 0;
+                //$RompadOpeningStock = $this->ClosingStock_model->GetOpeningStockRompad($date);
+                $RompadOpeningStock = $this->ClosingStock_model->GetOpeningStockRompadNew($date);
+                if($RompadOpeningStock){
+                    $TonnesPengali = 0;
+                    foreach ($RompadOpeningStock as $rops) {
+                    $TonnesOpen = $TonnesOpen + $rops->Tonnes;
+                    $AuRompadOpen = round((($AuRompadOpen*$TonnesPengali) + ($rops->Au * $rops->Tonnes))/$TonnesOpen,2);
+                    $AgRompadOpen = round((($AgRompadOpen*$TonnesPengali) + ($rops->Ag * $rops->Tonnes))/$TonnesOpen,2);
+
+                    $TonnesPengali = $TonnesOpen;
+                 
+                    }
+
+                }
+                else{
+                    $TonnesOpen = "-";
+                    $AuRompadOpen = "-";
+                    $AgRompadOpen = "-";
+                }
 
                
+               
+                   
+                  $RompadClosingStock = $this->ClosingStock_model->GetClosingStockRompadNew($date);
+                if($RompadClosingStock){
+                    $TonnesPengali = 0;
+                    foreach ($RompadClosingStock as $rcps) {
+                    $TonnesClosing = $TonnesClosing + $rcps->Tonnes;
+                    $AuRompadClosing = round((($AuRompadClosing*$TonnesPengali) + ($rcps->Au * $rcps->Tonnes))/$TonnesClosing,2);
+                    $AgRompadClosing = round((($AgRompadClosing*$TonnesPengali) + ($rcps->Ag * $rcps->Tonnes))/$TonnesClosing,2);
 
-                 if($TonnesOpen == 0){
-                    $AuRompadOpen =0;
-                    $AgRompadOpen =0;
-                 }else{
+                    $TonnesPengali = $TonnesClosing;
+                    }
 
-                    $TonnesOpen = round($TonnesOpen,0);
-                    $AuRompadOpen = round((((($AuOpenOremineFixOld * $TonnesOpenOremineFixOld) - ($AuOpenOrefeedFixOld * $TonnesOpenOrefeedFixOld)) + (($AuOpenOremineFix * $TonnesOpenOremine) - ($AuOpenOrefeedFix * $TonnesOpenOrefeed)))/$TonnesOpen),2);
+                }
+                else{
+                    $TonnesClosing = "-";
+                    $AuRompadClosing = "-";
+                    $AgRompadClosing = "-";
+                }
 
-                    $AgRompadOpen = round((((($AgOpenOremineFixOld * $TonnesOpenOremineFixOld) - ($AgOpenOrefeedFixOld * $TonnesOpenOrefeedFixOld)) + (($AgOpenOremineFix * $TonnesOpenOremine) - ($AgOpenOrefeedFix * $TonnesOpenOrefeed)))/$TonnesOpen),2);
-                 }
+           
 
-                 //Closing Stock Rompad
-                 foreach ($ClosingstockOremine as $closingstockoremine) {
-                     $TonnesClosingstockormine = $TonnesClosingstockormine + $closingstockoremine->DryTonFF;
-                     $AuClosingstockoremine = $AuClosingstockoremine + ($closingstockoremine->Au * $closingstockoremine->DryTonFF);
-                     $AgClosingstockoremine = $AgClosingstockoremine + ($closingstockoremine->Au * $closingstockoremine->DryTonFF);
-                 }
-
-                 if($TonnesClosingstockormine == 0){
-                    $AuClosingstockoremine = 0;
-                    $AgClosingstockoremine = 0;
-                 }
-                 else{
-                    $TonnesClosingstockormine = round($TonnesClosingstockormine,2);
-                    $AuClosingstockoremine = round(($AuClosingstockoremine/$TonnesClosingstockormine),2);
-                    $AgClosingstockoremine = round(($AgClosingstockoremine/$TonnesClosingstockormine),2);
-                 }
-
-
-
-                 foreach ($ClosingstockOrefeed as $closingstockorefeed) {
-                     $TonnesClosingstockorefeed = $TonnesClosingstockorefeed + $closingstockorefeed->Tonnestocrush;
-                     $AuClosingstockoremine = $AuClosingstockoremine + ($closingstockoremine->Au * $closingstockoremine->DryTonFF);
-                     $AgClosingstockoremine = $AgClosingstockoremine + ($closingstockoremine->Au * $closingstockoremine->DryTonFF);
-                 }
-
-                 if($TonnesClosingstockorefeed == 0){
-                    $AuClosingstockorefeed = 0;
-                    $AgClosingstockorefeed = 0;
-                 }
-                 else{
-                    $TonnesClosingstockorefeed = round($TonnesClosingstockorefeed,2);
-                    $AuClosingstockorefeed = round(($AuClosingstockorefeed/$TonnesClosingstockorefeed),2);
-                    $AgClosingstockorefeed = round(($AgClosingstockorefeed/$TonnesClosingstockorefeed),2);
-                 }
-
-                 $Tonnes = ($TonnesOpen + $TonnesClosingstockormine) - $TonnesClosingstockorefeed;
-
-
-                            if($Tonnes == 0){
-                                $AuRompad =0;
-                                $AgRompad =0;
-                                $Tonnes =0;
-                            }
-                            else{
-                                $Tonnes = round($Tonnes,0);
-                                $AuRompad = round(((($AuRompadOpen*$TonnesOpen)+($AuClosingstockoremine*$TonnesClosingstockormine)-($AuClosingstockorefeed*$TonnesClosingstockorefeed))/$Tonnes),2);
-
-                                $AgRompad = round(((($AgRompadOpen*$TonnesOpen)+($AgClosingstockoremine*$TonnesClosingstockormine)-($AgClosingstockorefeed*$TonnesClosingstockorefeed))/$Tonnes),2);
-                            }
 
 
                     $this->excel->getActiveSheet()->setCellValue('L5', $TonnesOpen);
                 $this->excel->getActiveSheet()->getStyle('L5')->applyFromArray($style_table);
-                    $this->excel->getActiveSheet()->setCellValue('L6', $Tonnes);
+                    $this->excel->getActiveSheet()->setCellValue('L6', $TonnesClosing);
                 $this->excel->getActiveSheet()->getStyle('L6')->applyFromArray($style_table);
 
                 $this->excel->getActiveSheet()->setCellValue('M5', $AuRompadOpen);
@@ -959,9 +983,9 @@ class DailyReport extends CI_Controller {
                 $this->excel->getActiveSheet()->getStyle('N5')->applyFromArray($style_table);
 
 
-                    $this->excel->getActiveSheet()->setCellValue('M6', $AuRompad);
+                    $this->excel->getActiveSheet()->setCellValue('M6', $AuRompadClosing);
                 $this->excel->getActiveSheet()->getStyle('M6')->applyFromArray($style_table);
-                    $this->excel->getActiveSheet()->setCellValue('N6', $AgRompad);
+                    $this->excel->getActiveSheet()->setCellValue('N6', $AgRompadClosing);
                 $this->excel->getActiveSheet()->getStyle('N6')->applyFromArray($style_table);
 
                 $TonnesFeed =0;
@@ -979,7 +1003,7 @@ class DailyReport extends CI_Controller {
                     $AgFeedRompad = 0;
                 }
                 else{
-                        $TonnesFeed = round($TonnesFeed,0);
+                        $TonnesFeed = round($TonnesFeed,2);
                         $AuFeedRompad = round(($AuFeed/$TonnesFeed),2);
                         $AgFeedRompad = round(($AgFeed/$TonnesFeed),2);
                 }
@@ -1073,8 +1097,8 @@ class DailyReport extends CI_Controller {
                     $AgBoulderFix = round(($AgBoulder/$TonnesBoulder),2);
                 }
 
-
-                $ActualMilling = round($TonnesFeed+$TonnesScat+$TonnesBoulder,0);
+               
+                $ActualMilling = round($TonnesFeed+$TonnesScat+$TonnesBoulder,2);
                 $ActualAu = round((($AuFeed+$AuScat+$AuBoulder)/$ActualMilling),2);
                 $ActualAg = round((($AgFeed+$AgScat+$AgBoulder)/$ActualMilling),2);
 

@@ -62,6 +62,8 @@
 			return $view->result();
 		}
 
+		
+
 		function ViewToStockpile(){
 			 $view = $this->db->get('tostockpile');
 	    return $view->result();
@@ -97,7 +99,7 @@
 
 		function GetStockpileByDateandStockpileReport($date,$stockpile){
 			$a = "'";
-			$view = $this->db->query('SELECT ts.Volume, ts.Density, ts.Tonnes, ts.Au, ts.Ag, ts.AuEq75, s.Nama as Stockpile FROM ToStockpile ts, Stockpile s WHERE ts.Stockpile = s.id AND ts.Date ='.$a.$date.$a.' AND ts.Stockpile='.$a.$stockpile.$a);
+			$view = $this->db->query('SELECT ts.Volume, ts.Density, ts.Tonnes, ts.Au, ts.Ag, ts.AuEq75, s.Nama as Stockpile FROM closingstockgrade ts, Stockpile s WHERE ts.Stockpile = s.id AND ts.Date <='.$a.$date.$a.' AND ts.Stockpile='.$a.$stockpile.$a.' ORDER BY ts.id DESC LIMIT 1');
 			return $view->result();
 		}
 

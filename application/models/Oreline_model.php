@@ -29,6 +29,11 @@
 			return $view->result();
 		}
 
+		function GetOrelineByFile($file){
+			$view = $this->db->get_where('Oreline', array('File' => $file, ));
+			return $view->result();
+		}
+
 		function GetOrelineByPit($Pit){
 			$view = $this->db->get_where('Oreline', array('Pit' => $Pit, ));
 			return $view->result();
@@ -53,7 +58,7 @@
 
 	function UpdateOrelineStatus($id,$status){
 		$a="'";
-		$view = $this->db->query('UPDATE oreline SET status ='.$a.$status.$a.' WHERE id = '.$a.$id.$a);
+		$view = $this->db->query('UPDATE oreline SET status ='.$a.$status.$a.' WHERE file = '.$a.$id.$a);
 	}
 
 	function DeleteMultipleOreline(){

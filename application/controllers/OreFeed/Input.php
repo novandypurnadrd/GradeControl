@@ -75,9 +75,8 @@ class Input extends CI_Controller {
 
 		$ClosingStockdate = date('Y-m-d', strtotime('-1 day', strtotime($Date)));
 
-
-        $data['Grade'] = $this->ClosingStock_model->GetGrade($Stockpile,$ClosingStockdate);
-   
+	
+		$data['Grade'] = $this->ClosingStock_model->GetGradeStockpile($Stockpile);
 
 
         $data['AuEq75'] = $this->input->post('AuEq75');
@@ -102,11 +101,11 @@ class Input extends CI_Controller {
 			$Type = $this->input->post('Type');
 
 			if ($Type == "Oremill"){
-				$Date =  $this->input->post('Date');
+				$Date =  $this->input->post('dateOrefeed');
 			$Date = explode('/', $Date)[2].'-'.explode('/', $Date)[0].'-'.explode('/', $Date)[1];
-			$Stockpile = $this->input->post("Stockpile1");
-			$Remarks = $this->input->post("Remarks");
-			$Note = $this->input->post("Note");
+			$Stockpile = $this->input->post('stockpileOrefeed');
+			$Remarks = $this->input->post('remarksOrefeed');
+			$Note = $this->input->post('noteOrefeed');
 			$Au = $this->input->post('Au');
 			$Ag = $this->input->post('Ag');
 			//$Tonnes = $this->input->post('DryTonBM');
@@ -128,9 +127,11 @@ class Input extends CI_Controller {
 			$Tonnestocrush = $this->input->post('Total');
 			$Act = $this->input->post('Act');
 			$AuEq75 = $this->input->post('AuEq75');
-			$Shift = $this->input->post('Shift');
+			$Shift = $this->input->post('shiftOrefeed');
 			$Class = $this->input->post('Class');
 			$Type = $this->input->post('Type');
+
+
 
 			
 			if($AdjTonnes != null){
@@ -172,6 +173,8 @@ class Input extends CI_Controller {
 				//$this->Oremined_model->UpdateTonnes($Stockpile,$Date,$Tonnes);
 
 			$OrefeedTonnes = $Total;
+			$v_Au = $this->input->post('Au');
+			$v_Ag = $this->input->post('Ag');
 			$Au = $this->input->post('Au');
 			$Ag = $this->input->post('Ag');
 			$Density = $this->input->post('Density');
@@ -214,11 +217,14 @@ class Input extends CI_Controller {
 				elseif(4<=$AuEq75 && $AuEq75<6.00){
 					$Class="High Grade";
 				}
-				else{
+				elseif($AuEq75 >= 6.00){
 					$Class="SHG";
 				}
+				else{
+					$Class="-";
+				}
 				
-
+			
 				
 			}
 
@@ -230,7 +236,7 @@ class Input extends CI_Controller {
 				'Class' =>$Class,
 				'Tonnes' => $Tonnes,
 				'Density' => $Density,
-				'Stockpile' => $this->input->post('Stockpile1'),
+				'Stockpile' => $this->input->post('stockpileOrefeed'),
 				'Date' => $Date,
 				'Status' => "Complete",
 			);
@@ -283,8 +289,11 @@ class Input extends CI_Controller {
 				elseif(4<=$AuEq75 && $AuEq75<6.00){
 					$Class="High Grade";
 				}
-				else{
+				elseif($AuEq75 >= 6.00){
 					$Class="SHG";
+				}
+				else{
+					$Class="-";
 				}
 				
 
@@ -297,9 +306,9 @@ class Input extends CI_Controller {
 				'Ag' => $v_Ag,
 				'AuEq75' => $AuEq75,
 				'Class' =>$Class,
-				//'Tonnes' => $Tonnes,
+				'Tonnes' => $Tonnes,
 				//'Density' => $Density,
-				'Stockpile' => $this->input->post('Stockpile1'),
+				'Stockpile' => $this->input->post('stockpileOrefeed'),
 				'Date' => $Date,
 				//'Status' => "Complete",
 			);
@@ -358,17 +367,20 @@ class Input extends CI_Controller {
 
 			
 
-			if (0.65 <= $UpdateAuEq75Stockpile && $UpdateAuEq75Stockpile < 2.00){
-					$ClassStockpile="Marginal";
+			if (0.65<=$AuEq75 && $AuEq75<2.00){
+					$Class="Marginal";
 				}
-				elseif(2<=$UpdateAuEq75Stockpile && $UpdateAuEq75Stockpile<4.00){
-					$ClassStockpile="Medium Grade";
+				elseif(2<=$AuEq75 && $AuEq75<4.00){
+					$Class="Medium Grade";
 				}
-				elseif(4<=$UpdateAuEq75Stockpile && $UpdateAuEq75Stockpile<6.00){
-					$ClassStockpile="High Grade";
+				elseif(4<=$AuEq75 && $AuEq75<6.00){
+					$Class="High Grade";
+				}
+				elseif($AuEq75 >= 6.00){
+					$Class="SHG";
 				}
 				else{
-					$ClassStockpile="SHG";
+					$Class="-";
 				}
 
 			$ToStockpile = array(
@@ -397,11 +409,11 @@ class Input extends CI_Controller {
 			}
 			else{
 
-				$Date =  $this->input->post('Date');
+				$Date =  $this->input->post('dateOrefeed');
 			$Date = explode('/', $Date)[2].'-'.explode('/', $Date)[0].'-'.explode('/', $Date)[1];
-			$Stockpile = $this->input->post("Stockpile1");
-			$Remarks = $this->input->post("Remarks");
-			$Note = $this->input->post("Note");
+			$Stockpile = $this->input->post('stockpileOrefeed');
+			$Remarks = $this->input->post('remarksOrefeed');
+			$Note = $this->input->post('noteOrefeed');
 			$Au = $this->input->post('Au');
 			$Ag = $this->input->post('Ag');
 			//$Tonnes = $this->input->post('DryTonBM');
@@ -422,7 +434,7 @@ class Input extends CI_Controller {
 			$Stock = $this->input->post('Stock');
 			$Tonnestocrush = $this->input->post('Total');
 			$AuEq75 = $this->input->post('AuEq75');
-			$Shift = $this->input->post('Shift');
+			$Shift = $this->input->post('shiftOrefeed');
 			$Class = $this->input->post('Class');
 			$Type = $this->input->post('Type');
 			
@@ -468,11 +480,11 @@ class Input extends CI_Controller {
 
 	public function InputBypass(){
 		if ($this->session->userdata('GradeControl')){
-			$Date =  $this->input->post('Date');
+			$Date =  $this->input->post('dateOrefeed');
 			$Date = explode('/', $Date)[2].'-'.explode('/', $Date)[0].'-'.explode('/', $Date)[1];
-			$Stockpile = $this->input->post("Stockpile1");
-			$Remarks = $this->input->post("Remarks");
-			$Note = $this->input->post("Note");
+			$Stockpile = $this->input->post('stockpileOrefeed');
+			$Remarks = $this->input->post('remarksOrefeed');
+			$Note = $this->input->post('noteOrefeed');
 			$Au = $this->input->post('Au');
 			$Ag = $this->input->post('Ag');
 			//$Tonnes = $this->input->post('DryTonBM');
@@ -493,7 +505,7 @@ class Input extends CI_Controller {
 			$Stock = $this->input->post('Stock');
 			$Tonnestocrush = $this->input->post('Total');
 			$AuEq75 = $this->input->post('AuEq75');
-			$Shift = $this->input->post('Shift');
+			$Shift = $this->input->post('shiftOrefeed');
 			$Class = $this->input->post('Class');
 			$Type = $this->input->post('Type');
 			
@@ -541,11 +553,11 @@ class Input extends CI_Controller {
 
 	public function InputOreMill(){
     if ($this->session->userdata('GradeControl')) {
-			$Date =  $this->input->post('Date');
+			$Date =  $this->input->post('dateOrefeed');
 			$Date = explode('/', $Date)[2].'-'.explode('/', $Date)[0].'-'.explode('/', $Date)[1];
-			$Stockpile = $this->input->post("Stockpile1");
-			$Remarks = $this->input->post("Remarks");
-			$Note = $this->input->post("Note");
+			$Stockpile = $this->input->post('stockpileOrefeed');
+			$Remarks = $this->input->post('remarksOrefeed');
+			$Note = $this->input->post('noteOrefeed');
 			$Au = $this->input->post('Au');
 			$Ag = $this->input->post('Ag');
 			//$Tonnes = $this->input->post('DryTonBM');
@@ -566,7 +578,7 @@ class Input extends CI_Controller {
 			$Stock = $this->input->post('Stock');
 			$Tonnestocrush = $this->input->post('Total');
 			$AuEq75 = $this->input->post('AuEq75');
-			$Shift = $this->input->post('Shift');
+			$Shift = $this->input->post('shiftOrefeed');
 			$Class = $this->input->post('Class');
 			$Type = $this->input->post('Type');
 			
@@ -650,7 +662,7 @@ class Input extends CI_Controller {
 				'Class' =>$Class,
 				'Tonnes' => $Tonnes,
 				'Density' => $Density,
-				'Stockpile' => $this->input->post('Stockpile1'),
+				'Stockpile' => $this->input->post('stockpileOrefeed'),
 				'Date' => $Date,
 				'Status' => "Complete",
 			);

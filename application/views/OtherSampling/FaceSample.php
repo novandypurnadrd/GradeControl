@@ -72,24 +72,8 @@
                               </div>
                             </div>
                           </div> -->
-                           <div class="col-md-4 col-sm-4">
-                            <label for="DryTonFF" class="col-sm-4 control-label">From Sample</label>
-                            <div class="col-sm-6">
-                              <div class="input-group">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" id="fromsample" name="fromsample">
-                                </div>
-                               
-                              </div>
-                            </div>
-                          </div>
-                       
-                
-                        </div>
-                        <br>
-                        <div class="form-group">
-                        <div class="col-md-3 col-sm-3">
-                            <label for="Aggt" class="col-sm-2 control-label">Prospect</label>
+                            <div class="col-md-3 col-sm-3">
+                            <label for="Aggt" class="col-sm-4 control-label">Prospect</label>
                             <div class="col-sm-8">
                                <select id="location" name="prospect" class="form-control" required="">
                                 <option value="">&nbsp;</option>
@@ -99,6 +83,36 @@
                               </select>
                             </div>
                           </div>
+
+                          <div class="col-md-3 col-sm-3">
+                              <label for="Aggt" class="col-sm-4 control-label">Location</label>
+                            <div class="col-sm-8">
+                               <select id="location" name="location" class="form-control" required="" >
+                                <option value="">&nbsp;</option>
+                                <?php foreach ($Location as $location): ?>
+                                  <option value="<?php echo $location->Id ?>"><?php echo $location->Nama ?></option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                          </div>
+                          
+                       
+                
+                        </div>
+                        <br>
+                        <div class="form-group">
+                           <div class="col-md-3 col-sm-3">
+                            <label for="DryTonFF" class="col-sm-4 control-label">From FS</label>
+                            <div class="col-sm-6">
+                              <div class="input-group">
+                                <div class="input-group-content">
+                                  <input type="text" class="form-control" id="fromsample" name="fromsample">
+                                </div>
+                               
+                              </div>
+                            </div>
+                          </div>
+                      
                           <!--  <div class="col-md-3 col-sm-3">
                             <label for="DryTonFF" class="col-sm-4 control-label">To Hole ID</label>
                             <div class="col-sm-6">
@@ -110,8 +124,8 @@
                               </div>
                             </div>
                           </div> -->
-                             <div class="col-md-4 col-sm-4">
-                            <label for="totalsample" class="col-sm-4 control-label">To Sample</label>
+                             <div class="col-md-3 col-sm-3">
+                            <label for="totalsample" class="col-sm-4 control-label">To FS</label>
                             <div class="col-sm-6">
                               <div class="input-group">
                                 <div class="input-group-content">
@@ -121,34 +135,9 @@
                               </div>
                             </div>
                           </div>
-                         
-                        </div>
-                        <br>
-                        <div class="form-group">
-                          <div class="col-md-3 col-sm-3">
-                            <label for="Aggt" class="col-sm-2 control-label">Location</label>
-                            <div class="col-sm-8">
-                               <select id="location" name="location" class="form-control" required="" >
-                                <option value="">&nbsp;</option>
-                                <?php foreach ($Location as $location): ?>
-                                  <option value="<?php echo $location->Id ?>"><?php echo $location->Nama ?></option>
-                                <?php endforeach; ?>
-                              </select>
-                            </div>
-                          </div>
-                          <!--  <div class="col-md-3 col-sm-3">
-                            <label for="DryTonFF" class="col-sm-4 control-label">Total Hole</label>
-                            <div class="col-sm-6">
-                              <div class="input-group">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" id="totalhole" name="totalhole">
-                                </div>
-                               
-                              </div>
-                            </div>
-                          </div> -->
-                             <div class="col-md-4 col-sm-4">
-                            <label for="totalsample" class="col-sm-4 control-label">Total Sample</label>
+
+                             <div class="col-md-3 col-sm-3">
+                            <label for="totalsample" class="col-sm-6 control-label">Total Sample</label>
                             <div class="col-sm-6">
                               <div class="input-group">
                                 <div class="input-group-content">
@@ -169,6 +158,24 @@
                               </div>
                             </div>
                           </div>
+                         
+                        </div>
+                        <br>
+                        <div class="form-group">
+                          <div class="col-md-3 col-sm-3">
+                        
+                          <!--  <div class="col-md-3 col-sm-3">
+                            <label for="DryTonFF" class="col-sm-4 control-label">Total Hole</label>
+                            <div class="col-sm-6">
+                              <div class="input-group">
+                                <div class="input-group-content">
+                                  <input type="text" class="form-control" id="totalhole" name="totalhole">
+                                </div>
+                               
+                              </div>
+                            </div>
+                          </div> -->
+                          
                         </div>
                 <br>
                 <div class= "col-md-5 col-sm-5">
@@ -220,8 +227,8 @@
                                <!--  <th>From Hole ID</th>
                                 <th>To Hole ID</th>
                                 <th>Total Hole</th> -->
-                                <th>From Sample</th>
-                                <th>To Sample</th>
+                                <th>From FS</th>
+                                <th>To FS</th>
                                 <th>Total Sample</th>
                                 <th>Remarks</th>
                              
@@ -349,7 +356,7 @@
         var TotalSample = document.getElementById("totalsample");
 
         
-        TotalSample.value = parseFloat(To.value - From.value)+1;
+        TotalSample.value = (parseFloat(To.value - From.value)+1).toFixed(1);
       }
     </script>
     <!-- END JAVASCRIPT -->

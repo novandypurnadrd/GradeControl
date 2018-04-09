@@ -38,14 +38,16 @@ class Boulder extends CI_Controller {
     	if ($this->session->userdata('GradeControl')) {
     		$Date =  $this->input->post('Date');
 			$Date = explode('/', $Date)[2].'-'.explode('/', $Date)[0].'-'.explode('/', $Date)[1];
-    		$DryTon = $this->input->post("DryTonFF");
+			$Volume = $this->input->post("Volume");
+    		$Density = $this->input->post("Density");
+    		$Tonnes = round(($Volume*$Density),2);
     		$Au = $this->input->post("Augt");
     		$Ag = $this->input->post("Aggt");
 
     		$Boulder = array(
     			'Date' => $Date,
     			'Stockpile' => "Boulder",
-    			'Tonnes' => $DryTon,
+    			'Tonnes' => $Tonnes,
     			'Au' => $Au,
     			'Ag' => $Ag,
     			'usrid' => $this->session->userdata('usernameGradeControl'),

@@ -15,6 +15,7 @@
 		<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>assets/css/theme-default/libs/DataTables/extensions/dataTables.colVis.css?1423553990" />
 		<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>assets/css/theme-default/libs/DataTables/extensions/dataTables.tableTools.css?1423553990" />
 		<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>assets/css/buttons.dataTables.min.css"/>
+		<link type="text/css" rel="stylesheet" href="<?php echo base_url();?>assets/css/theme-default/libs/bootstrap-datepicker/datepicker3.css?1424887858" />
 
 		<!-- END HEADER-->
 
@@ -34,7 +35,7 @@
 						<!-- BEGIN INTRO -->
 						<div class="row">
 							<div class="col-lg-12">
-								<h1 class="text-primary">Oreline Oremined</h1>
+								<h1 class="text-primary">Daily Oreline Oremined</h1>
 							</div><!--end .col -->
 						</div><!--end .row -->
 						<!-- END INTRO -->
@@ -45,13 +46,25 @@
 								<div class="card">
 									<div class="card-body">
 										<form class="form" role="form" action="<?php echo base_url().'OreInventory/Table/Filter' ?>" method="post">
-                      <div class="col-md-1 col-lg-1 col-xl-1">
+                        <div class="col-md-4 col-lg-4 col-xl-4">
+                        <div class="form-group floating-label">
+  											
+  												<label for="Date" class="col-sm-2 control-label">Date</label>
+														<div class="col-sm-10">
+															<div class="input-group date" id="demo-date">
+																<div class="input-group-content">
+																	<input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php echo $date?>">
+																</div>
+																<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+															</div>
+														</div>
 
+						     </div>
                       </div>
-                      <div class="col-md-6 col-lg-6 col-xl-6">
+                      <div class="col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group floating-label">
   												<select id="select2" name="Pit" class="form-control">
-  													<option value="0">&nbsp;</option>
+  													<option value="All">All</option>
                             <?php foreach ($Pit as $pit): ?>
                               <option value="<?php echo $pit->id ?>" <?php if($pit->id == $pitselected){echo "selected='true'";}?>><?php echo $pit->Nama ?></option>
                             <?php endforeach; ?>
@@ -92,7 +105,8 @@
 																<?php if ($this->session->userdata('roleGradeControl') == "Admin" || $this->session->userdata('GE')): ?>
 																	<th>Action</th>
 																<?php endif; ?>
-																	<th>Date</th>
+																	<th>Start Date</th>
+																	<th>Finish Date</th>
 																	<th>Stockpile</th>
 											                        <th>Block</th>
 											                        <th>RL</th>
@@ -103,11 +117,22 @@
 											                        <th>Dry Ton BM</th>
 											                        <th>Dry Ton (Final Figure)</th>
 											                        <th>Density</th>
+											                        <th>Value</th>
+											                        <th>Achievement</th>
 																	<th>Status</th>
+																	<th>Comment</th>
 															</tr>
 														</thead>
 														<tbody>
-															<?php foreach ($Table as $table) {$date = date("d-F-Y", strtotime($table->Start)); ?>
+															<?php foreach ($Table as $table) {$datestart = date("d-F-Y", strtotime($table->Start)); 
+																							 
+																if($table->Finish != null){
+																	$datefinish = date("d-F-Y", strtotime($table->Finish));
+																}
+																else{
+																	$datefinish = "-";
+																}
+																							 ?>
 																<tr>
 																
 
@@ -126,7 +151,8 @@
 																		</center>
 																	</td>
 																	<?php endif; ?>
-										  <td><?php echo $date; ?></td>
+										  <td><?php echo $datestart; ?></td>
+										  <td><?php echo $datefinish; ?></td>
 										  <td><?php echo $table->Stockpile; ?></td>
 				                          <td><?php echo $table->Block; ?></td>
 				                          <td><?php echo $table->RL; ?></td>
@@ -146,10 +172,13 @@
 																	?>
 										  <td><?php echo $table->AuEq75; ?></td>
 										  <td><?php echo $table->Class; ?></td>
-				                          <td><?php echo $table->DryTon; ?></td>
-																	<td><?php echo $table->DryTonFF; ?></td>
+				                          <td><?php echo $table->DryTonBM; ?></td>
+											<td><?php echo $table->DryTonFF; ?></td>
 				                          <td><?php echo $table->Dbdensity; ?></td>
+				                          <td><?php echo $table->Value; ?></td>
+				                          <td><?php echo $table->Achievement."%" ; ?></td>
 																	<td><?php echo $table->Status; ?></td>
+																	<td><?php echo $table->Note; ?></td>
 																</tr>
 																<div class="modal fade" id="<?php echo $table->id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 																	<div class="modal-dialog" role="document">
@@ -203,6 +232,8 @@
 		<script src="<?php echo base_url();?>assets/js/core/source/App.js"></script>
 		<script src="<?php echo base_url();?>assets/js/core/source/AppNavigation.js"></script>
 		<script src="<?php echo base_url();?>assets/js/core/source/AppForm.js"></script>
+		<script src="<?php echo base_url();?>assets/js/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+		<script src="<?php echo base_url();?>assets/js/core/demo/DemoFormComponents.js"></script>
 		<script src="<?php echo base_url();?>assets/js/jquery-1.12.4.js"></script>
 		<script src="<?php echo base_url();?>assets/js/jquery.dataTables.min.js"></script>
 		<script src="<?php echo base_url();?>assets/js/dataTables.buttons.min.js"></script>
@@ -213,7 +244,6 @@
 		<script src="<?php echo base_url();?>assets/js/buttons.html5.min.js"></script>
 		<script src="<?php echo base_url();?>assets/js/buttons.print.min.js"></script>
 		<script src="<?php echo base_url();?>assets/js/core/demo/DemoTableDynamic.js"></script>
-		<script src="<?php echo base_url();?>assets/js/libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
 	<!-- 	<script type="text/javascript">
 
 

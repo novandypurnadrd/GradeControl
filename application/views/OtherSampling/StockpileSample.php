@@ -154,8 +154,8 @@
                                             </div></center></th>
                                
                                 <th>Date</th>
-                                <th>From GS</th>
-                                <th>To GS</th>
+                                <th>From ST</th>
+                                <th>To ST</th>
                                 <th>Total Sample</th>
                                 <th>Remarks</th>
                                     
@@ -284,7 +284,7 @@
         var TotalSample = document.getElementById("totalsample");
 
         
-        TotalSample.value = parseFloat(To.value - From.value)+1;
+        TotalSample.value = (parseFloat(To.value - From.value)+1).toFixed(1);
       }
     </script>
 		<!-- END JAVASCRIPT -->

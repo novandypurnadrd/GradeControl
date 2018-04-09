@@ -21,35 +21,36 @@ class Table extends CI_Controller {
 				$data['main'] = "Ore Feed";
 				$data['selectedstockpile'] = '';
 	   			$data['selectedyear'] = '0000-00-00';
-	   			 $data['date'] = '';
+	   			$data['date'] = '';
 				$selectedstockpile = "";
 				$selectedyear = '';
-				$data['Table'] = $this->Stockpile_model->getToStockpile($selectedstockpile,$selectedyear);
+				$data['Table'] = $this->Orefeed_model->GetTableOreFeed($selectedstockpile,$selectedyear);
+				//$data['Table'] = $this->Stockpile_model->getToStockpile($selectedstockpile,$selectedyear);
 				//$data['Table'] = $this->Stockpile_model->getToStockpile($data['selectedstockpile'],$data['selectedyear']);
 				$data['Year'] = $this->Stockpile_model->getYear();
         		$data['Stockpile'] = $this->Stockpile_model->getStockpile();
 
-        	$sumclay = round($this->Orefeed_model->SumClay($selectedyear,$selectedstockpile),2);
+        	$sumclay = round($this->Orefeed_model->SumClaybyDate($selectedyear),2);
 			if ($sumclay == null){
 				$sumclay = 0;
 			}
-			$sumclayfull = round($this->Orefeed_model->SumClayfull($selectedyear,$selectedstockpile),2);
+			$sumclayfull = round($this->Orefeed_model->SumClayfullbyDate($selectedyear),2);
 			if ($sumclayfull == null){
 				$sumclayfull = 0;
 			}
-			$sumfresh = round($this->Orefeed_model->SumFresh($selectedyear,$selectedstockpile),2);
+			$sumfresh = round($this->Orefeed_model->SumFreshbyDate($selectedyear),2);
 			if ($sumfresh == null){
 				$sumfresh = 0;
 			}
-			$sumbypass = round($this->Orefeed_model->SumBypass($selectedyear,$selectedstockpile),2);
+			$sumbypass = round($this->Orefeed_model->SumBypassbyDate($selectedyear),2);
 			if ($sumbypass == null){
 				$sumbypass = 0;
 			}
-			$sumtransisi = round($this->Orefeed_model->SumTransisi($selectedyear,$selectedstockpile),2);
+			$sumtransisi = round($this->Orefeed_model->SumTransisibyDate($selectedyear),2);
 			if ($sumtransisi == null){
 				$sumtransisi = 0;
 			}
-			$sumtonnes = round($this->Orefeed_model->SumTonnestocrush($selectedyear,$selectedstockpile),2);
+			$sumtonnes = round($this->Orefeed_model->SumTonnestocrushbyDate($selectedyear),2);
 			if ($sumtonnes == null){
 				$sumtonnes = 1;
 			}
@@ -78,6 +79,40 @@ class Table extends CI_Controller {
 			$data['Year'] = $this->Stockpile_model->getYear();
 			$data['Stockpile'] = $this->Stockpile_model->getStockpile();
 			$sumclay = round($this->Orefeed_model->SumClay($selectedyear,$selectedstockpile),2);
+			
+
+			if($selectedstockpile == "All"){
+
+			$sumclay = round($this->Orefeed_model->SumClaybyDate($selectedyear),2);
+			if ($sumclay == null){
+				$sumclay = 0;
+			}
+			$sumclayfull = round($this->Orefeed_model->SumClayfullbyDate($selectedyear),2);
+			if ($sumclayfull == null){
+				$sumclayfull = 0;
+			}
+			$sumfresh = round($this->Orefeed_model->SumFreshbyDate($selectedyear),2);
+			if ($sumfresh == null){
+				$sumfresh = 0;
+			}
+			$sumbypass = round($this->Orefeed_model->SumBypassbyDate($selectedyear),2);
+			if ($sumbypass == null){
+				$sumbypass = 0;
+			}
+			$sumtransisi = round($this->Orefeed_model->SumTransisibyDate($selectedyear),2);
+			if ($sumtransisi == null){
+				$sumtransisi = 0;
+			}
+			$sumtonnes = round($this->Orefeed_model->SumTonnestocrushbyDate($selectedyear),2);
+			if ($sumtonnes == null){
+				$sumtonnes = 1;
+			}
+
+			}
+
+			else{
+
+			$sumclay = round($this->Orefeed_model->SumClay($selectedyear,$selectedstockpile),2);
 			if ($sumclay == null){
 				$sumclay = 0;
 			}
@@ -101,6 +136,10 @@ class Table extends CI_Controller {
 			if ($sumtonnes == null){
 				$sumtonnes = 1;
 			}
+
+			}
+
+			
 			// $data['clay'] = round($sumclay/$sumtonnes,2)*100;
 			// $data['fresh'] = round($sumfresh/$sumtonnes,2)*100;
 			// $data['transisi'] = round($sumtransisi/$sumtonnes,2)*100;

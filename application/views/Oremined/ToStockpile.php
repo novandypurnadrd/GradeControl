@@ -197,7 +197,6 @@
 				                       
 				                        <th>Density</th>
 				                        <th>Tonnes (Dry)</th>
-				                        <th>Achievement</th>
                                 		<th>Au (g/t)</th>
 				                        <th>Ag (g/t)</th>
 				                        <th>AuEq75</th>
@@ -213,9 +212,8 @@
                                   <td><?php echo $Date; ?></td>
 				                  <td><?php echo $table->RL; ?></td>
 				                  
-								  <td><?php echo number_format($table->Density, "2", ".",","); ?></td>
+								  <td><?php echo number_format(round($table->Dbdensity*0.8,2), "2", ".",","); ?></td>
 				                  <td><?php echo number_format($table->DryTonFF, "2", ".",","); ?></td>
-				                  <td><?php echo $table->Achievement.'%'; ?></td>
                                   <td><?php echo number_format($table->Au, "2", ".",","); ?></td>
 								  <td><?php echo number_format($table->Ag, "2", ".",","); ?></td>
 								  <td><?php echo $table->AuEq75; ?></td>

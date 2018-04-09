@@ -19,6 +19,7 @@ class Import extends CI_Controller {
     if ($this->session->userdata('GradeControl')) {
 				$data['main'] = "ImportOreline";
         $data['Pit'] = $this->Pit_model->getPit();
+        $data['msg'] = "";
 		    $this->load->view('Oreline/Import', $data);
     }else {
       redirect(base_url());
@@ -28,6 +29,7 @@ class Import extends CI_Controller {
 	public function ImportOreline()
 	{
     if ($this->session->userdata('GradeControl')) {
+
 
 				$fileName = time().$_FILES['file']['name'];
 
@@ -59,7 +61,14 @@ class Import extends CI_Controller {
 	            $highestRow = $sheet->getHighestRow();
 	            $highestColumn = $sheet->getHighestColumn();
 
-	            for ($row = 17; $row <= 17; $row++){                  //  Read a row of data into an array
+	            $File = explode('.', $_FILES['file']['name'])[0];
+	            $CheckDuplicate = $this->Oreline_model->GetOrelineByFile($File);
+
+	            if($CheckDuplicate){
+	            	$data['msg'] = "Oreline already Input in Database";
+	            }
+	            else{
+	            	for ($row = 17; $row <= 17; $row++){                  //  Read a row of data into an array
 	                $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
 	                                                NULL,
 	                                                TRUE,
@@ -105,12 +114,17 @@ class Import extends CI_Controller {
 
 	                //sesuaikan nama dengan nama tabel
 	                $this->Oreline_model->InputOreline($data);
-
+	                $data['msg'] = "Succes Import to Database";
 	            }
 
+
+	            }
+	            			$data['main'] = "ImportOreline";
+    						$data['Pit'] = $this->Pit_model->getPit();
 							$this->load->helper('file');
 							unlink($inputFileName);
-							redirect('Oreline/Import');
+							$this->load->view('Oreline/Import', $data);
+							//redirect('Oreline/Import');
 				}
 		}
 		else {

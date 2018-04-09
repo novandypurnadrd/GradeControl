@@ -35,7 +35,7 @@
         ]);
 
         var options = {
-          title: 'Feed Material',
+          title: 'Feed Material All Stockpile',
          
         };
 
@@ -84,7 +84,7 @@
 														<div class="col-sm-10">
 															<div class="input-group date" id="demo-date">
 																<div class="input-group-content">
-																	<input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php echo $date?>">
+																	<input type="text" class="form-control" id="Date" name="Date" autocomplete="off" required="" value="<?php echo $date?>">
 																</div>
 																<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 															</div>
@@ -94,13 +94,14 @@
                       </div>
                       <div class="col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group floating-label">
+                        	<label for="select2">Stockpile</label>
   												<select id="select2" name="Stockpile" class="form-control">
-  													<option value="">&nbsp;</option>
+  													<option value="All">All</option>
                             <?php foreach ($Stockpile as $stockpile): ?>
                               <option value="<?php echo $stockpile->id ?>" <?php if($stockpile->id == $selectedstockpile){echo "selected='true'";}?>><?php echo $stockpile->Nama ?></option>
                             <?php endforeach; ?>
   												</select>
-  												<label for="select2">Stockpile</label>
+  												
 						            </div>
                       </div>
                       <div class="col-md-3">
@@ -113,52 +114,9 @@
 								</div><!--end .card -->
 							</div><!--end .col -->
 <!-- 
-						<div class="col-md-12 col-sm-12">
-						 <div class="col-md-4 col-sm-4">
-                            <label for="Fresh" class="col-sm-4 control-label">Fresh Percentage:</label>
-                            <div class="col-sm-2">
-                              <div class="input-group">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" id="Fresh" readonly="" name="Fresh" value="<?php //echo $fresh ?>">
-                                </div>
-                               
-                              </div>
-                            </div>
-                               <br>
-                               <span>%</span>
-                          </div>
-                           <div class="col-md-4 col-sm-4">
-                            <label for="Clay" class="col-sm-4 control-label">Clay &nbsp Percentage:</label>
-                            <div class="col-sm-2">
-                              <div class="input-group">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" id="Clay" readonly="" name="Clay" value="<?php //echo $clay ?>">
-                                </div>
-                               
-                              </div>
-                            </div>
-                               <br>
-                               <span>%</span>
-                          </div>
-                           <div class="col-md-4 col-sm-4">
-                            <label for="Transisi" class="col-sm-4 control-label">Transisi Percentage:</label>
-                            <div class="col-sm-2">
-                              <div class="input-group">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" readonly="" id="Transisi" name="Transisi" value="<?php //echo $transisi ?>">
-                                </div>
-                               
-                              </div>
-                            </div>
-                            <br>
-                               <span>%</span>
-                           </div>
-						</div> -->
+					
 
 						
-
-						</div><!--end .row -->
-						<!-- END BASIC ELEMENTS -->
 
 						<!-- BEGIN TABLE -->
 						<div class="row">

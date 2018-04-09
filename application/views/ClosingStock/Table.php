@@ -49,8 +49,21 @@
                       <div class="col-md-1">
 
                       </div>
-                      <div class="col-md-2 col-lg-2 col-xl-2">
-                        
+              
+                       <div class="col-md-4 col-lg-4 col-xl-4">
+                        <div class="form-group floating-label">
+  											
+  												<label for="Date" class="col-sm-2 control-label">Date</label>
+														<div class="col-sm-10">
+															<div class="input-group date" id="demo-date">
+																<div class="input-group-content">
+																	<input type="text" class="form-control" id="Date" name="Date" required="" autocomplete="off" value="<?php echo $date?>">
+																</div>
+																<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+															</div>
+														</div>
+
+						     </div>
                       </div>
                       <div class="col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group floating-label">
@@ -59,7 +72,7 @@
                             <label for="Aggt" class="col-sm-3 control-label">Stockpile</label>
                             <div class="col-sm-9">
                               <select id="Stockpile" name="Stockpile" class="form-control" required="">
-                                <option value="">&nbsp;</option>
+                                <option value="All">All</option>
                                 <?php foreach ($Stockpile as $stockpile): ?>
                                   <option value="<?php echo $stockpile->id ?>" <?php if($stockpile->id == $selectedstockpile){echo "selected='true'";}?> ><?php echo $stockpile->Nama ?></option>
                                 <?php endforeach; ?>
@@ -98,8 +111,8 @@
 										
 										<th>Date</th>
                                 		<th>Stockpile</th>
-				                        <th>Volume</th>
-				                        <th>Density</th>
+				                       <!--  <th>Volume</th>
+				                        <th>Density</th> -->
 				                        <th>Tonnes</th>
 				                        <th>Au</th>
 				                        <th>Ag</th>
@@ -109,18 +122,64 @@
 															</tr>
 														</thead>
 														<tbody>
-															<?php foreach ($Table as $table) {$tanggal = date("d-F-Y", strtotime($table->Date)); ?>
+															<?php foreach ($Table as $table) {
+
+																if($date == null){
+																	$tanggal = date("d-F-Y", strtotime($table->Date));	
+																}
+																else{
+																	$tanggal = date("d-F-Y", strtotime($date));	
+																}
+
+																 
+
+
+																?>
+
+
 																<tr class="gradeX">
+
+																<?php 
+
+																//$Volume = $table->Volume;
+										
+
+																// if($table->Volume == 0){
+																// 	$Volume = "-";
+
+																// }
+																// $Density = $table->Density;
+																// if ($table->Density == 0) {
+																// 	$Density = "-";
+																// }
+																$Tonnes = $table->Tonnes;
+																if ($table->Tonnes == 0) {
+																	$Tonnes = "-";
+																}
+																$Au = $table->Au;
+																if ($table->Au == 0) {
+																	$Au = "-";
+																}
+																$Ag = $table->Ag;
+																if ($table->Ag == 0) {
+																	$Ag = "-";
+																}
+																$AuEq75 = $table->AuEq75;
+																if ($table->AuEq75 == 0) {
+																	$AuEq75 = "-";
+																}  
+
+																 ?>
 																	
 				                          <td><?php echo $tanggal; ?></td>
 				                          <td><?php echo $table->Stockpile; ?></td>
 																	
-				                          <td><?php echo $table->Volume; ?></td>
-										  <td><?php echo $table->Density; ?></td>
-										  <td><?php echo $table->Tonnes; ?></td>
-				                          <td><?php echo $table->Au; ?></td>
-										  <td><?php echo $table->Ag; ?></td>
-										  <td><?php echo $table->AuEq75; ?></td>
+				                         <!--  <td><?php //echo $Volume; ?></td>
+										  <td><?php //echo $Density; ?></td> -->
+										  <td><?php echo $Tonnes; ?></td>
+				                          <td><?php echo $Au; ?></td>
+										  <td><?php echo $Ag; ?></td>
+										  <td><?php echo $AuEq75; ?></td>
 										  <td><?php echo $table->Class; ?></td>
 									
 

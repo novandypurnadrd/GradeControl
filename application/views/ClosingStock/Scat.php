@@ -60,15 +60,21 @@
                               </div>
                             </div>
                           </div>
-  												<div class="col-md-3 col-sm-3">
-  													<label for="DryTonFF" class="col-sm-4 control-label">Dry Ton</label>
+  												<div class="col-md-2 col-sm-2">
+  													<label for="DryTonFF" class="col-sm-4 control-label">Volume</label>
   													<div class="col-sm-8">
-  														<input type="text" class="form-control" id="DryTonFF" name="DryTonFF" onkeyup="Counter()" required="" autocomplete="off">
+  														<input type="text" class="form-control" id="Volume" name="Volume" required="" autocomplete="off">
   													</div>
   												</div>
-                          <div class="col-md-3 col-sm-3">
-                            <label for="DryTonFF" class="col-sm-4 control-label">Au (g/t)</label>
-  													<div class="col-sm-4">
+                          <div class="col-md-2 col-sm-2">
+                            <label for="DryTonFF" class="col-sm-4 control-label">Density</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="Density" name="Density" required="" autocomplete="off">
+                            </div>
+                          </div>
+                          <div class="col-md-2 col-sm-2">
+                            <label for="DryTonFF" class="col-sm-6 control-label">Au (g/t)</label>
+  													<div class="col-sm-6">
                               <div class="input-group">
       													<div class="input-group-content">
       														<input type="text" class="form-control" id="Augt" name="Augt">
@@ -77,9 +83,9 @@
       												</div>
   													</div>
   												</div>
-                           <div class="col-md-3 col-sm-3">
+                           <div class="col-md-2 col-sm-2">
                             <label for="DryTonFF" class="col-sm-4 control-label">Ag (g/t)</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                               <div class="input-group">
                                 <div class="input-group-content">
                                   <input type="text" class="form-control" id="Aggt" name="Aggt">

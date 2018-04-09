@@ -33,8 +33,15 @@
 
 		function GetTableOreFeed($Stockpile,$Date){
 			$a="'";
-			$view = $this->db->query('SELECT of.id as id, of.Date as tanggal, of.Stockpile , of.Au as Au, of.Ag as Ag, of.Tonnes as Tonnes, of.AdjAu as AdjAu, of.AdjAg as AdjAg, of.AuEq75 as AuEq75, of.AdjAuPersen as AdjAuPersen, of.AdjAgPersen as AdjAgPersen, of.Loader as Loader, of.Remarks , of.Note as Note, of.Density as Density, of.Volume as Volume, s.Nama as Stockpile, of.Tonnestocrush as Tonnestocrush FROM orefeed of, stockpile s WHERE of.Stockpile = s.id AND of.Stockpile='.$a.$Stockpile.$a.'AND of.Date = '.$a.$Date.$a);
+
+			if($Stockpile == "All"){
+				$view = $this->db->query('SELECT of.id as id, of.Date as tanggal, of.Stockpile , of.Au as Au, of.Ag as Ag, of.Tonnes as Tonnes, of.AdjAu as AdjAu, of.AdjAg as AdjAg, of.AuEq75 as AuEq75, of.AdjAuPersen as AdjAuPersen, of.AdjAgPersen as AdjAgPersen, of.Loader as Loader, of.Remarks , of.Note as Note, of.Density as Density, of.Volume as Volume, s.Nama as Stockpile, of.Tonnestocrush as Tonnestocrush FROM orefeed of, stockpile s WHERE of.Stockpile = s.id AND of.Date = '.$a.$Date.$a);
 			return $view->result();
+			}else{
+				$view = $this->db->query('SELECT of.id as id, of.Date as tanggal, of.Stockpile , of.Au as Au, of.Ag as Ag, of.Tonnes as Tonnes, of.AdjAu as AdjAu, of.AdjAg as AdjAg, of.AuEq75 as AuEq75, of.AdjAuPersen as AdjAuPersen, of.AdjAgPersen as AdjAgPersen, of.Loader as Loader, of.Remarks , of.Note as Note, of.Density as Density, of.Volume as Volume, s.Nama as Stockpile, of.Tonnestocrush as Tonnestocrush FROM orefeed of, stockpile s WHERE of.Stockpile = s.id AND of.Stockpile='.$a.$Stockpile.$a.'AND of.Date = '.$a.$Date.$a);
+			return $view->result();	
+			}
+			
 		}
 
 
@@ -125,6 +132,12 @@
 	function SumTonnestocrush($Date,$Stockpile){
 		$a="'";
 		$sum = $this->db->query('SELECT SUM(Tonnestocrush) as tot FROM OreFeed WHERE  Date='.$a.$Date.$a.' AND Stockpile='.$a.$Stockpile.$a);
+		return $sum->row()->tot;
+	}
+
+	function SumTonnestocrushbyDate($Date){
+		$a="'";
+		$sum = $this->db->query('SELECT SUM(Tonnestocrush) as tot FROM OreFeed WHERE  Date='.$a.$Date.$a);
 		return $sum->row()->tot;
 	}
 

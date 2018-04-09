@@ -32,13 +32,19 @@
 
 		function GetClosingStockByStockpileandDate($Stockpile,$Date){
 				$a="'";
-			$view = $this->db->query('SELECT * FROM ClosingStock WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date='.$a.$Date.$a.' ORDER BY id DESC limit 1');
+			$view = $this->db->query('SELECT * FROM ClosingStock WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date='.$a.$Date.$a.' ORDER BY id DESC');
 	    return $view->result();
 		}
 
 		function GetClosingStockByStockpileandDateGrade($Stockpile,$Date){
 				$a="'";
 			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date='.$a.$Date.$a.' ORDER BY id DESC limit 1');
+	    return $view->result();
+		}
+
+		function GetClosingStockByStockpileGrade($Stockpile){
+				$a="'";
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' ORDER BY id DESC limit 1');
 	    return $view->result();
 		}
 		
@@ -120,6 +126,12 @@
 			$this->db->update('closingstockgrade',$Closing);
 		}
 
+
+	function UpdateClosingStockByStockpileGrade($Closing,$Stockpile){
+			$this->db->where('Stockpile', $Stockpile);
+			$this->db->update('closingstockgrade',$Closing);
+		}
+
 	function UpdateClosingStockByStockpile($Closing,$Stockpile){
 			$this->db->where('Stockpile', $Stockpile);
 			$this->db->update('ClosingStock',$Closing);
@@ -152,9 +164,35 @@
 	    	return $view->result();
 		}
 
+	function GetOpeningStockRompad($Date){
+			$a="'";
+			$view = $this->db->query('SELECT * FROM ClosingStock WHERE Date<'.$a.$Date.$a.'AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23');
+	    	return $view->result();
+		}
+
+	function GetOpeningStockRompadNew($Date){
+			$a="'";
+				$view = $this->db->query('SELECT c.Date, c.Tonnes as Tonnes, c.AuEq75 as AuEq75, c.Class as Class, c.id, c.Status, c.Au, c.Ag, s.Nama as Stockpile, s.id as idStockpile FROM stockpile s , closingstockgrade AS c WHERE c.date = (
+    				SELECT MAX(c2.date)
+    				FROM closingstockgrade AS c2
+    				WHERE c.stockpile = c2.stockpile AND c2.date < '.$a.$Date.$a.'
+      				) AND s.id = c.stockpile  ORDER BY s.id ASC');
+	    	return $view->result();
+		}
+
 	function GetClosingStockReport($Date){
 			$a="'";
-			$view = $this->db->query('SELECT * FROM ClosingStock WHERE Date='.$a.$Date.$a);
+			$view = $this->db->query('SELECT * FROM ClosingStock WHERE Date<='.$a.$Date.$a.' AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23');
+	    	return $view->result();
+		}
+
+	function GetClosingStockRompadNew($Date){
+			$a="'";
+			$view = $this->db->query('SELECT c.Date, c.Tonnes as Tonnes, c.AuEq75 as AuEq75, c.Class as Class, c.id, c.Status, c.Au, c.Ag, s.Nama as Stockpile, s.id as idStockpile FROM stockpile s , closingstockgrade AS c WHERE c.date = (
+    				SELECT MAX(c2.date)
+    				FROM closingstockgrade AS c2
+    				WHERE c.stockpile = c2.stockpile AND c2.date <= '.$a.$Date.$a.'
+      				) AND s.id = c.stockpile  ORDER BY s.id ASC');
 	    	return $view->result();
 		}
 
@@ -181,7 +219,48 @@
 		$a="'";
 			$view = $this->db->query('SELECT om.Date,om.Volume as Volume,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag, om.Density as DryTonBM,om.Density as Density, s.Nama as Stockpile, s.id as idStockpile
 																FROM  ClosingStock om, stockpile s
-																WHERE om.Stockpile = s.id AND om.Stockpile ='.$a.$stockpile.$a);
+																WHERE om.Stockpile = s.id AND om.Stockpile ='.$a.$stockpile.$a.'ORDER by Date');
+	    return $view->result();
+	}
+
+	function GetClosingStockByStockpileandDateTable($stockpile,$date){
+		$a="'";
+
+		if($stockpile == "All"){
+
+			$view = $this->db->query('SELECT om.Date,om.Volume as Volume,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag, om.Density as DryTonBM,om.Density as Density, s.Nama as Stockpile, s.id as idStockpile
+																FROM  ClosingStock om, stockpile s
+																WHERE om.Stockpile = s.id AND om.Date <='.$a.$date.$a.'Order by Date');
+
+		}else{
+
+			$view = $this->db->query('SELECT om.Date,om.Volume as Volume,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag, om.Density as DryTonBM,om.Density as Density, s.Nama as Stockpile, s.id as idStockpile
+																FROM  ClosingStock om, stockpile s
+																WHERE om.Stockpile = s.id AND om.Stockpile ='.$a.$stockpile.$a.' AND Date<='.$a.$date.$a.'Order by Date');
+		}
+
+		
+	    return $view->result();
+	}
+
+
+	function GetClosingStockGradeByStockpileandDateTable($stockpile,$date){
+		$a="'";
+
+		if($stockpile == "All"){
+
+			$view = $this->db->query('SELECT om.Date,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag, s.Nama as Stockpile, s.id as idStockpile
+																FROM  closingstockgrade om, stockpile s
+																WHERE om.Stockpile = s.id AND om.Date ='.$a.$date.$a.'Order by Date');
+
+		}else{
+
+			$view = $this->db->query('SELECT om.Date,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag,  s.Nama as Stockpile, s.id as idStockpile
+																FROM  closingstockgrade om, stockpile s
+																WHERE om.Stockpile = s.id AND om.Stockpile ='.$a.$stockpile.$a.' AND Date='.$a.$date.$a.'Order by Date');
+		}
+
+		
 	    return $view->result();
 	}
 
@@ -189,7 +268,7 @@
 			$a="'";
 			$view = $this->db->query('SELECT om.Date,om.Volume as Volume,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag, om.Density as DryTonBM,om.Density as Density, s.Nama as Stockpile, s.id as idStockpile
 																FROM  ClosingStock om, stockpile s
-																WHERE om.Stockpile = s.id');
+																WHERE om.Stockpile = s.id Order by om.Date DESC');
 	    return $view->result();
 	}
 
@@ -199,6 +278,57 @@
 	    return $view->result();
 	}
 
+		function GetGradeStockpile($Stockpile){
+		$a="'";
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE stockpile ='.$a.$Stockpile.$a.'ORDER by id asc limit 1');
+	    return $view->result();
+	}
+
+
+		function GetStockpilebyName($name){
+		$a="'";
+			$view = $this->db->query('SELECT id FROM stockpile WHERE Nama ='.$a.$name.$a.'ORDER by id asc limit 1');
+	    return $view->result();
+	}
+
+
+	function GetGradeStockpileScat(){
+		$a="'";
+			$view = $this->db->query('SELECT * FROM scat ORDER by id asc limit 1');
+	    return $view->result();
+	}
+
+
+	function GetClosingStockGradeByStockpileandDateTableLast($stockpile,$date){
+		$a="'";
+
+		if($stockpile == "All"){
+
+			$view = $this->db->query('SELECT c.Date, c.Tonnes as Tonnes, c.AuEq75 as AuEq75, c.Class as Class, c.id, c.Status, c.Au, c.Ag, s.Nama as Stockpile, s.id as idStockpile FROM stockpile s , closingstockgrade AS c WHERE c.date = (
+    				SELECT MAX(c2.date)
+    				FROM closingstockgrade AS c2
+    				WHERE c.stockpile = c2.stockpile AND c2.date <= '.$a.$date.$a.'
+      				) AND s.id = c.stockpile  ORDER BY s.id ASC');
+
+		}else{
+
+			$view = $this->db->query('SELECT om.Date,om.Tonnes as Tonnes,om.AuEq75 as AuEq75,om.Class as Class,om.id, om.Status, om.Au, om.Ag,  s.Nama as Stockpile, s.id as idStockpile
+																FROM  closingstockgrade om, stockpile s
+																WHERE om.Stockpile = s.id AND om.Stockpile ='.$a.$stockpile.$a.' AND Date <='.$a.$date.$a.'Order by Date desc limit 1');
+		}
+
+		
+	    return $view->result();
+	}
+
+
+	function GetClosingstockUptodate($date){
+		$a="'";
+
+			$view = $this->db->query('SELECT c.Date, c.Tonnes as Tonnes, c.AuEq75 as AuEq75, .Class as Class, om.id, om.Status, om.Au, om.Ag, s.Nama as Stockpile, s.id as idStockpile FROM closingstockgrade c inner join closingstockgrade c2 ON c2.stockpile = c.stockpile WHERE ((l.date) BETWEEN ('.$a.$start.$a.') AND ('.$a.$finish.$a.') AND l.hole_id = l2.hole_id AND l2.form < l.t_o) OR ((l.date) BETWEEN ('.$a.$start.$a.') AND ('.$a.$finish.$a.')  AND l.t_o <= l.form) order by l.id');
+      return $view->result();
+
+}
 
 
 }

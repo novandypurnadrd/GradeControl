@@ -69,10 +69,24 @@
             <li><a href="<?php echo base_url().'OreInventory/Input' ;?>" ><span class="title">Input Oreline Oremined</span></a></li>
           <?php } ?>
           <?php if($main == "OreInventory"){?>
-            <li><a href="<?php echo base_url().'OreInventory/Table' ;?>"  class="active"><span class="title">Record</span></a></li>
+            <li><a href="<?php echo base_url().'OreInventory/Table' ;?>"  class="active"><span class="title">Daily Record</span></a></li>
             <?php }
             else { ?>
-            <li><a href="<?php echo base_url().'OreInventory/Table' ;?>" ><span class="title">Record</span></a></li>
+            <li><a href="<?php echo base_url().'OreInventory/Table' ;?>" ><span class="title">Daily Record</span></a></li>
+          <?php } ?>
+           <?php if($main == "OreInventoryGeneral"){?>
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneral' ;?>" class="active"><span class="title">General Ore Record</span></a></li>
+            <?php }
+            else { ?>
+            
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneral' ;?>" ><span class="title">General Ore Record</span></a></li>
+          <?php } ?>
+           <?php if($main == "OreInventoryGeneralVisual"){?>
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneralVisual' ;?>" class="active"><span class="title">General Minerlized Waste Record</span></a></li>
+            <?php }
+            else { ?>
+            
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneralVisual' ;?>" ><span class="title">General Mineralized Waste Record</span></a></li>
           <?php } ?>
         </ul><!--end /submenu -->
       </li><!--end /menu-li -->

@@ -23,6 +23,7 @@ class Update extends CI_Controller {
 				$data['id'] = $this->session->userdata('update');
 				$data['Pit'] = $this->Pit_model->getPit();
 				$data['Oreline'] = $this->Oreline_model->getOreline();
+				$data['OreInventory'] = $this->OreInventory_model->getInventory();
         		$data['Stockpile'] = $this->Stockpile_model->getStockpile();
 				$data['Table'] = $this->OreInventory_model->GetOreInventoryforUpdate($data['id']);
 				$this->session->userdata('update', "");
@@ -69,13 +70,15 @@ class Update extends CI_Controller {
 				$Tonnes = $oremined->DryTonFF;
 				$date = $oremined->Start;
 				$Stockpile1 = $oremined->Stockpile;
-				//$Density = $oremined->Density;
+				$Density = $oremined->Dbdensity;
 				//$Volume = $oremined->Volume;
 			}
+
+
 			
 			
 
-			$Stockpile = $this->Stockpile_model->GetStockpileByDateandStockpile($date,$Stockpile1);
+			$Stockpile = $this->Stockpile_model->GetStockpileByStockpile($Stockpile1);
 			foreach ($Stockpile as $stockpile) {
 				$AuStockpile = $stockpile->Au;
 				$AgStockpile = $stockpile->Ag;
@@ -85,6 +88,8 @@ class Update extends CI_Controller {
 				$RLStockpile = $stockpile->RL;
 				$StockpileMined	= $stockpile->Stockpile;
 			}
+
+
 
 			if ($TonnesStockpile == 0){
 				
@@ -107,6 +112,8 @@ class Update extends CI_Controller {
 				$DensityStockpileUpdate=$DensityStockpile;
 				$VolumeStockpileUpdate = $TonnesStockpileUpdate/$DensityStockpile;
 				$AuEq75StockpileUpdate = round($AuStockpileUpdate+($AgStockpileUpdate/75),2);
+
+
 			if (0.65 <= $AuEq75StockpileUpdate && $AuEq75StockpileUpdate < 2.00){
 					$Class="Marginal";
 				}
@@ -136,12 +143,16 @@ class Update extends CI_Controller {
 				'Date' => $date,
 			);
 
-			$this->Stockpile_model->UpdateToStockpile($ToStockpile,$date,$StockpileMined);
+		
+
+			$this->Stockpile_model->UpdateToStockpilebyStockpile($ToStockpile,$StockpileMined);
 
 
-			
-			$Closingstock = $this->Closingstock_model->GetClosingStockByStockpileandDate($Stockpile1,$date);
 
+
+
+			//Update Closingstock
+			$Closingstock = $this->Closingstock_model->GetClosingStockByStockpile($Stockpile1);
 
 			foreach ($Closingstock as $closingstock) {
 				$AuClosingstock = $closingstock->Au;
@@ -154,53 +165,6 @@ class Update extends CI_Controller {
 				
 			}
 
-
-			if($TonnesClosingstock == 0){
-				$TonnesClosingstockUpdate = 0;
-				$AgStockpileUpdate = 0;
-				$AuClosingstockUpdate = 0;
-				$VolumeClosingstockUpdate = 0;
-				$DensityClosingstockUpdate = 0;
-				$AuEq75ClosingstockUpdate = 0;
-			}
-			else{
-
-			$TonnesClosingstockUpdate = $TonnesClosingstock-$Tonnes;
-			
-			$AuClosingstockUpdate = round(((($AuClosingstock*$TonnesClosingstock)-($Au*$Tonnes))/$TonnesClosingstockUpdate),2);
-			$AgClosingstockUpdate = round(((($AgClosingstock*$TonnesClosingstock)-($Ag*$Tonnes))/$TonnesClosingstockUpdate),2);
-			$DensityClosingstockUpdate=$DensityClosingstock;
-			$VolumeClosingstockUpdate = $TonnesClosingstockUpdate/$DensityClosingstockUpdate;
-			$AuEq75ClosingstockUpdate = round($AuClosingstockUpdate+($AgClosingstockUpdate/75),2);
-
-			if (0.65 <= $AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate < 2.00){
-					$Class="Marginal";
-				}
-				elseif(2<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<4.00){
-					$Class="Medium Grade";
-				}
-				elseif(4<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<6.00){
-					$Class="High Grade";
-				}
-				else{
-					$Class="SHG";
-				}
-
-			}
-
-			$Closing = array(
-				'Volume' => $VolumeClosingstockUpdate,
-				'Au' => $AuClosingstockUpdate,
-				'Ag' => $AgClosingstockUpdate,
-				'AuEq75' => $AuEq75ClosingstockUpdate,
-				'Class' =>$Class,
-				'Tonnes' => $TonnesClosingstockUpdate,
-				'Density' => $DensityClosingstockUpdate,
-				'Stockpile' => $StockpileClosingstock,
-				'Date' => $date,
-			);
-
-			$this->Closingstock_model->UpdateClosingStockByDate($Closing,$StockpileClosingstock,$date);
 
 
 			if ($Value == "Final Figure"){
@@ -215,6 +179,52 @@ class Update extends CI_Controller {
 					$AuEq75Update = $this->input->post('AuEq75');
 				}
 
+
+			
+			$TonnesClosingstockNew = $TonnesClosingstock-$Tonnes;
+			$AuClosingstockNew = round(((($AuClosingstock*$TonnesClosingstock)-($Au*$Tonnes))/$TonnesClosingstockNew),2);
+			$AgClosingstockNew = round(((($AgClosingstock*$TonnesClosingstock)-($Ag*$Tonnes))/$TonnesClosingstockNew),2);
+			$AuEq75New = round(($AuClosingstockNew+($AgClosingstockNew/75)),2);
+
+			if (0.65 <= $AuEq75New && $AuEq75New < 2.00){
+					$ClassNew="Marginal";
+				}
+				elseif(2<=$AuEq75New && $AuEq75New<4.00){
+					$ClassNew="Medium Grade";
+				}
+				elseif(4<=$AuEq75New && $AuEq75New<6.00){
+					$ClassNew="High Grade";
+				}
+				else{
+					$ClassNew="SHG";
+				}
+
+			$StockpileNew = $this->input->post('Stockpile');
+			$DensityNew = round(((($DensityClosingstock*$TonnesClosingstock)-($Density*$Tonnes))/$TonnesClosingstockNew),2);
+			$VolumeNew = round(($TonnesClosingstockNew/$DensityNew),2);
+			$StatusNew = $this->input->post('Status');
+
+			$UpdateClosingstock = array (
+				
+				'Date' => $date,
+				'Stockpile' => $StockpileNew,
+				'Volume' => $VolumeNew,
+				'Density' => $DensityNew,
+				'Tonnes' =>$TonnesClosingstockNew,
+				'Au' => $AuClosingstockNew,
+				'Ag' => $AgClosingstockNew,
+				'AuEq75' => $AuEq75New,
+				'Class' => $ClassNew,
+				'Status' => $StatusNew,
+				);
+
+
+			$this->Closingstock_model->UpdateClosingStockByStockpile($UpdateClosingstock,$StockpileClosingstock);
+
+
+			//Update Ore Inventory
+			$DryTonFFInventory = $this->input->post('DryTonFF');
+			$DryTonFFUpdate = $DryTonFFInventory;
 			$data = array(
 				'Pit' => $this->input->post('Pit'),
 				'Block' => $this->input->post('Block'),
@@ -222,7 +232,9 @@ class Update extends CI_Controller {
 				'Au' => $AuUpdate,
 				'Ag' => $AgUpdate,
 				'AuEq75' =>$AuEq75Update,
-				'DryTonFF' => $this->input->post('DryTonFF'),
+				'Dbdensity' => $this->input->post('Density'),
+				'DryTonBM' => $this->input->post('DryTonBM'),
+				'DryTonFF' => $DryTonFFUpdate,
 				'Start' => $Start,
 				'Finish' => $Finish,
 				'StartHour' => $this->input->post('StartHour'),
@@ -230,6 +242,7 @@ class Update extends CI_Controller {
 				'Status' => $this->input->post('Status'),
 				'Achievement' => $this->input->post('Achievement'),
 				'Stockpile' => $this->input->post('Stockpile'),
+				'Value' => $Value,
 				'Note' => $this->input->post('Note'),
 				'usrid' => $this->session->userdata('usernameGradeControl'),
 			);
@@ -238,7 +251,7 @@ class Update extends CI_Controller {
 			$this->Oreline_model->UpdateOrelineStatus($blockline,$statusline);
 			$this->OreInventory_model->UpdateOreInventory($data, $id);
 
-			$Stockpile = $this->Stockpile_model->GetStockpileByDateandStockpile($date,$Stockpile1);
+			$Stockpile = $this->Stockpile_model->GetStockpileByStockpile($Stockpile1);
 			foreach ($Stockpile as $stockpile) {
 				$AuStockpile = $stockpile->Au;
 				$AgStockpile = $stockpile->Ag;
@@ -267,6 +280,7 @@ class Update extends CI_Controller {
 				}
 
 			$TonnesStockpileNew = $TonnesStockpile+$TonnesUpdate;
+
 			$AuStockpileNew = round(((($AuStockpile*$TonnesStockpile)+($AuUpdate*$TonnesUpdate))/$TonnesStockpileNew),2);
 			$AgStockpileNew = round(((($AgStockpile*$TonnesStockpile)+($AgUpdate*$TonnesUpdate))/$TonnesStockpileNew),2);
 			$AuEq75New = round(($AuStockpileNew+($AgStockpileNew/75)),2);
@@ -302,12 +316,12 @@ class Update extends CI_Controller {
 			'Class' => $ClassNew,
 			'Date' => $date,
 			);
-
-			$this->Stockpile_model->UpdateToStockpile($UpdateStockpile,$date,$StockpileNew);
+		
+		
+			$this->Stockpile_model->UpdateToStockpile($UpdateStockpile,$StockpileNew);
 
 			
-
-			$Closingstock = $this->Closingstock_model->GetClosingStockByStockpileandDate($Stockpile1,$date);
+			$Closingstock = $this->Closingstock_model->GetClosingStockByStockpile($Stockpile1);
 			foreach ($Closingstock as $closingstock) {
 				$AuClosingstock = $closingstock->Au;
 				$AgClosingstock = $closingstock->Ag;
@@ -373,24 +387,24 @@ class Update extends CI_Controller {
 				);
 
 
-			$this->Closingstock_model->UpdateClosingStockByDate($UpdateClosingstock,$StockpileClosingstock,$date);
+			$this->Closingstock_model->UpdateClosingStockByStockpile($UpdateClosingstock,$StockpileClosingstock);
 
 
 			//Update Closing Stock Grade
-			$Closingstock = $this->Closingstock_model->GetClosingStockByStockpileandDateGrade($Stockpile1,$date);
+			$Closingstock = $this->Closingstock_model->GetClosingStockByStockpileGrade($Stockpile1);
 			foreach ($Closingstock as $closingstock) {
 				$AuClosingstock = $closingstock->Au;
 				$AgClosingstock = $closingstock->Ag;
 				$TonnesClosingstock = $closingstock->Tonnes;
-				//$VolumeClosingstock = $closingstock->Volume;
-				//$DensityClosingstock = $closingstock->Density;
+				$VolumeClosingstock = $closingstock->Volume;
+				$DensityClosingstock = $closingstock->Density;
 				$StockpileClosingstock = $closingstock->Stockpile;
 			}
 
 			$TonnesUpdate = $this->input->post('DryTonFF');
 			$AchievementUpdate = $this->input->post('Achievement');
 			$StatusUpdate = $this->input->post('Status');
-			$DensityUpdate = $this->input->post('Density');
+			$DensityUpdate = round($this->input->post('Density')*0.8,2);
 
 			if ($Value == "Final Figure"){
 					$Au = $this->input->post('Augt');
@@ -424,16 +438,16 @@ class Update extends CI_Controller {
 				}
 
 			$StockpileNew = $this->input->post('Stockpile');
-			//$DensityNew = round(((($DensityClosingstock*$TonnesClosingstock)+($DensityUpdate*$TonnesUpdate))/$TonnesClosingstockNew),2);
-			//$VolumeNew = round(($TonnesClosingstockNew/$DensityNew),2);
+			$DensityNew = round(((($DensityClosingstock*$TonnesClosingstock)+($DensityUpdate*$TonnesUpdate))/$TonnesClosingstockNew),2);
+			$VolumeNew = round(($TonnesClosingstockNew/$DensityNew),2);
 			$StatusNew = $this->input->post('Status');
 
 			$UpdateClosingstock = array (
 				
 				'Date' => $date,
 				'Stockpile' => $StockpileNew,
-				//'Volume' => $VolumeNew,
-				//'Density' => $DensityNew,
+				'Volume' => $VolumeNew,
+				'Density' => $DensityNew,
 				'Tonnes' =>$TonnesClosingstockNew,
 				'Au' => $AuClosingstockNew,
 				'Ag' => $AgClosingstockNew,
@@ -443,7 +457,7 @@ class Update extends CI_Controller {
 				);
 
 
-			$this->Closingstock_model->UpdateClosingStockByDateGrade($UpdateClosingstock,$StockpileClosingstock,$date);
+			$this->Closingstock_model->UpdateClosingStockByStockpileGrade($UpdateClosingstock,$StockpileClosingstock);
 
 			redirect('OreInventory/Table');
 		}else {

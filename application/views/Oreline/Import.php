@@ -40,9 +40,7 @@
 								<div class="card">
 									<div class="card-body">
 										<form class="form" role="form" action="<?php echo base_url().'Oreline/Import/ImportOreline' ?>" method="post" enctype="multipart/form-data">
-                      <div class="col-md-1 col-lg-1 col-xl-1">
-
-                      </div>
+                 
                       <div class="col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group floating-label">
   												<select id="select2" name="Pit" class="form-control" required="">
@@ -54,9 +52,9 @@
   												<label for="select2">Select Pit</label>
 						            </div>
                       </div>
-                      <div class="col-md-1 col-lg-1 col-xl-1">
+                <!--       <div class="col-md-1 col-lg-1 col-xl-1">
 
-                      </div>
+                      </div> -->
                       <div class="col-md-2 col-lg-2 col-xl-2">
                         <div class="form-group">
                           <input type="file" name="file" id="file" class="inputfile" required="" />
@@ -70,6 +68,22 @@
                           <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-save"></i> Import</button>
                         </div>
                       </div>
+                       <div class="col-md-2 col-lg-2 col-xl-2">
+
+                      </div>
+
+                      <br>
+
+
+                      <div class="col-md-8 col-lg-8 col-xl-8">
+                      
+						    						<span class="bigger-110" style="color:blue;"><?php
+						                                echo "".$msg;
+						                            ?>
+						                            	
+						                            </span>
+    											
+    				  </div>
 										</form>
 									</div><!--end .card-body -->
 								</div><!--end .card -->

@@ -70,7 +70,7 @@
 												</div>
 												<br>
 												
-												<div class="form-group">
+											<!-- 	<div class="form-group">
 													<div class="col-md-6 col-sm-6">
 														<label for="Aggt" class="col-sm-4 control-label">Remarks</label>
 														<div class="col-sm-8">
@@ -89,17 +89,8 @@
 
 														
 												</div>
-													
-												</div>
-												<br>
-												<div class="form-group">
-													<div class="col-md-6 col-sm-6">
-  													<label for="DryTonFF" class="col-sm-4 control-label">Note</label>
-  													<div class="col-sm-8">
-  														<textarea rows="2" id="Note" name="Note"></textarea>
-  													</div>
-  												</div>
-  													<div class="col-md-6 col-sm-6">
+
+												<div class="col-md-6 col-sm-6">
 														<label for="Aggt" class="col-sm-4 control-label">Shift</label>
 														<div class="col-sm-8">
 															<select id="Shift" name="Shift" class="form-control">
@@ -109,6 +100,17 @@
 															</select>
 													</div>
 												</div>
+													
+												</div> -->
+											
+												<div class="form-group">
+													<div class="col-md-6 col-sm-6">
+  													<label for="DryTonFF" class="col-sm-2 control-label">Note</label>
+  													<div class="col-sm-10">
+  														<textarea rows="3" id="Note" name="Note"></textarea>
+  													</div>
+  												</div>
+  													
 												</div>
 				
 											<br>
@@ -129,33 +131,33 @@
 													<div class="col-md-3 col-sm-3">
 														<label for="Au" class="col-sm-2 control-label">Au</label>
 														<div class="col-sm-8">
-															<?php foreach ($Grade as $grade): ?>
-															<input type="text" class="form-control" id="Au" name="Au" readonly="" autocomplete="off" value="<?php echo $grade->Au ?>">
-															<?php endforeach; ?>
+															<!-- <?php //foreach ($Grade as $grade): ?> -->
+															<input type="text" class="form-control" id="Au" name="Au" readonly="" autocomplete="off">
+															<!-- <?php //endforeach; ?> -->
 														</div>
 													</div>
 													<div class="col-md-3 col-sm-3">
 														<label for="Ag" class="col-sm-4 control-label">Ag</label>
 														<div class="col-sm-8">
-															<?php foreach ($Grade as $grade): ?>
-															<input type="text" class="form-control" id="Ag" name="Ag" readonly="" autocomplete="off" value="<?php echo $grade->Ag ?>">
-															<?php endforeach; ?>
+														<!-- 	<?php //foreach ($Grade as $grade): ?> -->
+															<input type="text" class="form-control" id="Ag" name="Ag" readonly="" autocomplete="off">
+															<!-- <?php //endforeach; ?> -->
 														</div>
 													</div>
 													<div class="col-md-3 col-sm-3">
 														<label for="Ag" class="col-sm-4 control-label">AuEq75</label>
 														<div class="col-sm-8">
-															<?php foreach ($Grade as $grade): ?>
-															<input type="text" class="form-control" id="AuEq75" name="AuEq75" readonly="" autocomplete="off" value="<?php echo $grade->AuEq75 ?>">
-															<?php endforeach; ?>
+															<!-- <?php //foreach ($Grade as $grade): ?> -->
+															<input type="text" class="form-control" id="AuEq75" name="AuEq75" readonly="" autocomplete="off" >
+															<!-- <?php //endforeach; ?> -->
 														</div>
 													</div>
 													<div class="col-md-3 col-sm-3">
 														<label for="Ag" class="col-sm-4 control-label">Class</label>
 														<div class="col-sm-8">
-															<?php foreach ($Grade as $grade): ?>
-															<input type="text" class="form-control" id="Class" name="Class" readonly="" autocomplete="off" value="<?php echo $grade->Class ?>" >
-															<?php endforeach; ?>
+															<!-- <?php //foreach ($Grade as $grade): ?> -->
+															<input type="text" class="form-control" id="Class" name="Class" readonly="" autocomplete="off" >
+															<!-- <?php //endforeach; ?> -->
 														</div>
 													</div>
 													
@@ -193,7 +195,7 @@
 												<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Au</label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="AdjAuPersen" name="AdjAuPersen" autocomplete="off" onkeyup="AdjusmentAu()">
+															<input type="text" class="form-control" id="AdjAuPersen" name="AdjAuPersen" autocomplete="off" onkeyup="AdjusmentAu()" required="">
 															
 														</div>
 														<span class="input-group-addon">%</span>
@@ -211,7 +213,7 @@
 												<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Ag</label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="AdjAgPersen" name="AdjAgPersen" autocomplete="off" onkeyup="AdjusmentAg()">
+															<input type="text" class="form-control" id="AdjAgPersen" name="AdjAgPersen" autocomplete="off" onkeyup="AdjusmentAg()" required="">
 															
 														</div>
 														<span class="input-group-addon">%</span>
@@ -223,6 +225,55 @@
 														</div>
 													</div>
 													
+												</div>
+												<div class ="form-group">
+													
+												
+														
+													
+														 <div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="dateOrefeed" name="dateOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+                     									 <div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="stockpileOrefeed" name="stockpileOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+                     									 <div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="shiftOrefeed" name="shiftOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+
+                     									<div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="noteOrefeed" name="noteOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+
+                     										<div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="remarksOrefeed" name="remarksOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+												
 												</div>
 											
   										</div>
@@ -262,7 +313,7 @@
 														<div class="col-md-4 col-sm-4">
 														<label for="Aggt" class="col-sm-4 control-label">Material</label>
 														<div class="col-sm-8">
-															 <select id="material" name="material" class="form-control" required="" onchange="PercentageChange()" >
+															 <select id="material" name="material" class="form-control" required="" onchange="SetValueOrefeed()" >
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Material as $material): ?>
                                   <option value="<?php echo $material->material ?>"><?php echo $material->material ?></option>
@@ -471,15 +522,15 @@
 
       function StockpileChange() {
        	var StockpileVar = document.getElementById("Stockpile1");
-        //var Au = document.getElementById("Au");
-        //var Ag = document.getElementById("Ag");
+        var Au = document.getElementById("Au");
+        var Ag = document.getElementById("Ag");
         var DryTonBM = document.getElementById("DryTonBM");
 		var Density = document.getElementById("Density");
 		var Volume = document.getElementById("Volume");
         var Bucket = document.getElementById("Bucket");
         var Tgl = document.getElementById("Date");
-        //var AuEq75 = document.getElementById("AuEq75");
-        //var Class = document.getElementById("Class");
+        var AuEq75 = document.getElementById("AuEq75");
+        var Class = document.getElementById("Class");
         
         var Dates = "";
         var vAu = 0;
@@ -507,10 +558,10 @@
 
           if ("<?php echo $tostockpile->Stockpile ?>" == StockpileVar.value) {
 
-				//Au.value = "";
-	   			//Ag.value = "";
-	   			//AuEq75.value = "<?php //echo $tostockpile->AuEq75 ?>";
-	   			//Class.value = "<?php //echo $tostockpile->Class ?>";
+				Au.value = "<?php echo $tostockpile->Au ?>";
+	   			Ag.value = "<?php echo $tostockpile->Ag ?>";
+	   			AuEq75.value = "<?php echo $tostockpile->AuEq75 ?>";
+	   			Class.value = "<?php echo $tostockpile->Class ?>";
 
 	
 				DryTonBM.value = parseFloat("<?php echo $tostockpile->Tonnes ?>").toFixed(2);
@@ -519,8 +570,8 @@
 				Volume.value = parseFloat(vVolume).toFixed(2) ;
 				return;
           }else {
-            //Au.value = "";
-            //Ag.value = "";
+            Au.value = "";
+            Ag.value = "";
             DryTonBM.value = "";
             Density.value = "";
             Bucket.value = "";
@@ -618,6 +669,26 @@
       	var v_Act = parseFloat(Act.value);
 
       	Adjtonnes.value = parseFloat(v_Stock + v_Act).toFixed(2);
+      }
+
+        function SetValueOrefeed() {
+        var masterDate = document.getElementById("Date");
+        var masterStockpile = document.getElementById("Stockpile1");
+        var masterRemarks = document.getElementById("Remarks");
+        var masterNote = document.getElementById("Note");
+        var masterShift = document.getElementById("Shift");
+
+        var orefeedDate = document.getElementById("dateOrefeed");
+        var orefeedStockpile = document.getElementById("stockpileOrefeed");
+        var orefeedRemarks = document.getElementById("remarksOrefeed");
+        var orefeedNote = document.getElementById("noteOrefeed");
+        var orefedShift = document.getElementById("shiftOrefeed");
+
+        orefeedDate.value = masterDate.value;
+        orefeedStockpile.value = masterStockpile.value;
+        orefeedRemarks.value = masterRemarks.value;
+        orefeedNote.value = masterNote.value;
+        orefedShift.value = masterShift.value; 
       }
 
 

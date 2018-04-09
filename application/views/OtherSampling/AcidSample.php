@@ -345,7 +345,7 @@
         var TotalSample = document.getElementById("totalsample");
 
         
-        TotalSample.value = parseFloat(To.value - From.value)+1;
+        TotalSample.value = (parseFloat(To.value - From.value)+1).toFixed(1);
       }
     </script>
   
