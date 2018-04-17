@@ -169,6 +169,13 @@
 			$this->db->update('ToStockpile',$data);
 		}
 
+
+		function UpdateValueToStockpile($tonnes,$volume,$stockpile){
+		$a="'";
+		$view = $this->db->query('UPDATE tostockpile SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. 'WHERE Stockpile ='.$a.$stockpile.$a);
+	
+	}
+
 	}
 
 ?>

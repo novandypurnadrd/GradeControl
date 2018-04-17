@@ -186,6 +186,14 @@
 		return $sum->row()->SumTon;
 	}
 
+
+	function UpdateValueOrefeed($tonnes,$volume,$loader,$material,$percentage,$bucket,$id){
+		$a="'";
+		$query = $this->db->query('UPDATE orefeed SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. ', Loader =' .$a.$loader.$a.',Material =' .$a.$material.$a.',Percentage='.$a.$percentage.$a.' , Bucket='.$a.$bucket.$a.' WHERE id ='.$a.$id.$a);
+	
+	}
+
+
 	}
 
 ?>

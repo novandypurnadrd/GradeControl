@@ -11,7 +11,8 @@ class Update extends CI_Controller {
 		$this->load->model('User_model');
 		$this->load->model('Oreline_model');
 		$this->load->model('OreInventory_model');
-    $this->load->model('Stockpile_model');
+    	$this->load->model('Stockpile_model');
+    	$this->load->model('ClosingStock_model');
 		$this->load->model('Pit_model');
 		$this->load->model('OreFeed_model');
 		$this->load->model('Loader_model');
@@ -46,15 +47,12 @@ class Update extends CI_Controller {
 
 			foreach ($Orefeed as $orefeedvalue) {
 				
-				$Volumeorefed = $orefeedvalue->Volume;
-				$Auorefeed = $orefeedvalue->Au;
-				$Agorefeed = $orefeedvalue->Ag;
-				$AuEq75orefeed = $orefeedvalue->AuEq75;
-				$Classorefeed = $orefeedvalue->Class;
-				$Densityorefeed = $orefeedvalue->Density;
-				$Tonnesorefeed = $orefeedvalue->Tonnes;
+				$Tonnestocrushorefeed = $orefeedvalue->Tonnestocrush;
 				$Stockpileorefeed = $orefeedvalue->Stockpile;
+				$Dateorefeed = $orefeedvalue->Date;
 			}
+
+			
 
 			//update tabel closingstock
 			$Closingstock = $this->ClosingStock_model->GetClosingStockByStockpile($Stockpileorefeed);
@@ -62,13 +60,97 @@ class Update extends CI_Controller {
 
 				foreach ($Closingstock as $closingstockvalue) {
 					
-					$TonnesUpdate = $closingstockvalue->Tonnes + $Tonnesorefeed;
+					$TonnesUpdate = $closingstockvalue->Tonnes + $Tonnestocrushorefeed;
+					$DensityUpdate = $closingstockvalue->Density;
+					$VolumeUpdate = $TonnesUpdate / $DensityUpdate;
+				
+
+				}
+
+			
+				$this->ClosingStock_model->UpdateValueClosingstock($TonnesUpdate,$VolumeUpdate,$Stockpileorefeed);
+
+
+				$Closingstock = $this->ClosingStock_model->GetClosingStockByStockpile($Stockpileorefeed);
+				foreach ($Closingstock as $closingstockvalue) {
+			
+					$TonnesUpdate = $closingstockvalue->Tonnes - (float) $this->input->post('Total');
 					$DensityUpdate = $closingstockvalue->Density;
 					$VolumeUpdate = $TonnesUpdate / $DensityUpdate;
 
 				}
+		
+
+				
+
+				$this->ClosingStock_model->UpdateValueClosingstock($TonnesUpdate,$VolumeUpdate,$Stockpileorefeed);
+
 			}
-			
+
+
+			//update table tostockpile
+			$ToStockpile = $this->Stockpile_model->GetStockpileByStockpile($Stockpileorefeed);
+			if($ToStockpile){
+				foreach ($ToStockpile as $tostockpile) {
+					$TonnesUpdate = $tostockpile->Tonnes + $Tonnestocrushorefeed;
+					$DensityUpdate = $tostockpile->Density;
+					$VolumeUpdate = $TonnesUpdate / $DensityUpdate;
+				}
+
+				$this->Stockpile_model->UpdateValueToStockpile($TonnesUpdate,$VolumeUpdate,$Stockpileorefeed);
+
+
+
+				$ToStockpile = $this->Stockpile_model->GetStockpileByStockpile($Stockpileorefeed);
+				foreach ($ToStockpile as $tostockpile) {
+					$TonnesUpdate = $tostockpile->Tonnes - (float) $this->input->post('Total');
+					$DensityUpdate = $tostockpile->Density;
+					$VolumeUpdate = $TonnesUpdate / $DensityUpdate;
+				}
+
+				$this->Stockpile_model->UpdateValueToStockpile($TonnesUpdate,$VolumeUpdate,$Stockpileorefeed);
+
+			}
+
+
+			//update tabel closingstockgrade
+			$ClosingstockGrade = $this->ClosingStock_model->GetGrade($Stockpileorefeed,$Dateorefeed);
+			if($ClosingstockGrade){
+				foreach ($ClosingstockGrade as $grade) {
+					$TonnesUpdate = $grade->Tonnes + $Tonnestocrushorefeed;
+					$DensityUpdate = $grade->Density;
+					$VolumeUpdate = $TonnesUpdate / $DensityUpdate;
+					$idClosingstockgrade = $grade->id;
+					$this->ClosingStock_model->UpdateValueClosingstockGrade($TonnesUpdate,$VolumeUpdate,$idClosingstockgrade);
+				}
+
+				
+
+
+				$ClosingstockGrade = $this->ClosingStock_model->GetGrade($Stockpileorefeed,$Dateorefeed);
+				foreach ($ClosingstockGrade as $grade) {
+					$TonnesUpdate = $grade->Tonnes - (float) $this->input->post('Total');
+					$DensityUpdate = $grade->Density;
+					$VolumeUpdate = $TonnesUpdate / $DensityUpdate;
+					$idClosingstockgrade = $grade->id;
+					$this->ClosingStock_model->UpdateValueClosingstockGrade($TonnesUpdate,$VolumeUpdate,$idClosingstockgrade);
+				}
+
+				
+
+			}
+
+
+			//update tabel orefeed
+				$LoaderUpdate = $this->input->post('Loader');
+				$MaterialUpdate = $this->input->post('material');
+				$PercentageUpdate = $this->input->post('percentage');
+				$BucketUpdate = $this->input->post('Bucket');
+				$TonnesUpdate = $this->input->post('Total');
+				$VolumeUpdate = $this->input->post('Volume');
+				$DensityUpdate = $this->input->post('Density');
+
+				$this->OreFeed_model->UpdateValueOrefeed($TonnesUpdate, $VolumeUpdate, $LoaderUpdate, $MaterialUpdate, $PercentageUpdate, $BucketUpdate,$id);
 
 
 

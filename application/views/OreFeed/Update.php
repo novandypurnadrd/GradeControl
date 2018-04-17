@@ -51,7 +51,7 @@
 														<div class="col-sm-10">
 															<div class="input-group date" id="demo-date">
 																<div class="input-group-content">
-																	<input type="text" class="form-control" id="Date" name="Date" autocomplete="off" onchange="StockpileChange()" value="<?php echo explode('-',$table->Date)[1].'/'.explode('-',$table->Date)[2].'/'.explode('-',$table->Date)[0] ?>">
+																	<input type="text" class="form-control" id="Date" name="Date" autocomplete="off" onchange="StockpileChange()" value="<?php echo explode('-',$table->Date)[1].'/'.explode('-',$table->Date)[2].'/'.explode('-',$table->Date)[0] ?>" readonly="">
 																</div>
 																<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 															</div>
@@ -60,7 +60,7 @@
 														<div class="col-md-6 col-sm-6">
 														<label for="Aggt" class="col-sm-4 control-label">Stockpile</label>
 														<div class="col-sm-8">
-															 <select id="Stockpile1" name="Stockpile1" class="form-control" required="" onchange="StockpileChange()">
+															 <select id="Stockpile1" name="Stockpile1" class="form-control" readonly="" onchange="StockpileChange()">
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Stockpile as $stockpile): ?>
                                   <option value="<?php echo $stockpile->id ?>" <?php if($stockpile->id == $table->Stockpile){echo "selected='true'";}?>><?php echo $stockpile->Nama ?></option>
@@ -75,7 +75,7 @@
 													<div class="col-md-6 col-sm-6">
   													<label for="DryTonFF" class="col-sm-2 control-label">Note</label>
   													<div class="col-sm-10">
-  														<textarea rows="3" id="Note" name="Note"><?php echo $table->Note ?></textarea>
+  														<textarea rows="3" id="Note" name="Note" readonly=""><?php echo $table->Note ?></textarea>
   													</div>
   												</div>
   													
@@ -89,7 +89,7 @@
   							</div><!--end .col -->
   						</form>
 
-  						 <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Orefeed/Input/InputOreFeed' ?>" method="post">
+  						 <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Orefeed/Update/UpdateOreFeed/'.$table->id ?>" method="post">
   							<div class="col-md-7 col-sm-7">
   								<div class="card">
   									<div class="card-body">
@@ -146,10 +146,10 @@
 												</div>
 												<div class="form-group">
 												<div class="col-md-6 col-sm-6">
-														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Tonnes</label>
+														<!-- <label for="DryTonBM" class="col-sm-4 control-label">Adjusment Tonnes</label>
 														<div class="col-sm-7">
 															<input type="text" class="form-control" id="Adjtonnes" name="Adjtonnes" autocomplete="off">
-														</div>
+														</div> -->
 													</div>
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Volume</label>
@@ -163,7 +163,7 @@
 												<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Au</label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="AdjAuPersen" name="AdjAuPersen" autocomplete="off" onkeyup="AdjusmentAu()" required="" value="<?php echo $table->AdjAuPersen ?>">
+															<input type="text" class="form-control" id="AdjAuPersen" name="AdjAuPersen" autocomplete="off" onkeyup="AdjusmentAu()" readonly="" value="<?php echo $table->AdjAuPersen ?>">
 															
 														</div>
 														<span class="input-group-addon">%</span>
@@ -172,7 +172,7 @@
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Au</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="AdjAu" name="AdjAu" autocomplete="off" value="<?php echo $table->AdjAu ?>">
+															<input type="text" class="form-control" id="AdjAu" name="AdjAu" autocomplete="off" value="<?php echo $table->AdjAu ?>" readonly="">
 														</div>
 													</div>
 													
@@ -181,7 +181,7 @@
 												<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Ag</label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="AdjAgPersen" name="AdjAgPersen" autocomplete="off" onkeyup="AdjusmentAg()" required="" value="<?php echo $table->AdjAgPersen ?>">
+															<input type="text" class="form-control" id="AdjAgPersen" name="AdjAgPersen" autocomplete="off" onkeyup="AdjusmentAg()" readonly="" value="<?php echo $table->AdjAgPersen ?>">
 															
 														</div>
 														<span class="input-group-addon">%</span>
@@ -189,7 +189,7 @@
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Ag</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="AdjAg" name="AdjAg" autocomplete="off" value="<?php echo $table->AdjAg ?>">
+															<input type="text" class="form-control" id="AdjAg" name="AdjAg" autocomplete="off" value="<?php echo $table->AdjAg ?>" readonly="">
 														</div>
 													</div>
 													
@@ -363,7 +363,7 @@
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Total</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="Total" name="Total" readonly="" autocomplete="off">
+															<input type="text" class="form-control" id="Total" name="Total" autocomplete="off">
 														</div>
 													</div>
 													<div class="col-md-6 col-sm-6">
@@ -380,12 +380,12 @@
 														
 													</div>
 
-													<div class="col-md-6 col-sm-6">
+													<!-- <div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Act.</label>
 														<div class="col-sm-8">
 															<input type="text" class="form-control" id="Act" name="Act" autocomplete="off" onkeyup="ActTonnes()">
 														</div>
-													</div>
+													</div> -->
 												</div>
 
 												<div class="form-group">	

@@ -301,7 +301,7 @@
 
 	function GetGrade($Stockpile,$Date){
 		$a="'";
-			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE stockpile ='.$a.$Stockpile.$a.' AND date ='.$a.$Date.$a);
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE stockpile ='.$a.$Stockpile.$a.' AND date >='.$a.$Date.$a);
 	    return $view->result();
 	}
 
@@ -356,6 +356,23 @@
       return $view->result();
 
 }
+
+
+	function UpdateValueClosingstock($tonnes,$volume,$stockpile){
+		$a="'";
+		$view = $this->db->query('UPDATE closingstock SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. 'WHERE Stockpile ='.$a.$stockpile.$a);
+	
+	}
+
+
+	function UpdateValueClosingstockGrade($tonnes,$volume,$id){
+		$a="'";
+		$view = $this->db->query('UPDATE closingstockgrade SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. 'WHERE id ='.$a.$id.$a);
+	
+	}
+
+
+	
 
 
 }
