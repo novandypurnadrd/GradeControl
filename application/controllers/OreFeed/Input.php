@@ -419,7 +419,7 @@ class Input extends CI_Controller {
 			
 
 			if (0.65<=$UpdateAuEq75Stockpile && $UpdateAuEq75Stockpile<2.00){
-					$UpdateAuEq75Stockpile="Marginal";
+					$Class="Marginal";
 				}
 				elseif(2<=$UpdateAuEq75Stockpile && $UpdateAuEq75Stockpile<4.00){
 					$Class="Medium Grade";

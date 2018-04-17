@@ -52,10 +52,25 @@ class Update extends CI_Controller {
 				$AuEq75orefeed = $orefeedvalue->AuEq75;
 				$Classorefeed = $orefeedvalue->Class;
 				$Densityorefeed = $orefeedvalue->Density;
-				$Tonnesorefeed = $oreinventory->Tonnes;
+				$Tonnesorefeed = $orefeedvalue->Tonnes;
+				$Stockpileorefeed = $orefeedvalue->Stockpile;
 			}
 
+			//update tabel closingstock
+			$Closingstock = $this->ClosingStock_model->GetClosingStockByStockpile($Stockpileorefeed);
+			if($Closingstock){
+
+				foreach ($Closingstock as $closingstockvalue) {
+					
+					$TonnesUpdate = $closingstockvalue->Tonnes + $Tonnesorefeed;
+					$DensityUpdate = $closingstockvalue->Density;
+					$VolumeUpdate = $TonnesUpdate / $DensityUpdate;
+
+				}
+			}
 			
+
+
 
 			redirect('OreFeed/Table');
 		}else {

@@ -124,7 +124,7 @@
 														<label for="Ag" class="col-sm-4 control-label">Class</label>
 														<div class="col-sm-8">
 															<!-- <?php //foreach ($Grade as $grade): ?> -->
-															<input type="text" class="form-control" id="Class" name="Class" readonly="" autocomplete="off" >
+															<input type="text" class="form-control" id="Class" name="Class" readonly="" autocomplete="off" value="<?php echo $table->Class ?>">
 															<!-- <?php //endforeach; ?> -->
 														</div>
 													</div>
