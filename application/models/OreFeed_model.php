@@ -13,6 +13,14 @@
 	    return $view->result();
 		}
 
+
+		function GetOreFeedByIDNew($id){
+			$a="'";
+			$view = $this->db->query('SELECT * FROM OreFeed WHERE id ='.$a.$id.$a);
+	    return $view->result();
+		}
+
+
 		function GetOreFeedByID($id){
 			$a="'";
 			$view = $this->db->query('SELECT om.id, ol.Au as AuBM, ol.Ag as AgBM, om.Au, om.Ag, om.Class, om.AuEq75, om.Density, om.Volume,om.Material,om.Percentage,om.Bucket, oi.Au as AuFF, oi.Ag as AgFF, oi.RL,
@@ -162,7 +170,7 @@
 
 	function GetOrefeedtocrusherkDashboard($Date){
 		$a="'";
-		$sum = $this->db->query('SELECT SUM(Tonnes) as SumTon FROM orefeed WHERE Date='.$a.$Date.$a);
+		$sum = $this->db->query('SELECT SUM(Tonnestocrush) as SumTon FROM orefeed WHERE Date='.$a.$Date.$a);
 		return $sum->row()->SumTon;
 	}
 

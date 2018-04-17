@@ -301,7 +301,7 @@
 													<div class="col-md-4 col-sm-4">
 														<label for="Aggt" class="col-sm-4 control-label">Loader</label>
 														<div class="col-sm-8">
-															 <select id="Loader" name="Loader" class="form-control" required="" onchange="PercentageChange()">
+															 <select id="Loader" name="Loader" class="form-control" required="" onchange="SetLoader()">
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Loader as $loader): ?>
                                   <option value="<?php echo $loader->Equipment ?>"><?php echo $loader->Equipment ?></option>
@@ -348,7 +348,8 @@
 													<div class="col-md-4 col-sm-4">
 														<label for="Aggt" class="col-sm-4 control-label">Type</label>
 														<div class="col-sm-8">
-															<select id="Type" name="Type" class="form-control" required="" onchange="StatusChange()">
+															<select id="Type" name="Type" class="form-control" required="" onchange="SetValueOrefeed()">
+																<option value="">Choose</option>
 																<option value="Oremill">Ore Mill</option>
 																<option value="Bypass">Bypass</option>
 															</select>
@@ -584,6 +585,33 @@
       }
 
 
+      function SetLoader(){
+      	var Loader = document.getElementById("Loader");
+      	var Material = document.getElementById("material");
+        var Percentage = document.getElementById("percentage");
+        var Tonnes = document.getElementById("Tonnes2");
+		var Density = document.getElementById("Density2");
+
+         <?php foreach ($Loader as $loader): ?>
+          if ("<?php echo $loader->Equipment ?>" == Loader.value) {
+
+          		Material.value = "<?php echo $loader->Material ?>";
+          		Percentage.value = "<?php echo $loader->Percentage ?>";
+          	}
+
+
+          if ("<?php echo $loader->Equipment ?>" == Loader.value && "<?php echo $loader->Material ?>" == Material.value && "<?php echo $loader->Percentage ?>" == Percentage.value ) {
+
+          		Tonnes.value = "<?php echo $loader->Tonnageper ?>";
+				Density.value = "<?php echo $loader->Density ?>";
+          }
+
+          <?php endforeach ?>
+
+
+      }
+
+
        function PercentageChange() {
         var Loader = document.getElementById("Loader");
         var Material = document.getElementById("material");
@@ -634,6 +662,8 @@
         }else {
           document.getElementById("button").disabled = false;
         }
+
+
 
         <?php endforeach; ?>
       }

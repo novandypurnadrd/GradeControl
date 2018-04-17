@@ -25,10 +25,12 @@ class Update extends CI_Controller {
 				$data['Pit'] = $this->Pit_model->getPit();
 				$data['Oreline'] = $this->Oreline_model->getOreline();
         		$data['Stockpile'] = $this->Stockpile_model->getStockpile();
+
+        		$data['ToStockpile'] = $this->Stockpile_model->ViewToStockpile();
         		$data['Loader'] = $this->Loader_model->GetLoader();
         		$data['Material'] = $this->Loader_model->GetMaterial();
         		$data['Percentage'] = $this->Loader_model->GetPercentage();
-				$data['Table'] = $this->OreFeed_model->GetOreFeedByID($data['id']);
+				$data['Table'] = $this->OreFeed_model->GetOreFeedByIDNew($data['id']);
 				$this->session->userdata('update', "");
 		    $this->load->view('OreFeed/Update', $data);
     }else {
@@ -40,32 +42,22 @@ class Update extends CI_Controller {
 	{
 		if ($this->session->userdata('GradeControl')) {
 
-			$Start =  $this->input->post('Start');
-			$Start = explode('/', $Start)[2].'-'.explode('/', $Start)[0].'-'.explode('/', $Start)[1];
-			$Finish =  $this->input->post('Finish');
-			if ($Finish!= "") {
-				$Finish = explode('/', $Finish)[2].'-'.explode('/', $Finish)[0].'-'.explode('/', $Finish)[1];
+			$Orefeed = $this->OreFeed_model->GetOreFeedByIDNew($id);
+
+			foreach ($Orefeed as $orefeedvalue) {
+				
+				$Volumeorefed = $orefeedvalue->Volume;
+				$Auorefeed = $orefeedvalue->Au;
+				$Agorefeed = $orefeedvalue->Ag;
+				$AuEq75orefeed = $orefeedvalue->AuEq75;
+				$Classorefeed = $orefeedvalue->Class;
+				$Densityorefeed = $orefeedvalue->Density;
+				$Tonnesorefeed = $oreinventory->Tonnes;
 			}
 
-			$data = array(
-				'Pit' => $this->input->post('Pit'),
-				'Block' => $this->input->post('Block'),
-				'RL' => $this->input->post('RL'),
-				'Au' => $this->input->post('Augt'),
-				'Ag' => $this->input->post('Aggt'),
-				'DryTonFF' => $this->input->post('DryTonFF'),
-				'Start' => $Start,
-				'Finish' => $Finish,
-				'StartHour' => $this->input->post('StartHour'),
-				'FinishHour' => $this->input->post('FinishHour'),
-				'Status' => $this->input->post('Status'),
-				'Achievement' => $this->input->post('Achievement'),
-				'usrid' => $this->session->userdata('usernameGradeControl'),
-			);
+			
 
-			$this->OreInventory_model->UpdateOreInventory($data, $id);
-
-			redirect('OreInventory/Table');
+			redirect('OreFeed/Table');
 		}else {
 			redirect(base_url());
 		}

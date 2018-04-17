@@ -184,27 +184,44 @@ class Input extends CI_Controller {
 			$Temp = $this->ClosingStock_model->GetClosingStockByStockpile($Stockpile);
 			foreach ($Temp as $temp) {
 
-				if($AdjTonnes != null){
-				$Tonnes = $AdjTonnes;
+					if($AdjTonnes != null){
+					$Tonnes = $AdjTonnes;
+
+						if($Tonnes == 0){
+						$Density = 0;
+						$v_Au = 0;
+						$v_Ag = 0;
+						$AuEq75 = 0;
+						$Volume = 0;
+
+					}else{
+						$Density = $this->input->post('Density');
+						$v_Au = $this->input->post('Au');
+						$v_Ag = $this->input->post('Ag');
+						$AuEq75 = round(($v_Au+($v_Ag/75)),2);
+						$Volume = round($Tonnes / $Density,2);
+					}
+
 				}
 				else{
-				$Tonnes = $temp->Tonnes - $OrefeedTonnes;
+						$Tonnes = $temp->Tonnes - $OrefeedTonnes;
+						if($Tonnes == 0){
+							$Density = 0;
+							$v_Au = 0;
+							$v_Ag = 0;
+							$AuEq75 = 0;
+							$Volume = 0;
+
+						}else{
+							$Density = round(((($temp->Density*$temp->Tonnes)-($Density*$OrefeedTonnes))/$Tonnes),2);
+							$v_Au = round(((($temp->Au*$temp->Tonnes)-($Au*$OrefeedTonnes))/$Tonnes),2);
+							$v_Ag = round(((($temp->Ag*$temp->Tonnes)-($Ag*$OrefeedTonnes))/$Tonnes),2);
+							$AuEq75 = round(($v_Au+($v_Ag/75)),2);
+							$Volume = $Tonnes / $Density;
+						}
 				}
 
-				if($Tonnes == 0){
-					$Density = 0;
-					$v_Au = 0;
-					$v_Ag = 0;
-					$AuEq75 = 0;
-					$Volume = 0;
-
-				}else{
-					$Density = round(((($temp->Density*$temp->Tonnes)-($Density*$OrefeedTonnes))/$Tonnes),2);
-					$v_Au = round(((($temp->Au*$temp->Tonnes)-($Au*$OrefeedTonnes))/$Tonnes),2);
-					$v_Ag = round(((($temp->Ag*$temp->Tonnes)-($Ag*$OrefeedTonnes))/$Tonnes),2);
-					$AuEq75 = round(($v_Au+($v_Ag/75)),2);
-					$Volume = $Tonnes / $Density;
-				}
+				
 
 				
 
@@ -257,26 +274,41 @@ class Input extends CI_Controller {
 			foreach ($Temp as $temp) {
 
 				if($AdjTonnes != null){
-				$Tonnes = $AdjTonnes;
+						$Tonnes = $AdjTonnes;
+						if($Tonnes == 0){
+							$Density = 0;
+							$v_Au = 0;
+							$v_Ag = 0;
+							$AuEq75 = 0;
+							$Volume = 0;
+
+						}else{
+							$Density = $this->input->post('Density');
+							$v_Au = $this->input->post('Au');
+							$v_Ag = $this->input->post('Ag');
+							$AuEq75 = round(($v_Au+($v_Ag/75)),2);
+							$Volume = round($Tonnes / $Density,2);
+						}
 				}
 				else{
-				$Tonnes = $temp->Tonnes - $OrefeedTonnes;
+						$Tonnes = $temp->Tonnes - $OrefeedTonnes;
+						if($Tonnes == 0){
+							$Density = 0;
+							$v_Au = 0;
+							$v_Ag = 0;
+							$AuEq75 = 0;
+							$Volume = 0;
+
+						}else{
+							$Density = round(((($temp->Density*$temp->Tonnes)-($Density*$OrefeedTonnes))/$Tonnes),2);
+							$v_Au = round(((($temp->Au*$temp->Tonnes)-($Au*$OrefeedTonnes))/$Tonnes),2);
+							$v_Ag = round(((($temp->Ag*$temp->Tonnes)-($Ag*$OrefeedTonnes))/$Tonnes),2);
+							$AuEq75 = round(($v_Au+($v_Ag/75)),2);
+							$Volume = $Tonnes / $Density;
+						}
 				}
 
-				if($Tonnes == 0){
-					//$Density = 0;
-					$v_Au = 0;
-					$v_Ag = 0;
-					$AuEq75 = 0;
-					//$Volume = 0;
-
-				}else{
-					//$Density = round(((($temp->Density*$temp->Tonnes)-($Density*$OrefeedTonnes))/$Tonnes),2);
-					$v_Au = round(((($temp->Au*$temp->Tonnes)-($Au*$OrefeedTonnes))/$Tonnes),2);
-					$v_Ag = round(((($temp->Ag*$temp->Tonnes)-($Ag*$OrefeedTonnes))/$Tonnes),2);
-					$AuEq75 = round(($v_Au+($v_Ag/75)),2);
-					//$Volume = $Tonnes / $Density;
-				}
+				
 
 				
 
@@ -301,13 +333,13 @@ class Input extends CI_Controller {
 			}
 
 			$Closing = array(
-				//'Volume' => $Volume,
+				'Volume' => $Volume,
 				'Au' => $v_Au,
 				'Ag' => $v_Ag,
 				'AuEq75' => $AuEq75,
 				'Class' =>$Class,
 				'Tonnes' => $Tonnes,
-				//'Density' => $Density,
+				'Density' => $Density,
 				'Stockpile' => $this->input->post('stockpileOrefeed'),
 				'Date' => $Date,
 				//'Status' => "Complete",
@@ -340,56 +372,75 @@ class Input extends CI_Controller {
 
 			
 			if($AdjTonnes != null){
-				$UpdateTonnesStockpile = $AdjTonnes;
+							$UpdateTonnesStockpile = $AdjTonnes;
+						if($UpdateTonnesStockpile == 0){
+							$UpdateAuStockpile = 0;
+							$UpdateAgStockpile = 0;
+							$UpdateDensityStockpile = 0;
+							$UpdateAuEq75Stockpile = 0;
+							$UpdateStockpileVolume = 0;
+							$UpdateStockpileRL = $RLStockpile;
+							$UpdateStockpileStockpile = $StockpileFeed;
+						}else{
+							$UpdateAuStockpile = $this->input->post('Au');
+							$UpdateAgStockpile = $this->input->post('Ag');
+							$UpdateDensityStockpile = $this->input->post('Density');
+							$UpdateAuEq75Stockpile = round((($UpdateAuStockpile)+($UpdateAgStockpile/75)),2);
+							$UpdateStockpileVolume = round(($UpdateTonnesStockpile/$UpdateDensityStockpile),2);
+							$UpdateStockpileRL = $RLStockpile;
+							$UpdateStockpileStockpile = $StockpileFeed;
+
+						}
 				}
 				else{
-				$UpdateTonnesStockpile = $TonnesStockpile-$Total;
+							$UpdateTonnesStockpile = $TonnesStockpile-$Total;
+						if($UpdateTonnesStockpile == 0){
+							$UpdateAuStockpile = 0;
+							$UpdateAgStockpile = 0;
+							$UpdateDensityStockpile = 0;
+							$UpdateAuEq75Stockpile = 0;
+							$UpdateStockpileVolume = 0;
+							$UpdateStockpileRL = $RLStockpile;
+							$UpdateStockpileStockpile = $StockpileFeed;
+						}else{
+							$UpdateAuStockpile = round(((($AuStockpile*$TonnesStockpile)-($Au*$Total))/$UpdateTonnesStockpile),2);
+							$UpdateAgStockpile = round(((($AgStockpile*$TonnesStockpile)-($Ag*$Total))/$UpdateTonnesStockpile),2);
+							$UpdateDensityStockpile = round(((($DensityStockpile*$TonnesStockpile)-($Density*$Total))/$UpdateTonnesStockpile),2);
+							$UpdateAuEq75Stockpile = round((($UpdateAuStockpile)+($UpdateAgStockpile/75)),2);
+							$UpdateStockpileVolume = round(($UpdateTonnesStockpile/$UpdateDensityStockpile),2);
+							$UpdateStockpileRL = $RLStockpile;
+							$UpdateStockpileStockpile = $StockpileFeed;
+
+						}
 				}
-
-			if($UpdateTonnesStockpile == 0){
-				$UpdateAuStockpile = 0;
-				$UpdateAgStockpile = 0;
-				$UpdateDensityStockpile = 0;
-				$UpdateAuEq75Stockpile = 0;
-				$UpdateStockpileVolume = 0;
-				$UpdateStockpileRL = $RLStockpile;
-				$UpdateStockpileStockpile = $StockpileFeed;
-			}else{
-				$UpdateAuStockpile = round(((($AuStockpile*$TonnesStockpile)-($Au*$Total))/$UpdateTonnesStockpile),2);
-				$UpdateAgStockpile = round(((($AgStockpile*$TonnesStockpile)-($Ag*$Total))/$UpdateTonnesStockpile),2);
-				$UpdateDensityStockpile = round(((($DensityStockpile*$TonnesStockpile)-($Density*$Total))/$UpdateTonnesStockpile),2);
-				$UpdateAuEq75Stockpile = round((($UpdateAuStockpile)+($UpdateAgStockpile/75)),2);
-				$UpdateStockpileVolume = round(($UpdateTonnesStockpile/$UpdateDensityStockpile),2);
-				$UpdateStockpileRL = $RLStockpile;
-				$UpdateStockpileStockpile = $StockpileFeed;
-
-			}
 
 			
 
-			if (0.65<=$AuEq75 && $AuEq75<2.00){
-					$Class="Marginal";
+			
+
+			if (0.65<=$UpdateAuEq75Stockpile && $UpdateAuEq75Stockpile<2.00){
+					$UpdateAuEq75Stockpile="Marginal";
 				}
-				elseif(2<=$AuEq75 && $AuEq75<4.00){
+				elseif(2<=$UpdateAuEq75Stockpile && $UpdateAuEq75Stockpile<4.00){
 					$Class="Medium Grade";
 				}
-				elseif(4<=$AuEq75 && $AuEq75<6.00){
+				elseif(4<=$UpdateAuEq75Stockpile && $UpdateAuEq75Stockpile<6.00){
 					$Class="High Grade";
 				}
-				elseif($AuEq75 >= 6.00){
+				elseif($UpdateAuEq75Stockpile >= 6.00){
 					$Class="SHG";
 				}
 				else{
 					$Class="-";
 				}
-
+			
 			$ToStockpile = array(
 				'Volume' => $UpdateStockpileVolume,
 				'RL' => $UpdateStockpileRL,
 				'Au' => $UpdateAuStockpile,
 				'Ag' => $UpdateAgStockpile,
 				'AuEq75' => $UpdateAuEq75Stockpile,
-				'Class' =>$ClassStockpile,
+				'Class' =>$Class,
 				'Tonnes' => $UpdateTonnesStockpile,
 				'Density' => $UpdateDensityStockpile,
 				'Stockpile' => $UpdateStockpileStockpile,

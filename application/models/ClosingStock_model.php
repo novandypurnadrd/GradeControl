@@ -42,6 +42,12 @@
 	    return $view->result();
 		}
 
+		function GetClosingStockByStockpileandDateGradeAll($Stockpile,$Dateblock,$date){
+				$a="'";
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date BETWEEN ('.$a.$Dateblock.$a.') AND ('.$a.$date.$a.') ORDER BY id DESC');
+	    return $view->result();
+		}
+
 		function GetClosingStockByStockpileGrade($Stockpile){
 				$a="'";
 			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' ORDER BY id DESC limit 1');
@@ -152,11 +158,32 @@
 		return $sum->row()->SumTon;
 	}
 
+
+	function GetClosingStockRompadDashboard($Date){
+			$a="'";
+			$sum = $this->db->query('SELECT SUM(c.Tonnes) as SumTon FROM stockpile s , closingstockgrade AS c WHERE c.date = (
+    				SELECT MAX(c2.date)
+    				FROM closingstockgrade AS c2
+    				WHERE c.stockpile = c2.stockpile AND c2.date <= '.$a.$Date.$a.'
+      				) AND s.id = c.stockpile AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23 ORDER BY s.id ASC');
+	    	return $sum->row()->SumTon;
+		}
+
 	function GetOpenStockDashboard($Date){
 		$a="'";
 		$sum = $this->db->query('SELECT SUM(Tonnes) as SumTon FROM Closingstock WHERE Date='.$a.$Date.$a);
 		return $sum->row()->SumTon;
 	}
+
+	function GetOpeningStockRompadDashboard($Date){
+			$a="'";
+				$sum = $this->db->query('SELECT SUM(c.Tonnes) as SumTon FROM stockpile s , closingstockgrade AS c WHERE c.date = (
+    				SELECT MAX(c2.date)
+    				FROM closingstockgrade AS c2
+    				WHERE c.stockpile = c2.stockpile AND c2.date < '.$a.$Date.$a.'
+      				) AND s.id = c.stockpile AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23 ORDER BY s.id ASC');
+	    	return $sum->row()->SumTon;
+		}
 
 	function GetOpenStockReport($Date){
 			$a="'";
@@ -176,7 +203,7 @@
     				SELECT MAX(c2.date)
     				FROM closingstockgrade AS c2
     				WHERE c.stockpile = c2.stockpile AND c2.date < '.$a.$Date.$a.'
-      				) AND s.id = c.stockpile  ORDER BY s.id ASC');
+      				) AND s.id = c.stockpile AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23 ORDER BY s.id ASC');
 	    	return $view->result();
 		}
 
@@ -192,7 +219,7 @@
     				SELECT MAX(c2.date)
     				FROM closingstockgrade AS c2
     				WHERE c.stockpile = c2.stockpile AND c2.date <= '.$a.$Date.$a.'
-      				) AND s.id = c.stockpile  ORDER BY s.id ASC');
+      				) AND s.id = c.stockpile AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23 ORDER BY s.id ASC');
 	    	return $view->result();
 		}
 

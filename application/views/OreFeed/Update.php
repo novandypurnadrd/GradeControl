@@ -8,7 +8,7 @@
 		<!-- END HEADLIB -->
 
 	</head>
-	<body class="menubar-hoverable header-fixed ">
+	<body onload="StockpileChange()" class="menubar-hoverable header-fixed ">
 
 		<!-- BEGIN HEADER-->
 		<?php $this->load->view('lib/Header'); ?>
@@ -30,7 +30,7 @@
 						<!-- BEGIN BASIC ELEMENTS -->
 						<!-- BEGIN TITLE -->
 						<?php foreach ($Table as $table): ?>
-            <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Orefeed/Input/InputOreFeed' ?>" method="post">
+            <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Orefeed/Input/GetGrade' ?>" method="post">
   						<div class="row">
   							<div class="col-lg-6">
   								<h2 class="text-primary">Detail Orefeed</h2>
@@ -60,92 +60,81 @@
 														<div class="col-md-6 col-sm-6">
 														<label for="Aggt" class="col-sm-4 control-label">Stockpile</label>
 														<div class="col-sm-8">
-															 <select id="Stockpile1" name="Stockpile1" class="form-control" required="" onchange="StockpileChange()" value="<?php echo $table->Nama ?>">
+															 <select id="Stockpile1" name="Stockpile1" class="form-control" required="" onchange="StockpileChange()">
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Stockpile as $stockpile): ?>
-                                  <option value="<?php echo $stockpile->id ?>"><?php echo $stockpile->Nama ?></option>
+                                  <option value="<?php echo $stockpile->id ?>" <?php if($stockpile->id == $table->Stockpile){echo "selected='true'";}?>><?php echo $stockpile->Nama ?></option>
                                 <?php endforeach; ?>
       												</select>
 														</div>
 													</div>
 												</div>
 												<br>
-												
+										
 												<div class="form-group">
 													<div class="col-md-6 col-sm-6">
-														<label for="Aggt" class="col-sm-4 control-label">Remarks</label>
-														<div class="col-sm-8">
-															<select id="Remarks" name="Remarks" class="form-control" required="" onchange="StatusChange()">
-																 <option value="Continue" <?php if($table->Remarks == "Continue"){echo "selected='true'";}?>>Continue</option>
-                                								 <option value="Completed" <?php if($table->Remarks == "Completed"){echo "selected='true'";}?>>Completed</option>
-															</select>
-														</div>
-													</div>
-													<div class="col-md-6 col-sm-6">
-														<label for="Aggt" class="col-sm-4 control-label">Shift</label>
-														<div class="col-sm-8">
-															<select id="Shift" name="Shift" class="form-control">
-															 <option value="AM" <?php if($table->shift == "AM"){echo "selected='true'";}?>>AM</option>
-                                							 <option value="PM" <?php if($table->shift == "PM"){echo "selected='true'";}?>>PM</option>
-                                							 <option value="DAY" <?php if($table->shift == "DAY"){echo "selected='true'";}?>>DAY</option>
-															</select>
-													</div>
-												</div>
-													
-												</div>
-												<br>
-												<div class="form-group">
-													<div class="col-md-12 col-sm-12">
   													<label for="DryTonFF" class="col-sm-2 control-label">Note</label>
   													<div class="col-sm-10">
-  														<input type="text" class="form-control" id="Note" name="Note" disabled autocomplete="off" value="<?php echo $table->Note ?>" >
+  														<textarea rows="3" id="Note" name="Note"><?php echo $table->Note ?></textarea>
   													</div>
   												</div>
+  													
 												</div>
+				
 											<br>
 											<br>
-											<br>
-											
-											
 											</div>
   									</div><!--end .card-body -->
   								</div><!--end .card -->
   							</div><!--end .col -->
+  						</form>
+
+  						 <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Orefeed/Input/InputOreFeed' ?>" method="post">
   							<div class="col-md-7 col-sm-7">
   								<div class="card">
   									<div class="card-body">
   										<div class="form-horizontal">
 												<div class="form-group">
+													
 													<div class="col-md-3 col-sm-3">
 														<label for="Au" class="col-sm-2 control-label">Au</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="Au" name="Au" readonly="" autocomplete="off" value="<?php echo $table->Au ?>" >
+															<!-- <?php //foreach ($Grade as $grade): ?> -->
+															<input type="text" class="form-control" id="Au" name="Au" readonly="" autocomplete="off" value="<?php echo $table->Au ?>">
+															<!-- <?php //endforeach; ?> -->
 														</div>
 													</div>
 													<div class="col-md-3 col-sm-3">
 														<label for="Ag" class="col-sm-4 control-label">Ag</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="Ag" name="Ag" readonly="" autocomplete="off" value="<?php echo $table->Ag ?>" >
+														<!-- 	<?php //foreach ($Grade as $grade): ?> -->
+															<input type="text" class="form-control" id="Ag" name="Ag" readonly="" autocomplete="off" value="<?php echo $table->Ag ?>">
+															<!-- <?php //endforeach; ?> -->
 														</div>
 													</div>
 													<div class="col-md-3 col-sm-3">
 														<label for="Ag" class="col-sm-4 control-label">AuEq75</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="AuEq75" name="AuEq75" readonly="" autocomplete="off" value="<?php echo $table->AuEq75 ?>" >
+															<!-- <?php //foreach ($Grade as $grade): ?> -->
+															<input type="text" class="form-control" id="AuEq75" name="AuEq75" readonly="" autocomplete="off" value="<?php echo $table->AuEq75 ?>">
+															<!-- <?php //endforeach; ?> -->
 														</div>
 													</div>
 													<div class="col-md-3 col-sm-3">
 														<label for="Ag" class="col-sm-4 control-label">Class</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="Class" name="Class" readonly="" autocomplete="off" value="<?php echo $table->Class ?>" >
+															<!-- <?php //foreach ($Grade as $grade): ?> -->
+															<input type="text" class="form-control" id="Class" name="Class" readonly="" autocomplete="off" >
+															<!-- <?php //endforeach; ?> -->
 														</div>
 													</div>
+													
 												</div>
 												<div class="form-group">
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Tonnes</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="DryTonBM" name="DryTonBM" readonly="" autocomplete="off" value="<?php echo $table->DryTonBM ?>" >
+															<input type="text" class="form-control" id="DryTonBM" name="DryTonBM" readonly="" autocomplete="off" value="<?php echo $table->Tonnes ?>">
 														</div>
 													</div>
 													<div class="col-md-6 col-sm-6">
@@ -159,7 +148,7 @@
 												<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Tonnes</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="Adjtonnes" name="Adjtonnes" autocomplete="off" >
+															<input type="text" class="form-control" id="Adjtonnes" name="Adjtonnes" autocomplete="off">
 														</div>
 													</div>
 													<div class="col-md-6 col-sm-6">
@@ -174,7 +163,7 @@
 												<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Au</label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="AdjAuPersen" name="AdjAuPersen" autocomplete="off" onchange="AdjusmentAu()">
+															<input type="text" class="form-control" id="AdjAuPersen" name="AdjAuPersen" autocomplete="off" onkeyup="AdjusmentAu()" required="" value="<?php echo $table->AdjAuPersen ?>">
 															
 														</div>
 														<span class="input-group-addon">%</span>
@@ -183,7 +172,7 @@
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Au</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="AdjAu" name="AdjAu" readonly="" autocomplete="off">
+															<input type="text" class="form-control" id="AdjAu" name="AdjAu" autocomplete="off" value="<?php echo $table->AdjAu ?>">
 														</div>
 													</div>
 													
@@ -192,7 +181,7 @@
 												<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Ag</label>
 														<div class="col-sm-4">
-															<input type="text" class="form-control" id="AdjAgPersen" name="AdjAgPersen" autocomplete="off" onchange="AdjusmentAg()">
+															<input type="text" class="form-control" id="AdjAgPersen" name="AdjAgPersen" autocomplete="off" onkeyup="AdjusmentAg()" required="" value="<?php echo $table->AdjAgPersen ?>">
 															
 														</div>
 														<span class="input-group-addon">%</span>
@@ -200,13 +189,63 @@
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Adjusment Ag</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="AdjAg" name="AdjAg" readonly="" autocomplete="off">
+															<input type="text" class="form-control" id="AdjAg" name="AdjAg" autocomplete="off" value="<?php echo $table->AdjAg ?>">
 														</div>
 													</div>
 													
 												</div>
+												<div class ="form-group">
+													
+												
+														
+													
+														 <div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="dateOrefeed" name="dateOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+                     									 <div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="stockpileOrefeed" name="stockpileOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+                     									 <div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="shiftOrefeed" name="shiftOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+
+                     									<div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="noteOrefeed" name="noteOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+
+                     										<div class="col-md-1">
+                       										<div class="form-group">
+                          										<label class="col-sm-4 control-label"></label>
+                          										<div class="col-sm-8">
+                            										<input autocomplete="off" type="hidden" class="form-control" id="remarksOrefeed" name="remarksOrefeed" type="text" placeholder="">
+                          										</div>
+                        									</div> 
+                     									</div>
+												
+												</div>
 											
   										</div>
+  										<br>
   									</div><!--end .card-body -->
   								</div><!--end .card -->
   							</div><!--end .col -->
@@ -230,7 +269,7 @@
 													<div class="col-md-4 col-sm-4">
 														<label for="Aggt" class="col-sm-4 control-label">Loader</label>
 														<div class="col-sm-8">
-															 <select id="Loader" name="Loader" class="form-control" required="" onchange="PercentageChange()" >
+															 <select id="Loader" name="Loader" class="form-control" required="" onchange="PercentageChange()">
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Loader as $loader): ?>
                                   <option value="<?php echo $loader->Equipment?>" <?php if($table->Loader == $loader->Equipment){echo "selected='true'";}?>><?php echo $loader->Equipment ?></option>
@@ -242,10 +281,10 @@
 														<div class="col-md-4 col-sm-4">
 														<label for="Aggt" class="col-sm-4 control-label">Material</label>
 														<div class="col-sm-8">
-															 <select id="material" name="material" class="form-control" required="" onchange="PercentageChange()" >
+															 <select id="material" name="material" class="form-control" required="" onchange="SetValueOrefeed()" >
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Material as $material): ?>
-                                  <option value="<?php echo $material->material?>" <?php if($table->Material == $material->material){echo "selected='true'";}?>><?php echo $material->material ?></option>
+                                   <option value="<?php echo $material->material?>" <?php if($table->Material == $material->material){echo "selected='true'";}?>><?php echo $material->material ?></option>
                                 <?php endforeach; ?>
       												</select>
 														</div>
@@ -270,7 +309,7 @@
 													<div class="col-md-4 col-sm-4">
 														<label for="DryTonBM" class="col-sm-4 control-label">Bucket</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="Bucket" name="Bucket"  autocomplete="off" onchange="PercentageChange()" value="<?php echo $table->Bucket ?>">
+															<input type="text" class="form-control" id="Bucket" name="Bucket" autocomplete="off" onkeyup="PercentageChange()">
 														</div>
 													</div>
 
@@ -278,8 +317,8 @@
 														<label for="Aggt" class="col-sm-4 control-label">Type</label>
 														<div class="col-sm-8">
 															<select id="Type" name="Type" class="form-control" required="" onchange="StatusChange()">
-																<option value="Continue">Ore Mill</option>
-																<option value="Completed">Bypass</option>
+																<option value="Oremill">Ore Mill</option>
+																<option value="Bypass">Bypass</option>
 															</select>
 														</div>
 													</div>
@@ -287,6 +326,10 @@
 
 												</div>
 											
+												<br>
+												<br>
+												<br>
+												<br>
 												<br>
 												<br>
 
@@ -306,7 +349,7 @@
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Tonnes</label>
 														<div class="col-sm-7">
-															<input type="text" class="form-control" id="Tonnes2" name="Tonnes2" readonly="" autocomplete="off" >
+															<input type="text" class="form-control" id="Tonnes2" name="Tonnes2" readonly="" autocomplete="off">
 														</div>
 													</div>
 													<div class="col-md-6 col-sm-6">
@@ -320,7 +363,7 @@
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Total</label>
 														<div class="col-sm-8">
-															<input type="text" class="form-control" id="Total" name="Total" readonly="" autocomplete="off" value="<?php echo $table->Tonnestocrush ?>">
+															<input type="text" class="form-control" id="Total" name="Total" readonly="" autocomplete="off">
 														</div>
 													</div>
 													<div class="col-md-6 col-sm-6">
@@ -329,16 +372,30 @@
 															<input type="text" class="form-control" id="Stock" name="Stock" readonly="" autocomplete="off">
 														</div>
 													</div>
+												</div>
+												<br>
+												<div class="form-group">
+													<div class="col-md-6 col-sm-6">
+														<label for="DryTonBM" class="col-sm-4 control-label"></label>
+														
+													</div>
 
-													
+													<div class="col-md-6 col-sm-6">
+														<label for="DryTonBM" class="col-sm-4 control-label">Act.</label>
+														<div class="col-sm-8">
+															<input type="text" class="form-control" id="Act" name="Act" autocomplete="off" onkeyup="ActTonnes()">
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group">	
 						                            <div class="col-md-12 col-sm-12">
 														
 														<div class="col-sm-12">
 															<input type="text" class="form-control" style="color:red; font-size:100%;text-align: center;" centre="" id="message" name="message" readonly="" autocomplete="off">
 														</div>
 													</div>
-						                            	
-						                            </span>
+ 
     											</div>
 													
 												</div>
@@ -362,7 +419,7 @@
   						</div><!--end .row -->
 
             </form>
-            	<?php endforeach; ?>
+            <?php endforeach; ?>
 						<!-- END BASIC ELEMENTS -->
 
 					</div><!--end .section-body -->
@@ -395,16 +452,7 @@
 			});
 		</script>
     <script type="text/javascript">
-      function StatusChange() {
-        var Remarks = document.getElementById("Remarks");
-        var Note = document.getElementById("Note");
-
-        if (Remarks.value == "Continue") {
-          Note.disabled = true;
-        }else {
-          Note.disabled = false;
-        }
-      }
+      
 
 
 			function TypeChange() {
@@ -477,26 +525,13 @@
        
 			
 
-          if ("<?php echo $tostockpile->Stockpile ?>" == StockpileVar.value && "<?php echo $tostockpile->Date ?>" == outDate) {
+          if ("<?php echo $tostockpile->Stockpile ?>" == StockpileVar.value) {
 
 				Au.value = "<?php echo $tostockpile->Au ?>";
 	   			Ag.value = "<?php echo $tostockpile->Ag ?>";
 	   			AuEq75.value = "<?php echo $tostockpile->AuEq75 ?>";
 	   			Class.value = "<?php echo $tostockpile->Class ?>";
 
-	   			// vAu = "<?php //echo $tostockpile->Au ?>";
-	   			// vAg = "<?php //echo $tostockpile->Ag ?>";
-
-	      //      	vTonnes = "<?php //echo $tostockpile->Tonnes ?>";
-	      //      	vDensity = "<?php //echo $tostockpile->Density ?>";
-	      //      	vVolume = "<?php //echo $tostockpile->Volume ?>";
-
-	      //      	totAu = ((parseFloat(totAu) + parseFloat(vTonnes * vAu)).toFixed(2));
-	      //      	totAg = ((parseInt(totAg) + parseInt(vTonnes * vAg)).toFixed(2));
-
-	      //      	totTonnes = ((parseInt(totTonnes) + parseInt(vTonnes)).toFixed(2));
-	      //      	totDensity = ((parseFloat(totDensity) + parseFloat(vDensity)).toFixed(2));
-	      //      	totVolume = ((parseFloat(totVolume) + parseFloat(vVolume)).toFixed(2));
 	
 				DryTonBM.value = parseFloat("<?php echo $tostockpile->Tonnes ?>").toFixed(2);
 				Density.value = parseFloat("<?php echo $tostockpile->Density ?>").toFixed(2);
@@ -510,24 +545,15 @@
             Density.value = "";
             Bucket.value = "";
             Volume.value ="";
-            // totAu = "";
-            // totAg = "";
-            // totTonnes = "";
-            // totDensity = "";
-            // totVolume = "";
+
           }
 
-          // Au.value = (parseFloat(totAu)/totTonnes).toFixed(2);
-          // Ag.value = (parseFloat(totAg)/totTonnes).toFixed(2);
-          // DryTonBM.value = totTonnes;
-          // Density.value = totDensity;
-          // Volume.value = totVolume;
 
         <?php endforeach; ?>
       }
 
 
-       function PercentageChange() {
+        function PercentageChange() {
         var Loader = document.getElementById("Loader");
         var Material = document.getElementById("material");
         var Percentage = document.getElementById("percentage");
@@ -555,10 +581,11 @@
 
 	   		
 	
-				Tonnes.value = "<?php echo $loader->Tonnage ?>";
+				Tonnes.value = "<?php echo $loader->Tonnageper ?>";
 				Density.value = "<?php echo $loader->Density ?>";
-				Total.value = parseFloat(Bucket.value * Tonnes.value * Density.value).toFixed(2);
-				Stock.value = parseFloat(DryTonBM.value - Total.value).toFixed(2);
+				Percentage.value = "<?php echo $loader->Percentage ?>";
+				Total.value = parseFloat(Bucket.value * Tonnes.value).toFixed(4);
+				Stock.value = parseFloat(DryTonBM.value - Total.value).toFixed(4);
 				return;
           }else {
        
@@ -577,8 +604,11 @@
           document.getElementById("button").disabled = false;
         }
 
+
+
         <?php endforeach; ?>
       }
+
 
       function AdjusmentAu(){
       	var Au = document.getElementById("Au");
@@ -601,6 +631,39 @@
       	AdjAg.value = parseFloat(AdjAuAg.value/100*Ag.value).toFixed(2);
       }
 
+      function ActTonnes(){
+
+      	var Stock = document.getElementById("Stock");
+      	var Act = document.getElementById("Act");
+      	var Adjtonnes = document.getElementById("Adjtonnes");
+
+      	var v_Stock = parseFloat(Stock.value);
+      	var v_Act = parseFloat(Act.value);
+
+      	Adjtonnes.value = parseFloat(v_Stock + v_Act).toFixed(2);
+      }
+
+        function SetValueOrefeed() {
+        var masterDate = document.getElementById("Date");
+        var masterStockpile = document.getElementById("Stockpile1");
+        var masterRemarks = document.getElementById("Remarks");
+        var masterNote = document.getElementById("Note");
+        var masterShift = document.getElementById("Shift");
+
+        var orefeedDate = document.getElementById("dateOrefeed");
+        var orefeedStockpile = document.getElementById("stockpileOrefeed");
+        var orefeedRemarks = document.getElementById("remarksOrefeed");
+        var orefeedNote = document.getElementById("noteOrefeed");
+        var orefedShift = document.getElementById("shiftOrefeed");
+
+        orefeedDate.value = masterDate.value;
+        orefeedStockpile.value = masterStockpile.value;
+        orefeedRemarks.value = masterRemarks.value;
+        orefeedNote.value = masterNote.value;
+        orefedShift.value = masterShift.value; 
+      }
+
+
     </script>
 
       <script type="text/javascript">
@@ -613,7 +676,9 @@
         
         if (stock > 0)
         {
-            //we're ok
+            var message = document.getElementById("message");
+            message.value = "";
+            return false;
         }
         else
         {
@@ -622,6 +687,52 @@
             return false;
         }
     });
+
+     $('#Adjtonnes').on('change keyup', function() {
+			  var sanitized = $(this).val().replace(/[^0-9^.]/g, '');
+			  $(this).val(sanitized);
+			});
+	$('#AdjAu').on('change keyup', function() {
+			  var sanitized = $(this).val().replace(/[^0-9^.]/g, '');
+			  $(this).val(sanitized);
+			});
+       $('#AdjAg').on('change keyup', function() {
+			  var sanitized = $(this).val().replace(/[^0-9^.]/g, '');
+			  $(this).val(sanitized);
+			});
+       $('#AdjAgPersen').on('change keyup', function() {
+			  var sanitized = $(this).val().replace(/[^0-9^.]/g, '');
+			  $(this).val(sanitized);
+			});
+       $('#AdjAuPersen').on('change keyup', function() {
+			  var sanitized = $(this).val().replace(/[^0-9^.]/g, '');
+			  $(this).val(sanitized);
+			});
+
+
+        function SetValueGrade() {
+        var masterAuEq75 = document.getElementById("AuEq75");
+        var masterClass = document.getElementById("Class");
+        var masterTonnes = document.getElementById("Tonnes");
+        var masterVolume = document.getElementById("Volume");
+        var masterDensity = document.getElementById("Density");
+
+        var valueAuEq75 = document.getElementById("valueAuEq75");
+        var valueClass = document.getElementById("valueClass");
+        var valueTonnes = document.getElementById("valueTonnes");
+        var valueDensity = document.getElementById("valueDensity");
+        var valueVolume = document.getElementById("valueVolume");
+
+
+        valueAuEq75.value = masterAuEq75.value;
+        valueClass.value = masterClass.value;
+        valueTonnes.value = masterTonnes.value;
+        valueDensity.value = masterDensity.value;
+        valueVolume.value = masterDensity.value;
+        
+      }
+
+
 </script>
 		<!-- END JAVASCRIPT -->
 

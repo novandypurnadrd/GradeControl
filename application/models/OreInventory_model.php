@@ -33,6 +33,13 @@
 			return $view->result();
 		}
 
+		function getOreInventoryByBlockOnly($block){
+			$a="'";
+			$view = $this->db->query('SELECT * FROM oreinventory WHERE block='.$a.$block.$a);
+			return $view->result();
+		}
+
+
 			function getOreInventoryByBlockGeneral($block,$stockpile){
 			$a="'";
 			$view = $this->db->query('SELECT * FROM oreinventorygeneral WHERE block='.$a.$block.$a.'AND Stockpile='.$a.$stockpile.$a);
@@ -349,7 +356,7 @@
 
 		function SelectCount($date){
 		$a="'";
-		$view = $this->db->query('SELECT DISTINCT Block FROM oreinventory WHERE Start='.$a.$date.$a);
+		$view = $this->db->query('SELECT DISTINCT Count(DISTINCT Block) FROM oreinventory WHERE Start='.$a.$date.$a);
 		return $view->num_rows();
 	}
 

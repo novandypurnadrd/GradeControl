@@ -159,10 +159,10 @@
 																				<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#<?php echo $table->id; ?>"><span class="fa fa-trash"></span>
 																				</button>
 																			</a>
-																			<!-- <a href="<?php //echo base_url().'OreFeed/Table/Update/'.$table->id ?>">
+																			<a href="<?php echo base_url().'OreFeed/Table/Update/'.$table->id ?>">
 																			 	<button type="button" class="btn btn-xs btn-info"><span class="fa fa-edit"></span>
 																				</button>
-																			</a> -->
+																			</a>
 																		</center>
 																	</td>
 																	<?php endif; ?>

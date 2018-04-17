@@ -23,16 +23,23 @@ class Dashboard extends CI_Controller {
         	$date = date('Y-m-d');
         	$openingdate = date('Y-m-d', strtotime('-1 day', strtotime($date)));
 
-        	$openingstock = round($this->Closingstock_model->GetOpenStockDashboard($openingdate),2);
+           
+        	$openingstock = $this->Closingstock_model->GetOpeningStockRompadDashboard($date);
         	if($openingstock == null){
-        		$openingstock =0;
+        		$openingstock =2;
         	}
-        	$closingstock = round($this->Closingstock_model->GetClosingStockDashboard($date),2);
+     
+        	$closingstock = $this->Closingstock_model->GetClosingStockRompadDashboard($date);
         	if($closingstock == null){
         		$closingstock =0;
         	}
 
+        
         	$totalblock = $this->Oreinventory_model->SelectCount($date);
+            if($totalblock <= 1){
+                $totalblock = 0;
+            }
+        
         	$feedtocrush= round($this->Orefeed_model->GetOrefeedtocrusherkDashboard($date),2);
         	if($feedtocrush == null){
         		$feedtocrush =0;
