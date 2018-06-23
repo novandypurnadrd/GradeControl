@@ -96,9 +96,16 @@
 										<tbody>
 											<?php foreach ($Table as $table) { ?>
 												<tr class="gradeX">
-												 <td><center> <div class="">
+												<?php if($table->id == 20 || $table->id == 22 || $table->id == 23){ ?>
+
+												<td><center><?php echo "x" ?></center></td>
+
+												<?php } else{ ?>
+
+												<td><center> <div class="">
                                                 <input type="checkbox" name="msg[]" value="<?php echo $table->id; ?>">
                                                 <label></label></center> </td>
+                                                <?php } ?>
 													<!-- <?php //if ($this->session->userdata('roleGradeControl') == "Admin" || $this->session->userdata('GE')): ?>
 														<td class="center">
 														<center>
@@ -132,7 +139,7 @@
 							</div><!--end .col -->
 								 <div class="col-sm-6">
                                                  
-                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class=" mdi mdi-delete"></i>Delete</button>
+                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class="md md-delete"></i>Delete</button>
                                                     
                                                 </div>
 							</form>

@@ -163,7 +163,7 @@ class Table extends CI_Controller {
 			// $IdClosingstock = 0;
 
 
-			$Orefeed = $this->Orefeed_model->GetOreFeedByID($id);
+			$Orefeed = $this->Orefeed_model->GetOreFeedByIDNew($id);
 			foreach ($Orefeed as $orefeed) {
 				$Tonnestocrush = $orefeed->Tonnestocrush;
 				$Volumefeed = $orefeed->Volume;
@@ -237,17 +237,14 @@ class Table extends CI_Controller {
 					$AgClosingstock = $key->Ag;
 					$DensityClosingstock = $key->Density;
 					$Tonnes = $key->Tonnes;
-				}
-
-			
 
 
 				$UpdateTonnes = $TonnesClosingstock+$Tonnestocrush;
 				$UpdateAu = round(((($AuFeed*$Tonnestocrush)+($AuClosingstock*$Tonnes))/$UpdateTonnes),2);
 				$UpdateAg = round(((($AgFeed*$Tonnestocrush)+($AgClosingstock*$Tonnes))/$UpdateTonnes),2);
 				$UpdateAuEq75 = round((($UpdateAu)+($UpdateAg/75)),2);
-				//$UpdateDensity = round(((($DensityClosingstock*$TonnesClosingstock)+($DensityFeed*$Tonnestocrush))/$UpdateTonnes),2);
-				//$UpdateVolume = round(($UpdateTonnes/$UpdateDensity),2);
+				$UpdateDensity = round(((($DensityClosingstock*$TonnesClosingstock)+($DensityFeed*$Tonnestocrush))/$UpdateTonnes),2);
+				$UpdateVolume = round(($UpdateTonnes/$UpdateDensity),2);
 
 				if (0.65 <= $UpdateAuEq75 && $UpdateAuEq75 < 2.00){
 					$Class="Marginal";
@@ -264,8 +261,8 @@ class Table extends CI_Controller {
 			
 			$ClosingstockUpdate = array(
 				'Tonnes'=>$UpdateTonnes,
-				//'Volume'=>$UpdateVolume,
-				//'Density'=>$UpdateDensity,
+				'Volume'=>$UpdateVolume,
+				'Density'=>$UpdateDensity,
 				'Au'=>$UpdateAu,
 				'Ag'=>$UpdateAg,
 				'AuEq75'=>$UpdateAuEq75,
@@ -274,8 +271,10 @@ class Table extends CI_Controller {
 
 			
 
-			$this->Closingstock_model->UpdateClosingStockByDateGrade($ClosingstockUpdate,$IdClosingstock);
+			$this->Closingstock_model->UpdateClosingStockGrade($ClosingstockUpdate,$IdClosingstock);
+				}
 
+	
 		
 			//Update To Stockpile
 			$Stockpile = $this->Stockpile_model->GetStockpileByStockpile($Stockpile);

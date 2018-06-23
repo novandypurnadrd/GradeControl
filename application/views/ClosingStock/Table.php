@@ -84,7 +84,7 @@
                       </div>
                       <div class="col-md-3">
                         <div class="form-group">
-                          <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-center-focus-strong"></i> Filter</button>
+                          <button type="submit" class="btn ink-reaction btn-raised btn-info"><i class="md md-center-focus-strong"></i> Filter</button>
                         </div>
                       </div>
 										</form>

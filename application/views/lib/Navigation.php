@@ -69,24 +69,33 @@
             <li><a href="<?php echo base_url().'OreInventory/Input' ;?>" ><span class="title">Input Oreline Oremined</span></a></li>
           <?php } ?>
           <?php if($main == "OreInventory"){?>
-            <li><a href="<?php echo base_url().'OreInventory/Table' ;?>"  class="active"><span class="title">Daily Record</span></a></li>
+            <li><a href="<?php echo base_url().'OreInventory/Table' ;?>"  class="active"><span class="title">Daily Ore Record</span></a></li>
             <?php }
             else { ?>
-            <li><a href="<?php echo base_url().'OreInventory/Table' ;?>" ><span class="title">Daily Record</span></a></li>
+            <li><a href="<?php echo base_url().'OreInventory/Table' ;?>" ><span class="title">Daily Ore Record</span></a></li>
           <?php } ?>
-           <?php if($main == "OreInventoryGeneral"){?>
-            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneral' ;?>" class="active"><span class="title">General Ore Record</span></a></li>
-            <?php }
-            else { ?>
-            
-            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneral' ;?>" ><span class="title">General Ore Record</span></a></li>
-          <?php } ?>
+           
            <?php if($main == "OreInventoryGeneralVisual"){?>
-            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneralVisual' ;?>" class="active"><span class="title">General Minerlized Waste Record</span></a></li>
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneralVisual' ;?>" class="active"><span class="title">Daily Visual Record</span></a></li>
             <?php }
             else { ?>
             
-            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneralVisual' ;?>" ><span class="title">General Mineralized Waste Record</span></a></li>
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneralVisual' ;?>" ><span class="title">Daily Visual Record</span></a></li>
+          <?php } ?>
+
+           <?php if($main == "OreInventoryGeneralMinWaste"){?>
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneralMinWaste' ;?>" class="active"><span class="title">Daily Minerlized Waste Record</span></a></li>
+            <?php }
+            else { ?>
+            
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneralMinWaste' ;?>" ><span class="title">Daily Mineralized Waste Record</span></a></li>
+          <?php } ?>
+          <?php if($main == "OreInventoryGeneral"){?>
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneral' ;?>" class="active"><span class="title">General Record</span></a></li>
+            <?php }
+            else { ?>
+            
+            <li><a href="<?php echo base_url().'OreInventory/Table/IndexTableGeneral' ;?>" ><span class="title">General Record</span></a></li>
           <?php } ?>
         </ul><!--end /submenu -->
       </li><!--end /menu-li -->
@@ -168,9 +177,39 @@
             else { ?>
             <li><a href="<?php echo base_url().'Closingstock/Table' ;?>" ><span class="title">Closing Stock Record</span></a></li>
           <?php } ?>
+           <?php if($main == "TransferClosingstock"){?>
+            <li><a href="<?php echo base_url().'Closingstock/Transfer' ;?>"  class="active"><span class="title">Transfer Stockpile</span></a></li>
+            <?php }
+            else { ?>
+            <li><a href="<?php echo base_url().'Closingstock/Transfer' ;?>" ><span class="title">Transfer Stockpile</span></a></li>
+          <?php } ?>
         </ul><!--end /submenu -->
       </li><!--end /menu-li -->
       <!-- END CLOSINGSTOCK -->
+
+      <!-- BEGIN Daily Blending Plan -->
+      <li class="gui-folder">
+        <a>
+          <div class="gui-icon"><i class="md md-receipt"></i></div>
+          <span class="title">Daily Blending Plan</span>
+        </a>
+        <!--start submenu -->
+        <ul>
+          <?php if($main == "DailyBlendingPlan"){?>
+            <li><a href="<?php echo base_url().'BlendingPlan/Input' ;?>"  class="active"><span class="title">Blending Plan</span></a></li>
+            <?php }
+            else { ?>
+            <li><a href="<?php echo base_url().'BlendingPlan/Input' ;?>" ><span class="title">Blending Plan</span></a></li>
+          <?php } ?>
+          <?php if($main == "RecordBlendingPlan"){?>
+            <li><a href="<?php echo base_url().'BlendingPlan/Record' ;?>"  class="active"><span class="title">Record</span></a></li>
+            <?php }
+            else { ?>
+            <li><a href="<?php echo base_url().'BlendingPlan/Record' ;?>" ><span class="title">Record</span></a></li>
+          <?php } ?>
+        </ul><!--end /submenu -->
+      </li><!--end /menu-li -->
+      <!-- END Daily Blending Plan -->
 
       <!-- BEGIN OTHER SAMPLING -->
       <li class="gui-folder">

@@ -31,7 +31,7 @@
 						<!-- BEGIN TITLE -->
             <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Orefeed/Input/GetGrade' ?>" method="post">
   						<div class="row">
-  							<div class="col-lg-6">
+  							<div class="col-lg-5">
   								<h2 class="text-primary">Detail Orefeed</h2>
   							</div><!--end .col -->
   								<div class="col-lg-6">
@@ -115,6 +115,10 @@
 				
 											<br>
 											<br>
+											<br>
+											<br>
+											<br>
+
 											</div>
   									</div><!--end .card-body -->
   								</div><!--end .card -->
@@ -301,7 +305,7 @@
 													<div class="col-md-4 col-sm-4">
 														<label for="Aggt" class="col-sm-4 control-label">Loader</label>
 														<div class="col-sm-8">
-															 <select id="Loader" name="Loader" class="form-control" required="" onchange="PercentageChange()">
+															 <select id="Loader" name="Loader" class="form-control" required="" onchange="SetLoader()">
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Loader as $loader): ?>
                                   <option value="<?php echo $loader->Equipment ?>"><?php echo $loader->Equipment ?></option>
@@ -348,7 +352,8 @@
 													<div class="col-md-4 col-sm-4">
 														<label for="Aggt" class="col-sm-4 control-label">Type</label>
 														<div class="col-sm-8">
-															<select id="Type" name="Type" class="form-control" required="" onchange="StatusChange()">
+															<select id="Type" name="Type" class="form-control" required="" onchange="SetValueOrefeed()">
+																<option value="">Choose</option>
 																<option value="Oremill">Ore Mill</option>
 																<option value="Bypass">Bypass</option>
 															</select>
@@ -407,10 +412,16 @@
 												</div>
 												<br>
 												<div class="form-group">
-													<div class="col-md-6 col-sm-6">
-														<label for="DryTonBM" class="col-sm-4 control-label"></label>
+													<!-- <div class="col-md-6 col-sm-6">
+														<label for="Operator" class="col-sm-4 control-label">Operator</label>
+														<div class="col-sm-8">
+															<select id="Operator" name="Operator" class="form-control" required="">
+																<option value="+">+</option>
+																<option value="-">-</option>
+															</select>
+														</div>
 														
-													</div>
+													</div> -->
 
 													<div class="col-md-6 col-sm-6">
 														<label for="DryTonBM" class="col-sm-4 control-label">Act.</label>
@@ -584,6 +595,33 @@
       }
 
 
+      function SetLoader(){
+      	var Loader = document.getElementById("Loader");
+      	var Material = document.getElementById("material");
+        var Percentage = document.getElementById("percentage");
+        var Tonnes = document.getElementById("Tonnes2");
+		var Density = document.getElementById("Density2");
+
+         <?php foreach ($Loader as $loader): ?>
+          if ("<?php echo $loader->Equipment ?>" == Loader.value) {
+
+          		Material.value = "<?php echo $loader->Material ?>";
+          		Percentage.value = "<?php echo $loader->Percentage ?>";
+          	}
+
+
+          if ("<?php echo $loader->Equipment ?>" == Loader.value && "<?php echo $loader->Material ?>" == Material.value && "<?php echo $loader->Percentage ?>" == Percentage.value ) {
+
+          		Tonnes.value = "<?php echo $loader->Tonnageper ?>";
+				Density.value = "<?php echo $loader->Density ?>";
+          }
+
+          <?php endforeach ?>
+
+
+      }
+
+
        function PercentageChange() {
         var Loader = document.getElementById("Loader");
         var Material = document.getElementById("material");
@@ -635,6 +673,8 @@
           document.getElementById("button").disabled = false;
         }
 
+
+
         <?php endforeach; ?>
       }
 
@@ -661,22 +701,107 @@
 
       function ActTonnes(){
 
-      	var Stock = document.getElementById("Stock");
-      	var Act = document.getElementById("Act");
-      	var Adjtonnes = document.getElementById("Adjtonnes");
 
-      	var v_Stock = parseFloat(Stock.value);
-      	var v_Act = parseFloat(Act.value);
 
-      	Adjtonnes.value = parseFloat(v_Stock + v_Act).toFixed(2);
+      	var Loader = document.getElementById("Loader");
+        var Material = document.getElementById("material");
+        var Percentage = document.getElementById("percentage");
+        var Tonnes = document.getElementById("Tonnes2");
+		var Density = document.getElementById("Density2");
+		var Total = document.getElementById("Total");
+        var Bucket = document.getElementById("Bucket");
+        var Stock = document.getElementById("Stock");
+        var DryTonBM = document.getElementById("DryTonBM");
+
+        var Act = document.getElementById("Act");
+		var v_Act = parseFloat(Act.value);
+
+        
+        var vTonnes = 0;
+        var vDensity = 0;
+        var vVolume = 0;
+      
+        var totTonnes = 0;
+        var totDensity = 0;
+        var totVolume = 0;
+
+        <?php foreach ($Loader as $loader): ?>
+          if ("<?php echo $loader->Equipment ?>" == Loader.value && "<?php echo $loader->Material ?>" == Material.value && "<?php echo $loader->Percentage ?>" == Percentage.value ) {
+
+				// Au.value = "<?php //echo $tostockpile->Au ?>";
+	   			// Ag.value = "<?php //echo $tostockpile->Ag ?>";
+
+	   		
+	
+				Tonnes.value = "<?php echo $loader->Tonnageper ?>";
+				Density.value = "<?php echo $loader->Density ?>";
+				Percentage.value = "<?php echo $loader->Percentage ?>";
+				Total.value = parseFloat(Bucket.value * Tonnes.value).toFixed(4);
+
+				if(!v_Act)
+				{
+					v_Act = 0;
+				}
+
+				
+				Total.value = parseFloat((Bucket.value * Tonnes.value) + v_Act) .toFixed(4);
+				Stock.value = parseFloat(DryTonBM.value - Total.value).toFixed(4);
+
+							if (Stock.value >= 0)
+					        {
+					            var message = document.getElementById("message");
+					            message.value = "";
+					          
+					        }
+					        else
+					        {
+					        	var message = document.getElementById("message");
+					            message.value = "Stock not allowed minus";
+					         
+					        }
+				return;
+          }else {
+       
+            Tonnes.value = "";
+            Density.value = "";
+            Total.value = "";
+         	Stock.value ="";
+          }
+
+          <?php endforeach; ?>
+
+      // 	var Stock = document.getElementById("Stock");
+      // 	var Act = document.getElementById("Act");
+      // 	var Adjtonnes = document.getElementById("Adjtonnes");
+      // 	var Total = document.getElementById("Total");
+      // 	var Operator = document.getElementById("Operator");
+
+      // 	var v_Stock = parseFloat(Stock.value);
+      // 	var v_Act = parseInt(Act.value);
+      // 	var v_Total = parseInt(Total.value);
+
+
+      	
+
+     	// if(Operator.value == "-"){
+
+     	// 	Total.value = (v_Total - v_Act);
+
+     	// }
+     	// else{
+
+     	// 	Total.value = (v_Total + v_Act);
+     	// }
+
+      // 	//Adjtonnes.value = parseFloat(v_Stock + v_Act).toFixed(2);
+
+
       }
 
         function SetValueOrefeed() {
         var masterDate = document.getElementById("Date");
         var masterStockpile = document.getElementById("Stockpile1");
-        var masterRemarks = document.getElementById("Remarks");
         var masterNote = document.getElementById("Note");
-        var masterShift = document.getElementById("Shift");
 
         var orefeedDate = document.getElementById("dateOrefeed");
         var orefeedStockpile = document.getElementById("stockpileOrefeed");
@@ -686,9 +811,7 @@
 
         orefeedDate.value = masterDate.value;
         orefeedStockpile.value = masterStockpile.value;
-        orefeedRemarks.value = masterRemarks.value;
         orefeedNote.value = masterNote.value;
-        orefedShift.value = masterShift.value; 
       }
 
 

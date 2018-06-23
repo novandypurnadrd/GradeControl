@@ -8,7 +8,7 @@
     <!-- END HEADLIB -->
 
   </head>
-  <body class="menubar-hoverable header-fixed ">
+  <body class="menubar-hoverable header-fixed" onload="BlockChange()">
 
     <!-- BEGIN HEADER-->
     <?php $this->load->view('lib/Header'); ?>
@@ -29,7 +29,8 @@
 
             <!-- BEGIN BASIC ELEMENTS -->
             <!-- BEGIN TITLE -->
-            <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'OreInventory/Input/InputOreInventory' ?>" method="post">
+            <?php foreach ($Table as $table): ?>
+              <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'OreInventory/UpdateMinWaste/UpdateMinWasteRecord/'.$id ?>" method="post">
               <div class="row">
                 <div class="col-lg-6">
                   <h2 class="text-primary">Choose Pit & Block</h2>
@@ -40,7 +41,7 @@
               </div><!--end .row -->
               <!-- END TITLE -->
               <div class="row">
-              <div class="col-md-6 col-sm-6">
+                 <div class="col-md-6 col-sm-6">
                   <div class="card">
                     <div class="card-body">
                       <div class="form-horizontal">
@@ -51,7 +52,7 @@
                               <select id="Pit" name="Pit" class="form-control" required="">
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Pit as $pit): ?>
-                                  <option value="<?php echo $pit->id ?>"><?php echo $pit->Nama ?></option>
+                                 <option value="<?php echo $pit->id ?>" <?php if($table->Pit == $pit->id){echo "selected='true'";}?>><?php echo $pit->Nama ?></option>
                                 <?php endforeach; ?>
                               </select>
                             </div>
@@ -59,30 +60,20 @@
                           <div class="col-md-6 col-sm-6">
                             <label for="Aggt" class="col-sm-4 control-label">Type</label>
                             <div class="col-sm-8">
-                              <select id="Type" name="Type" class="form-control" onchange="TypeChange()" required="">
-                                <option value="Ore">Ore</option>
-                                <option value="Visual">Visual</option>
-                                <option value="Mineralized Waste">Mineralized Waste</option>
+                              <select id="Type" name="Type" class="form-control" required="">
+                                <option value="Ore" <?php if($table->Type == "Ore"){echo "selected='true'";} ?>>Ore</option>
+                                <option value="Visual" <?php if($table->Type == "Visual"){echo "selected='true'";} ?>>Visual</option>
+                                <option value="Mineralized Waste" <?php if($table->Type == "Mineralized Waste"){echo "selected='true'";} ?>>Mineralized Waste</option>
                               </select>
                             </div>
                           </div>
                         </div>
                         <div class="form-group">
-                          <div class="col-md-6 col-sm-6">
-                            <label for="Aggt" class="col-sm-4 control-label" id="ore">Block</label>
-                            <div class="col-sm-8">
-                              <select id="Block" name="Block" class="form-control" required="" onchange="BlockChange()" required="">
-                                <option value="">&nbsp;</option>
-                                <?php foreach ($Oreline as $oreline): ?>
-                                  <option value="<?php echo $oreline->File ?>" class="<?php echo $oreline->pit ?>"><?php echo $oreline->File ?></option>
-                                <?php endforeach; ?>
-                              </select>
-                            </div>
-                          </div>
+                        
                           <div class="col-md-6 col-sm-6">
                             <label for="Au" class="col-sm-4 control-label" id="nonore"></label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Nonore" name="Nonore" disabled="" autocomplete="off">
+                              <input type="text" class="form-control" id="Nonore" name="Nonore" value="<?php echo $table->Block ?>" autocomplete="off">
                             </div>
                           </div>
                         </div>
@@ -90,13 +81,7 @@
                           <div class="col-md-6 col-sm-6">
                             <label for="Au" class="col-sm-4 control-label">RL</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="RL" name="RL" required="" autocomplete="off">
-                            </div>
-                          </div>
-                            <div class="col-md-6 col-sm-6">
-                            <label for="Au" class="col-sm-4 control-label">Tonnes</label>
-                            <div class="col-sm-8">
-                              <input type="text" class="form-control" id="akumulasitones" name="akumulasitones" readonly="" autocomplete="off">
+                              <input type="text" class="form-control" id="RL" name="RL" autocomplete="off" value="<?php echo $table->RL ?>">
                             </div>
                           </div>
                         </div>
@@ -108,7 +93,6 @@
                     </div><!--end .card-body -->
                   </div><!--end .card -->
                 </div><!--end .col -->
-
                 <div class="col-md-6 col-sm-6">
                   <div class="card">
                     <div class="card-body">
@@ -117,8 +101,9 @@
                         <div class="form-group">
                           <div class="col-md-6 col-sm-6">
                             <label for="DryTonFF" class="col-sm-4 control-label">Dry Ton</label>
+
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="DryTonFF" name="DryTonFF" onkeyup="Counter()" required="" autocomplete="off">
+                              <input type="text" class="form-control" id="DryTonFF" name="DryTonFF" onkeyup="Counter()" required="" autocomplete="off" value="<?php echo $table->DryTonFF ?>">
                             </div>
                           </div>
                           <div class="col-md-6 col-sm-6">
@@ -126,7 +111,7 @@
                             <div class="col-sm-4">
                               <div class="input-group">
                                 <div class="input-group-content">
-                                  <input type="text" class="form-control" id="Achievement" name="Achievement" readonly="">
+                                  <input type="text" class="form-control" id="Achievement" name="Achievement" readonly="" value="<?php echo $table->Achievement ?>">
                                 </div>
                                 <span class="input-group-addon">%</span>
                               </div>
@@ -137,13 +122,13 @@
                           <div class="col-md-6 col-sm-6">
                             <label for="Augr" class="col-sm-4 control-label">Au (gr)</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Augr" name="Augr" readonly="">
+                              <input type="text" class="form-control" id="Augr" name="Augr" readonly="" value="<?php echo $table->Au*$table->DryTonFF ?>">
                             </div>
                           </div>
                           <div class="col-md-6 col-sm-6">
                             <label for="Augt" class="col-sm-4 control-label">Au (gr/t)</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Augt" name="Augt" readonly="">
+                              <input type="text" class="form-control" id="Augt" name="Augt" readonly="" value="<?php echo $table->Au ?>">
                             </div>
                           </div>
                         </div>
@@ -151,13 +136,13 @@
                           <div class="col-md-6 col-sm-6">
                             <label for="Aggr" class="col-sm-4 control-label">Ag (gr)</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Aggr" name="Aggr" readonly="">
+                              <input type="text" class="form-control" id="Aggr" name="Aggr" readonly="" value="<?php echo $table->Ag*$table->DryTonFF ?>">
                             </div>
                           </div>
                           <div class="col-md-6 col-sm-6">
                             <label for="Aggt" class="col-sm-4 control-label">Ag (gr/t)</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Aggt" name="Aggt" readonly="">
+                              <input type="text" class="form-control" id="Aggt" name="Aggt" readonly="" value="<?php echo $table->Ag ?>">
                             </div>
                           </div>
                         </div>
@@ -168,7 +153,7 @@
                           <div class="col-md-6 col-sm-6">
                             <label for="Aggt" class="col-sm-4 control-label">AuEq75 (gr/t)</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="AuEq75gr" name="AuEq75gr" readonly="">
+                              <input type="text" class="form-control" id="AuEq75gr" name="AuEq75gr" readonly="" value="<?php echo $table->AuEq75 ?>">
                             </div>
                           </div>
                         </div>
@@ -177,6 +162,9 @@
                     </div><!--end .card-body -->
                   </div><!--end .card -->
                 </div><!--end .col -->
+             
+            
+
               </div><!--end .row -->
               <!-- BEGIN TITLE -->
               <div class="row">
@@ -189,7 +177,9 @@
               </div><!--end .row -->
               <!-- END TITLE -->
               <div class="row">
-                <div class="col-md-6 col-sm-6">
+               
+           
+                  <div class="col-md-6 col-sm-6">
                   <div class="card">
                     <div class="card-body">
                       <div class="form-horizontal">
@@ -197,13 +187,13 @@
                           <div class="col-md-6 col-sm-6">
                             <label for="Au" class="col-sm-4 control-label">Au</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Au" name="Au" readonly="" required="">
+                              <input type="text" class="form-control" id="Au" name="Au" value="<?php echo $table->Au ?>">
                             </div>
                           </div>
                           <div class="col-md-6 col-sm-6">
                             <label for="Ag" class="col-sm-4 control-label">Ag</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Ag" name="Ag" readonly="" required="">
+                              <input type="text" class="form-control" id="Ag" name="Ag" value="<?php echo $table->Ag ?>">
                             </div>
                           </div>
                         </div>
@@ -211,13 +201,13 @@
                           <div class="col-md-6 col-sm-6">
                             <label for="Ag" class="col-sm-4 control-label">AuEq75</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="AuEq75" name="AuEq75" readonly="">
+                              <input type="text" class="form-control" id="AuEq75" name="AuEq75" readonly="" value="<?php echo $table->AuEq75 ?>">
                             </div>
                           </div>
                           <div class="col-md-6 col-sm-6">
-                            <label for="Density" class="col-sm-4 control-label">Class</label>
+                          <label for="Ag" class="col-sm-4 control-label">Class</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Class" name="Class" readonly="">
+                              <input type="text" class="form-control" id="Class" name="Class" readonly="" value="<?php echo $table->Class ?>">
                             </div>
                           </div>
                         </div>
@@ -225,13 +215,13 @@
                           <div class="col-md-6 col-sm-6">
                             <label for="DryTonBM" class="col-sm-4 control-label">Dry Ton BM</label>
                             <div class="col-sm-7">
-                              <input type="text" class="form-control" id="DryTonBM" name="DryTonBM" readonly="" required="" onkeyup="CounterBlockModel()">
+                              <input type="text" class="form-control" id="DryTonBM" name="DryTonBM" value="<?php echo $table->Tonnes ?>" onkeyup="CounterBlockModel()">
                             </div>
                           </div>
                           <div class="col-md-6 col-sm-6">
                             <label for="Density" class="col-sm-4 control-label">Density</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Density" name="Density" required="" readonly="">
+                              <input type="text" class="form-control" id="Density" name="Density" value="<?php echo $table->Density ?>">
                             </div>
                           </div>
                         </div>
@@ -239,14 +229,12 @@
                       </br>
                       </br>
                       </br>
-                      </br>
-                      </br>
-                   
                      
                       </div>
                     </div><!--end .card-body -->
                   </div><!--end .card -->
                 </div><!--end .col -->
+              
                 <div class="col-md-6 col-sm-6">
                   <div class="card">
                     <div class="card-body">
@@ -255,12 +243,17 @@
                           <div class="col-md-12 col-sm-12">
                             <div class="input-daterange input-group" id="demo-date-range">
                               <div class="input-group-content">
-                                <input type="text" class="form-control" name="Start" id="Start" required=""  autocomplete="off"/>
+                                <input type="text" class="form-control" name="Start" id="Start" required=""  autocomplete="off" value="<?php echo explode('-',$table->Start)[1].'/'.explode('-',$table->Start)[2].'/'.explode('-',$table->Start)[0] ?>"/>
                                 <label>(Date) Start</label>
                               </div>
                               <span class="input-group-addon">Finish</span>
                               <div class="input-group-content">
-                                <input type="text" class="form-control" name="Finish" id="Finish" required="" autocomplete="off" disabled="true"/>
+                              <?php if ($table->Finish != null) { ?>
+                                  <input type="text" class="form-control" name="Finish" id="Finish" required="" autocomplete="off" disabled="true" value="<?php echo explode('-',$table->Finish)[1].'/'.explode('-',$table->Finish)[2].'/'.explode('-',$table->Finish)[0] ?>"/>
+                                <?php } else {?>
+                                  <input type="text" class="form-control" name="Finish" id="Finish" required="" autocomplete="off" disabled="true"/>
+                                  <?php } ?>
+                                
                                 <div class="form-control-line"></div>
                               </div>
                             </div>
@@ -270,37 +263,38 @@
                           <div class="col-md-6 col-sm-6">
                             <label for="Aggt" class="col-sm-4 control-label">Start Hour</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control time-mask" id="StartHour" required="" name="StartHour" autocomplete="off">
+                              <input type="text" class="form-control time-mask" id="StartHour" required="" name="StartHour" autocomplete="off" value="<?php echo $table->StartHour ?>">
                             </div>
                             <p class="help-block">Time: 24h</p>
                           </div>
                           <div class="col-md-6 col-sm-6">
                             <label for="Aggt" class="col-sm-4 control-label">Finish Hour</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control time-mask" id="FinishHour" required="" name="FinishHour" autocomplete="off" disabled="true">
+                              <input type="text" class="form-control time-mask" id="FinishHour" required="" name="FinishHour" autocomplete="off" disabled="true" value="<?php echo $table->FinishHour ?>">
                             </div>
                             <p class="help-block">Time: 24h</p>
                           </div>
                         </div>
+
                       </br>
-                      <div class="form-group">
+                       <div class="form-group">
                       <div class="col-md-6 col-sm-6">
                             <label for="Aggt" class="col-sm-4 control-label">Stockpile</label>
                             <div class="col-sm-8">
-                              <select id="Stockpile" name="Stockpile" class="form-control" required="">
+                              <select id="Stockpile" name="Stockpile" class="form-control" required="" readonly >
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Stockpile as $stockpile): ?>
-                                  <option value="<?php echo $stockpile->id ?>"><?php echo $stockpile->Nama ?></option>
+                                  <option value="<?php echo $stockpile->id ?>" <?php if($table->Stockpile == $stockpile->id){echo "selected='true'";} ?> ><?php echo $stockpile->Nama ?></option>
                                 <?php endforeach; ?>
                               </select>
                             </div>
                           </div>
-                      <div class="col-md-6 col-sm-6">
+                             <div class="col-md-6 col-sm-6">
                             <label for="Aggt" class="col-sm-4 control-label">Value</label>
                             <div class="col-sm-8">
                               <select id="Value" name="Value" class="form-control" required="" >
-                                <option value="Block Model">Block Model</option>
-                                <option value="Final Figure">Final Figure</option>
+                                <option value="Block Model"<?php if($table->Value == "Block Model"){echo "selected='true'";}?>>Block Model</option>
+                                <option value="Final Figure"<?php if($table->Value == "Final Figure"){echo "selected='true'";}?>>Final Figure</option>
                               </select>
                             </div>
                           </div>
@@ -311,16 +305,16 @@
                             <label for="Aggt" class="col-sm-4 control-label">Status</label>
                             <div class="col-sm-8">
                               <select id="Status" name="Status" class="form-control" required="" onchange="StatusChange()">
-                                <option value="Continue">Continue</option>
-                                <option value="Completed">Completed</option>
+                                <option value="Continue" <?php if($table->Status == "Continue"){echo "selected='true'";}?>>Continue</option>
+                                <option value="Completed" <?php if($table->Status == "Completed"){echo "selected='true'";}?>>Completed</option>
                               </select>
                             </div>
                           </div>
-                          <div class="col-md-6 col-sm-6">
+                           <div class="col-md-6 col-sm-6">
 
                             <label for="DryTonFF" class="col-sm-4 control-label">Note</label>
                             <div class="col-sm-8">
-                              <textarea type="text" class="form-control" id="Note" name="Note" autocomplete="off" rows="3"></textarea>
+                              <input type="text" class="form-control" id="Note" value="<?php echo $table->Note ?>" name="Note" autocomplete="off">
                             </div>
                           
                           </div>
@@ -333,12 +327,14 @@
               <div class="row" style="text-align:center">
                 <div class="col-md-12 col-sm-12">
                   <div class="form-group">
-                    <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-save"></i> Insert</button>
+                    <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-system-update-tv"></i> Update</button>
+                    <a class="btn ink-reaction btn-raised btn-information" href="<?php echo base_url().'OreInventory/Table/IndexTableGeneralVisual' ?>">Cancel</a>
                   </div>
                 </div><!--end .col -->
               </div><!--end .row -->
 
             </form>
+            <?php endforeach; ?>
             <!-- END BASIC ELEMENTS -->
 
           </div><!--end .section-body -->
@@ -356,8 +352,7 @@
 
     </div><!--end #base-->
     <!-- END BASE -->
-
-    <!-- BEGIN JAVASCRIPT -->
+  <!-- BEGIN JAVASCRIPT -->
     <?php $this->load->view('lib/Footlib'); ?>
     <script src="<?php echo base_url();?>assets/js/jquery.chained.min.js"></script>
     <script src="<?php echo base_url();?>assets/js/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
@@ -373,8 +368,7 @@
         var sanitized = $(this).val().replace(/[^0-9,.]/g, '');
         $(this).val(sanitized);
       });
-    </script>
-    <script type="text/javascript">
+
       function StatusChange() {
         var Status = document.getElementById("Status");
         var Finish = document.getElementById("Finish");
@@ -405,10 +399,6 @@
         var Augr = document.getElementById("Augr");
         var Aggr = document.getElementById("Aggr");
         var RL = document.getElementById("RL");
-        var Akumulasitones = document.getElementById("akumulasitones");
-        var StartHour = document.getElementById("StartHour");
-        var Start =  document.getElementById("Start");
-        var akumulasiTonnesValue = 0;
 
         <?php foreach ($Oreline as $oreline): ?>
           if ("<?php echo $oreline->File ?>" == Block.value) {
@@ -419,11 +409,6 @@
                 RL.value = "<?php echo $oreinventory->RL ?> ";
                 RL.readonly = true;
               }
-
-              
-              akumulasiTonnesValue = parseInt("<?php echo $oreinventory->DryTonFF ?>") + akumulasiTonnesValue;
-            
-              Akumulasitones.value = akumulasiTonnesValue;
             }
              <?php endforeach; ?>
             Au.value = "<?php echo $oreline->Au ?>";
@@ -447,67 +432,12 @@
             RL.value ="";
             AuEq75.value = "";
             Class.value ="";
-            Akumulasitones.value = "";
           }
 
         <?php endforeach; ?>
       }
 
-      function TypeChange() {
-    var Type = document.getElementById("Type");
-        var Block = document.getElementById("Block");
-    var Nonore = document.getElementById("Nonore");
-        var Au = document.getElementById("Au");
-        var Ag = document.getElementById("Ag");
-        var DryTonBM = document.getElementById("DryTonBM");
-        var Density = document.getElementById("Density");
-        var RL = document.getElementById("RL");
-        var Achievement = document.getElementById("Achievement");
-        var Value = document.getElementById("Value");
-        var Class = document.getElementById("Class");
-
-        if (Type.value == "Ore") {
-          Nonore.disabled = true;
-          Block.disabled = false;
-          document.getElementById('ore').innerHTML = 'Block';
-          document.getElementById('nonore').innerHTML = '';
-          $("#Au").prop('readonly', false);
-          $("#Ag").prop('readonly', false);
-          $("#DryTonBM").prop('readonly', true);
-          $("#DryTonFF").prop('readonly', false);
-          $("#Density").prop('readonly', false);
-          $("#RL").prop('readonly', false);
-          $("#AuEq75").prop('readonly', true);
-          $("#Class").prop('readonly', true);
-          $("#Augr").prop('readonly', false);
-          $("#Aggr").prop('readonly', false);
-          $("#Augt").prop('readonly', true);
-          $("#Aggt").prop('readonly', true);
-
-        }else {
-          Nonore.disabled = false;
-          Block.value = "";
-          Block.disabled = true;
-          document.getElementById('ore').innerHTML = '';
-          document.getElementById('nonore').innerHTML = 'Block';
-          Achievement.value = "100";
-          var Class = document.getElementById("Class");
-
-
-          $("#Au").prop('readonly', false);
-          $("#Ag").prop('readonly', false);
-          $("#DryTonBM").prop('readonly', false);
-          $("#DryTonFF").prop('readonly', true);
-          $("#Density").prop('readonly', false);
-          $("#RL").prop('readonly', false);
-          $("#AuEq75").prop('readonly', true);
-          $("#Class").prop('readonly', true);
-          $("#Augr").prop('readonly', true);
-          $("#Aggr").prop('readonly', true);
-          $("#Augt").prop('readonly', true);
-          $("#Aggt").prop('readonly', true);
-        }
-      }
+   
 
       function Counter(){
          var Type = document.getElementById("Type");
@@ -523,23 +453,15 @@
         var Aggt = document.getElementById("Aggt");
         var AuEq75gr = document.getElementById("AuEq75gr");
         var Achievement = document.getElementById("Achievement");
-        var Class = document.getElementById("Class");
-        var Akumulasitones = document.getElementById("akumulasitones").value;
-      
-      if(Akumulasitones == ""){
-          var aa = parseFloat(DryTonFF);
-        }
-        else{
-          var aa = parseFloat(Akumulasitones)+parseFloat(DryTonFF);
-        }
+         var Class = document.getElementById("Class");
 
-        var x = Augr / aa;
-        var y = Aggr / aa;
-        
-        var z = (aa / DryTonBM)*100;
+
+        var x = Augr / DryTonFF ;
+        var y = Aggr / DryTonFF ;
+        var z = DryTonFF / DryTonBM * 100;
         Augt.value = x.toFixed(2);
         Aggt.value = y.toFixed(2);
-        Achievement.value = z.toFixed(1);
+        Achievement.value = z.toFixed(0);
         AuEq75gr.value = parseFloat(x+(y/75)).toFixed(2);
 
          }else{
@@ -568,7 +490,7 @@
       }
 
 
-        function CounterBlockModel(){
+       function CounterBlockModel(){
         var Type = document.getElementById("Type");
 
         var DryTonFF = document.getElementById("DryTonFF");
@@ -650,7 +572,6 @@
 
 
 
-
       function Visual(){
 
         var Au = document.getElementById("Au").value;
@@ -690,7 +611,8 @@
 
     </script>
 
-  
+
+    
     <!-- END JAVASCRIPT -->
 
   </body>

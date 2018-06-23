@@ -14,6 +14,50 @@
 	    return $view->result();
 		}
 
+
+		function GetGrabSampleRangeDate($Start, $End){
+			$a="'";
+			$view = $this->db->query('SELECT p.Nama as Prospect , l.Nama as Location, g.Id, g.Date, g.FromGS, g.ToGS, g.TotalSample, g.Remarks FROM prospect p, location l, grabsample g WHERE g.prospect = p.Id AND g.location = l.Id AND Date BETWEEN ('.$a.$Start.$a.') AND ('.$a.$End.$a.') ORDER BY id DESC');
+	    	return $view->result();
+		}
+
+
+		function GetFaceSampleRangeDate($Start, $End){
+			$a="'";
+			$view = $this->db->query('SELECT p.Nama as Prospect , l.Nama as Location, f.id, f.Date, f.FromHoleID, F.ToHoleID, f.TotalHole, f.FromSample, f.ToSample, f.TotalSample, f.Remarks FROM prospect p, location l, facesample f WHERE f.prospect = p.Id AND f.location = l.Id AND Date BETWEEN ('.$a.$Start.$a.') AND ('.$a.$End.$a.') ORDER BY id DESC');
+	    	return $view->result();
+		}
+
+
+		function GetAcidSampleRangeDate($Start, $End){
+			$a="'";
+			$view = $this->db->query('SELECT p.Nama as Prospect , l.Nama as Location, f.id, f.Date, f.FromHoleID, F.ToHoleID, f.TotalHole, f.FromSample, f.ToSample, f.TotalSample, f.Remarks FROM prospect p, location l, acidsample f WHERE f.prospect = p.Id AND f.location = l.Id AND Date BETWEEN ('.$a.$Start.$a.') AND ('.$a.$End.$a.') ORDER BY id DESC');
+	    	return $view->result();
+		}
+
+
+		function GetAugerSampleRangeDate($Start, $End){
+			$a="'";
+			$view = $this->db->query('SELECT p.Nama as Prospect , l.Nama as Location, f.id, f.Date, f.FromHoleID, F.ToHoleID, f.TotalHole, f.FromSample, f.ToSample, f.TotalSample, f.Remarks FROM prospect p, location l, augersample f WHERE f.prospect = p.Id AND f.location = l.Id AND Date BETWEEN ('.$a.$Start.$a.') AND ('.$a.$End.$a.') ORDER BY id DESC');
+	    	return $view->result();
+		}
+
+
+		function GetRCDrillingRangeDate($Start, $End){
+			$a="'";
+			$view = $this->db->query('SELECT p.Nama as Prospect , l.Nama as Location, f.id, f.Date, f.FromHoleID, F.ToHoleID, f.TotalHole, f.FromSample, f.ToSample, f.TotalSample, f.TotalMeter, f.Drill, f.Remarks FROM prospect p, location l, rcdrilling f WHERE f.prospect = p.Id AND f.location = l.Id AND Date BETWEEN ('.$a.$Start.$a.') AND ('.$a.$End.$a.') ORDER BY id DESC');
+	    	return $view->result();
+		}
+
+
+
+		function GetStockpileSampleRangeDate($Start, $End){
+			$a="'";
+			$view = $this->db->query('SELECT * FROM stockpilesample WHERE Date BETWEEN ('.$a.$Start.$a.') AND ('.$a.$End.$a.') ORDER BY id DESC');
+	    	return $view->result();
+		}
+
+
 		function GetGrabSampleReport($date){
 			$a="'";
 			$view = $this->db->query('SELECT * FROM grabsample WHERE Date='.$a.$date.$a);
@@ -34,7 +78,7 @@
 	
 		function GetRCDrilling(){
      	$a="'";
-			$view = $this->db->query('SELECT p.Nama as Prospect , l.Nama as Location, r.id, r.Date, r.FromHoleID, r.ToHoleID, r.TotalHole, r.FromSample, r.TotalSample, r.ToSample, r.Drill, r.TotalMeter,r.Remarks FROM prospect p, location l, rcdrilling r WHERE r.prospect = p.Id AND r.location = l.Id');
+			$view = $this->db->query('SELECT p.Nama as Prospect , l.Nama as Location, r.id, r.Date, r.FromHoleID, r.ToHoleID, r.TotalHole, r.FromSample, r.TotalSample, r.ToSample, r.Drill, r.TotalMeter,r.Remarks FROM prospect p, location l, rcdrilling r WHERE r.prospect = p.Id AND r.location = l.Id ORDER by r.Date DESC');
 	    return $view->result();
 		}
 
@@ -70,7 +114,7 @@
 
 		function GetAugerSample(){
      	$a="'";
-			$view = $this->db->query('SELECT p.Nama as Prospect , l.Nama as Location, r.id, r.Date, r.FromHoleID, r.ToHoleID, r.TotalHole, r.FromSample, r.TotalSample, r.ToSample,r.Remarks FROM prospect p, location l, augersample r WHERE r.prospect = p.Id AND r.location = l.Id');
+			$view = $this->db->query('SELECT p.Nama as Prospect , l.Nama as Location, r.id, r.Date, r.FromHoleID, r.ToHoleID, r.TotalHole, r.FromSample, r.TotalSample, r.ToSample,r.Remarks FROM prospect p, location l, augersample r WHERE r.prospect = p.Id AND r.location = l.Id ORDER by r.Date DESC');
 	    return $view->result();
 		}
 

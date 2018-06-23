@@ -89,6 +89,12 @@
 								</div><!--end .card -->
 							</div><!--end .col -->
 						</div><!--end .row -->
+
+						<div class="row">
+							<div class="col-lg-12">
+								<h4 class="text-info">*Make Sure that data oreline on row 17.</h4>
+							</div><!--end .col -->
+						</div><!--end .row -->
 						<!-- END BASIC ELEMENTS -->
 
 					</div><!--end .section-body -->

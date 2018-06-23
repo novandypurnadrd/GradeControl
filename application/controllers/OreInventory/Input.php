@@ -23,7 +23,7 @@ class Input extends CI_Controller {
 				$data['Pit'] = $this->Pit_model->getPit();
 				$data['Oreline'] = $this->Oreline_model->GetOrelineStatus();
 				$data['OreInventory'] = $this->OreInventory_model->getInventory();
-        $data['Stockpile'] = $this->Stockpile_model->getStockpile();
+        		$data['Stockpile'] = $this->Stockpile_model->GetStockpileNoScatBoulder();
 		    $this->load->view('OreInventory/Input', $data);
     }else {
       redirect(base_url());
@@ -174,19 +174,24 @@ class Input extends CI_Controller {
 
 			$OpenTonnes = 0;
 			$OpenAu = 0;
-			$OpenAg = 0; 
+			$OpenAg = 0;
+
+			$Status = $this->input->post('Status');
+
 
 			//Block yang sama dari continue -> completed sehingga ada update value Au Ag
-			
+
 			$CheckBlock = $this->OreInventory_model->getOreInventoryByBlockNew($Block,$Stockpile);
-			if($CheckBlock != null){
+			if($CheckBlock != null && $Status == "Completed" && $Value == "Final Figure"){
 				foreach ($CheckBlock as $valueblock) {
 
-					$TonnesBlock = $valueblock->DryTonBM;
+					$TonnesBlock = $valueblock->DryTonFF;
 					$AuBlock = $valueblock->Au;
 					$AgBlock = $valueblock->Ag;
 					$DensityBlock = round($valueblock->Dbdensity*0.8,2);
+					$DateBlock = $valueblock->Start;
 
+					
 					//Update To Stockpile table
 					//Penghapusan tostockpile table berdasarkan oreinventory
 					$StockpileValue = $this->Stockpile_model->GetStockpileByStockpile($Stockpile);
@@ -199,6 +204,7 @@ class Input extends CI_Controller {
 						$RLStockpile = $stockpilevalue->RL;
 						$StockpileMined	= $stockpilevalue->Stockpile;
 						$date = $stockpilevalue->Date;
+
 					}
 					
 					if ($TonnesStockpile == 0){
@@ -206,7 +212,6 @@ class Input extends CI_Controller {
 						$TonnesStockpileUpdate = 0; 
 						$AuStockpileUpdate = 0;
 						$AgStockpileUpdate = 0;
-						//$DensityStockpileUpdate = 0;
 						$DensityStockpileUpdate = 0;
 						$VolumeStockpileUpdate = 0;
 						$AuEq75StockpileUpdate = 0;
@@ -214,12 +219,25 @@ class Input extends CI_Controller {
 					}
 					else{
 						
-						$TonnesStockpileUpdate = $TonnesStockpile - $TonnesBlock; 
-						$AuStockpileUpdate = round(((($AuStockpile*$TonnesStockpile)-($AuBlock*$TonnesBlock))/$TonnesStockpileUpdate),2);
-						$AgStockpileUpdate = round(((($AgStockpile*$TonnesStockpile)-($AgBlock*$TonnesBlock))/$TonnesStockpileUpdate),2);
-						$DensityStockpileUpdate = round(((($DensityStockpile*$TonnesStockpile)-($DensityBlock*$TonnesBlock))/$TonnesStockpileUpdate),2);
-						$VolumeStockpileUpdate = $TonnesStockpileUpdate/$DensityStockpile;
+						$TonnesStockpileUpdate = $TonnesStockpile - $TonnesBlock;
+
+						if($TonnesStockpileUpdate <= 0){
+							$TonnesStockpileUpdate = 0;
+							$AuStockpileUpdate = 0;
+							$AgStockpileUpdate = 0;
+							$DensityStockpileUpdate = 0;
+							$VolumeStockpileUpdate = 0;
+						}
+						else{
+							$AuStockpileUpdate = ((($AuStockpile*$TonnesStockpile)-($AuBlock*$TonnesBlock))/$TonnesStockpileUpdate);
+						 
+							$AgStockpileUpdate = ((($AgStockpile*$TonnesStockpile)-($AgBlock*$TonnesBlock))/$TonnesStockpileUpdate);
+							$DensityStockpileUpdate = ((($DensityStockpile*$TonnesStockpile)-($DensityBlock*$TonnesBlock))/$TonnesStockpileUpdate);
+							$VolumeStockpileUpdate = $TonnesStockpileUpdate/$DensityStockpile;
+						}
+						
 						$AuEq75StockpileUpdate = round($AuStockpileUpdate+($AgStockpileUpdate/75),2);
+					
 					if (0.65 <= $AuEq75StockpileUpdate && $AuEq75StockpileUpdate < 2.00){
 							$Class="Marginal";
 						}
@@ -229,11 +247,15 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75StockpileUpdate && $AuEq75StockpileUpdate<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75StockpileUpdate >= 6.00){
 							$Class="SHG";
+						}
+						else{
+							$Class = "Min.Waste";
 						}
 
 					}
+
 
 					$ToStockpile = array(
 						'Volume' => round($VolumeStockpileUpdate,2),
@@ -251,6 +273,18 @@ class Input extends CI_Controller {
 
 
 					//Update Add ke tostokcpile table
+					if ($Value == "Final Figure"){
+					$Au = $this->input->post('Augt');
+					$Ag = $this->input->post('Aggt');
+					$AuEq75 = $this->input->post('AuEq75gr');
+					}
+					else{
+
+							$Au = $this->input->post('Au');
+							$Ag = $this->input->post('Ag');
+							$AuEq75 = $this->input->post('AuEq75');
+						}
+
 					$StockpileValue = $this->Stockpile_model->GetStockpileByStockpile($Stockpile);
 					foreach ($StockpileValue as $stockpilevalue) {
 						$AuStockpile = $stockpilevalue->Au;
@@ -263,25 +297,17 @@ class Input extends CI_Controller {
 						$date = $stockpilevalue->Date;
 					}
 					
-					if ($TonnesStockpile == 0){
-						
-						$TonnesStockpileUpdate = 0; 
-						$AuStockpileUpdate = 0;
-						$AgStockpileUpdate = 0;
-						//$DensityStockpileUpdate = 0;
-						$DensityStockpileUpdate = 0;
-						$VolumeStockpileUpdate = 0;
-						$AuEq75StockpileUpdate = 0;
-						$Class = "";
-					}
-					else{
+				
+					
 						
 						$TonnesStockpileUpdate = $TonnesStockpile + $TonnesBlock; 
-						$AuStockpileUpdate = round(((($AuStockpile*$TonnesStockpile)+($Au*$TonnesBlock))/$TonnesStockpileUpdate),2);
-						$AgStockpileUpdate = round(((($AgStockpile*$TonnesStockpile)+($Ag*$TonnesBlock))/$TonnesStockpileUpdate),2);
-						$DensityStockpileUpdate = round(((($DensityStockpile*$TonnesStockpile)+($DensityBlock*$TonnesBlock))/$TonnesStockpileUpdate),2);
+						$AuStockpileUpdate = ((($AuStockpile*$TonnesStockpile)+($Au*$TonnesBlock))/$TonnesStockpileUpdate);
+						$AgStockpileUpdate = ((($AgStockpile*$TonnesStockpile)+($Ag*$TonnesBlock))/$TonnesStockpileUpdate);
+						$DensityStockpileUpdate = ((($DensityStockpile*$TonnesStockpile)+($DensityBlock*$TonnesBlock))/$TonnesStockpileUpdate);
 						$VolumeStockpileUpdate = $TonnesStockpileUpdate/$DensityStockpile;
 						$AuEq75StockpileUpdate = round($AuStockpileUpdate+($AgStockpileUpdate/75),2);
+
+
 					if (0.65 <= $AuEq75StockpileUpdate && $AuEq75StockpileUpdate < 2.00){
 							$Class="Marginal";
 						}
@@ -291,11 +317,14 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75StockpileUpdate && $AuEq75StockpileUpdate<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75StockpileUpdate >= 6.00){
 							$Class="SHG";
 						}
+						else{
+							$Class = "Min.Waste";
+						}
 
-					}
+					
 
 					$ToStockpile = array(
 						'Volume' => round($VolumeStockpileUpdate,2),
@@ -314,6 +343,21 @@ class Input extends CI_Controller {
 
 					//Update Closingstock table
 					//Delete closingstock berdasarkan blok
+					//Minus Closing stock berdasarkan oreinventiry yang memiliki blok yang sama
+
+					if ($Value == "Final Figure"){
+					$Au = $this->input->post('Augt');
+					$Ag = $this->input->post('Aggt');
+					$AuEq75 = $this->input->post('AuEq75gr');
+					}
+					else{
+
+							$Au = $this->input->post('Au');
+							$Ag = $this->input->post('Ag');
+							$AuEq75 = $this->input->post('AuEq75');
+						}
+
+
 					$Closingstock = $this->ClosingStock_model->GetClosingStockByStockpile($Stockpile);
 
 					foreach ($Closingstock as $closingstock) {
@@ -333,17 +377,30 @@ class Input extends CI_Controller {
 						$VolumeClosingstockUpdate = 0;
 						$DensityClosingstockUpdate = 0;
 						$AuEq75ClosingstockUpdate = 0;
+						$Class = "-";
 					}
 					else{
 
 					$TonnesClosingstockUpdate = $TonnesClosingstock-$TonnesBlock;
-					$AuClosingstockUpdate = round(((($AuClosingstock*$TonnesClosingstock)-($AuBlock*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-					$AgClosingstockUpdate = round(((($AgClosingstock*$TonnesClosingstock)-($AgBlock*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-					$DensityClosingstockUpdate=round(((($DensityClosingstock*$TonnesClosingstock)-($DensityBlock*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-					$VolumeClosingstockUpdate = $TonnesClosingstockUpdate/$DensityClosingstockUpdate;
-					$AuEq75ClosingstockUpdate = round($AuClosingstockUpdate+($AgClosingstockUpdate/75),2);
+					if($TonnesClosingstockUpdate <= 0){
+						$TonnesClosingstockUpdate = 0;
+						$AuClosingstockUpdate = 0;
+						$AgClosingstockUpdate = 0;
+						$DensityClosingstockUpdate = 0;
+						$VolumeClosingstockUpdate = 0;
+						$AuEq75ClosingstockUpdate = 0;
+						$Class="-";
+					}
+					else{
+						$AuClosingstockUpdate = ((($AuClosingstock*$TonnesClosingstock)-($AuBlock*$TonnesBlock))/$TonnesClosingstockUpdate);
+						$AgClosingstockUpdate = ((($AgClosingstock*$TonnesClosingstock)-($AgBlock*$TonnesBlock))/$TonnesClosingstockUpdate);
+						$DensityClosingstockUpdate= ((($DensityClosingstock*$TonnesClosingstock)-($DensityBlock*$TonnesBlock))/$TonnesClosingstockUpdate);
+						$VolumeClosingstockUpdate = $TonnesClosingstockUpdate/$DensityClosingstockUpdate;
 
-					if (0.65 <= $AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate < 2.00){
+
+						$AuEq75ClosingstockUpdate = round($AuClosingstockUpdate+($AgClosingstockUpdate/75),2);
+
+						if (0.65 <= $AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate < 2.00){
 							$Class="Marginal";
 						}
 						elseif(2<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<4.00){
@@ -352,9 +409,16 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75ClosingstockUpdate >= 6.00){
 							$Class="SHG";
 						}
+						else{
+							$Class = "Min.Waste";
+						}
+
+					}
+					
+					
 
 					}
 
@@ -375,6 +439,19 @@ class Input extends CI_Controller {
 
 
 					//Update Add closingstock berdasarkan blok
+					if ($Value == "Final Figure"){
+					$Au = $this->input->post('Augt');
+					$Ag = $this->input->post('Aggt');
+					$AuEq75 = $this->input->post('AuEq75gr');
+					}
+					else{
+
+							$Au = $this->input->post('Au');
+							$Ag = $this->input->post('Ag');
+							$AuEq75 = $this->input->post('AuEq75');
+						}
+
+
 					$Closingstock = $this->ClosingStock_model->GetClosingStockByStockpile($Stockpile);
 
 					foreach ($Closingstock as $closingstock) {
@@ -387,20 +464,12 @@ class Input extends CI_Controller {
 
 					}
 
-					if($TonnesClosingstock == 0){
-						$TonnesClosingstockUpdate = 0;
-						$AgClosingstockUpdate = 0;
-						$AuClosingstockUpdate = 0;
-						$VolumeClosingstockUpdate = 0;
-						$DensityClosingstockUpdate = 0;
-						$AuEq75ClosingstockUpdate = 0;
-					}
-					else{
+				
 
 					$TonnesClosingstockUpdate = $TonnesClosingstock+$TonnesBlock;
-					$AuClosingstockUpdate = round(((($AuClosingstock*$TonnesClosingstock)+($Au*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-					$AgClosingstockUpdate = round(((($AgClosingstock*$TonnesClosingstock)+($Ag*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-					$DensityClosingstockUpdate=round(((($DensityClosingstock*$TonnesClosingstock)+($DensityBlock*$TonnesBlock))/$TonnesClosingstockUpdate),2);
+					$AuClosingstockUpdate = ((($AuClosingstock*$TonnesClosingstock)+($Au*$TonnesBlock))/$TonnesClosingstockUpdate);
+					$AgClosingstockUpdate = ((($AgClosingstock*$TonnesClosingstock)+($Ag*$TonnesBlock))/$TonnesClosingstockUpdate);
+					$DensityClosingstockUpdate= ((($DensityClosingstock*$TonnesClosingstock)+($DensityBlock*$TonnesBlock))/$TonnesClosingstockUpdate);
 					$VolumeClosingstockUpdate = $TonnesClosingstockUpdate/$DensityClosingstockUpdate;
 					$AuEq75ClosingstockUpdate = round($AuClosingstockUpdate+($AgClosingstockUpdate/75),2);
 
@@ -413,11 +482,14 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75ClosingstockUpdate >= 6.00){
 							$Class="SHG";
 						}
+						else{
+							$Class = "Min.Waste";
+						}
 
-					}
+				
 
 					$Closing = array(
 						'Volume' => round($VolumeClosingstockUpdate,2),
@@ -435,9 +507,11 @@ class Input extends CI_Controller {
 
 
 
-					//Update Closing Stock Grade
+					//Update Closing Stock Grade Semuanya
 					//Update Delete berdasarkan blok
-					$Closingstock = $this->ClosingStock_model->GetClosingStockByStockpileandDateGrade($Stockpile,$date);
+					// $Closingstock = $this->ClosingStock_model->GetClosingStockByStockpileandDateGradeAll($Stockpile,$DateBlock,$date);
+
+					$Closingstock = $this->ClosingStock_model->GetClosingStockByStockpileandDateGrade($Stockpile,$DateBlock);
 
 						$AuClosingstock = 0;
 						$AgClosingstock = 0;
@@ -452,7 +526,7 @@ class Input extends CI_Controller {
 						$VolumeClosingstock = $closingstock->Volume;
 						$DensityClosingstock = $closingstock->Density;
 						$StockpileClosingstock = $closingstock->Stockpile;
-					}
+						$IdClosingstockGrade = $closingstock->id;
 
 					if($TonnesClosingstock == 0){
 						$TonnesClosingstockUpdate = 0;
@@ -461,18 +535,29 @@ class Input extends CI_Controller {
 						$VolumeClosingstockUpdate = 0;
 						$DensityClosingstockUpdate = 0;
 						$AuEq75ClosingstockUpdate = 0;
+						$Class= "-";
 					}
 					else{
 
 					$TonnesClosingstockUpdate = $TonnesClosingstock-$TonnesBlock;
-					$AuClosingstockUpdate = round(((($AuClosingstock*$TonnesClosingstock)-($AuBlock*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-					$AgClosingstockUpdate = round(((($AgClosingstock*$TonnesClosingstock)-($AgBlock*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-				
-					$AuEq75ClosingstockUpdate = round($AuClosingstockUpdate+($AgClosingstockUpdate/75),2);
-					$DensityClosingstockUpdate=round(((($DensityClosingstock*$TonnesClosingstock)-($DensityBlock*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-					$VolumeClosingstockUpdate = round($TonnesClosingstockUpdate/$DensityClosingstockUpdate,2);
+					if($TonnesClosingstockUpdate <= 0){
+						$AuClosingstockUpdate = 0;
+						$AgClosingstockUpdate = 0;
+						$DensityClosingstockUpdate = 0;
+						$VolumeClosingstockUpdate = 0;
+						$AuEq75ClosingstockUpdate = 0;
+						$Class= "-";
+					}
+					else{
+						$AuClosingstockUpdate = ((($AuClosingstock*$TonnesClosingstock)-($AuBlock*$TonnesBlock))/$TonnesClosingstockUpdate);
+						$AgClosingstockUpdate = ((($AgClosingstock*$TonnesClosingstock)-($AgBlock*$TonnesBlock))/$TonnesClosingstockUpdate);
+						$DensityClosingstockUpdate=((($DensityClosingstock*$TonnesClosingstock)-($DensityBlock*$TonnesBlock))/$TonnesClosingstockUpdate);
+						$VolumeClosingstockUpdate = $TonnesClosingstockUpdate/$DensityClosingstockUpdate;
 
-					if (0.65 <= $AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate < 2.00){
+						$AuEq75ClosingstockUpdate = round($AuClosingstockUpdate+($AgClosingstockUpdate/75),2);
+					
+
+						if (0.65 <= $AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate < 2.00){
 							$Class="Marginal";
 						}
 						elseif(2<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<4.00){
@@ -481,9 +566,18 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75ClosingstockUpdate >= 6.00){
 							$Class="SHG";
 						}
+						else{
+							$Class = "Min.Waste";
+						}
+
+
+					}
+					
+				
+					
 
 					}
 
@@ -494,17 +588,33 @@ class Input extends CI_Controller {
 						'AuEq75' => round($AuEq75ClosingstockUpdate,2),
 						'Class' =>$Class,
 						'Tonnes' => round($TonnesClosingstockUpdate,2),
-						'Density' => $DensityClosingstockUpdate,
-						'Volume' => $VolumeClosingstockUpdate,
+						'Density' => round($DensityClosingstockUpdate,2),
+						'Volume' => round($VolumeClosingstockUpdate,2),
 						'Stockpile' => $StockpileClosingstock,
-						'Date' => $date,
+					
 					);
 
-					$this->ClosingStock_model->UpdateClosingStockByDateGrade($Closing,$StockpileClosingstock,$date);
+					$this->ClosingStock_model->UpdateClosingStockGrade($Closing,$IdClosingstockGrade);
+
+					}
 
 
 					//Update Add berdasarkan blok
-					$Closingstock = $this->ClosingStock_model->GetClosingStockByStockpileandDateGrade($Stockpile,$date);
+					// $Closingstock = $this->ClosingStock_model->GetClosingStockByStockpileandDateGradeAll($Stockpile,$DateBlock,$date);
+
+					if ($Value == "Final Figure"){
+					$Au = $this->input->post('Augt');
+					$Ag = $this->input->post('Aggt');
+					$AuEq75 = $this->input->post('AuEq75gr');
+					}
+					else{
+
+							$Au = $this->input->post('Au');
+							$Ag = $this->input->post('Ag');
+							$AuEq75 = $this->input->post('AuEq75');
+						}
+
+					$Closingstock = $this->ClosingStock_model->GetClosingStockByStockpileandDateGrade($Stockpile,$DateBlock);
 
 						$AuClosingstock = 0;
 						$AgClosingstock = 0;
@@ -513,31 +623,24 @@ class Input extends CI_Controller {
 						$DensityClosingstock = 0;
 
 					foreach ($Closingstock as $closingstock) {
+
 						$AuClosingstock = $closingstock->Au;
 						$AgClosingstock = $closingstock->Ag;
 						$TonnesClosingstock = $closingstock->Tonnes;
 						$VolumeClosingstock = $closingstock->Volume;
 						$DensityClosingstock = $closingstock->Density;
 						$StockpileClosingstock = $closingstock->Stockpile;
-					}
+						$IdClosingstockGrade = $closingstock->id;
 
-					if($TonnesClosingstock == 0){
-						$TonnesClosingstockUpdate = 0;
-						$AgStockpileUpdate = 0;
-						$AuClosingstockUpdate = 0;
-						$VolumeClosingstock = 0;
-						$DensityClosingstock = 0;
-						$AuEq75ClosingstockUpdate = 0;
-					}
-					else{
+				
 
 					$TonnesClosingstockUpdate = $TonnesClosingstock+$TonnesBlock;
-					$AuClosingstockUpdate = round(((($AuClosingstock*$TonnesClosingstock)+($Au*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-					$AgClosingstockUpdate = round(((($AgClosingstock*$TonnesClosingstock)+($Ag*$TonnesBlock))/$TonnesClosingstockUpdate),2);
+					$AuClosingstockUpdate = ((($AuClosingstock*$TonnesClosingstock)+($Au*$TonnesBlock))/$TonnesClosingstockUpdate);
+					$AgClosingstockUpdate = ((($AgClosingstock*$TonnesClosingstock)+($Ag*$TonnesBlock))/$TonnesClosingstockUpdate);
 				
 					$AuEq75ClosingstockUpdate = round($AuClosingstockUpdate+($AgClosingstockUpdate/75),2);
-					$DensityClosingstockUpdate=round(((($DensityClosingstock*$TonnesClosingstock)+($DensityBlock*$TonnesBlock))/$TonnesClosingstockUpdate),2);
-					$VolumeClosingstockUpdate = round($TonnesClosingstockUpdate/$DensityClosingstockUpdate,2);
+					$DensityClosingstockUpdate=((($DensityClosingstock*$TonnesClosingstock)+($DensityBlock*$TonnesBlock))/$TonnesClosingstockUpdate);
+					$VolumeClosingstockUpdate = $TonnesClosingstockUpdate/$DensityClosingstockUpdate;
 
 					if (0.65 <= $AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate < 2.00){
 							$Class="Marginal";
@@ -548,11 +651,14 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75ClosingstockUpdate && $AuEq75ClosingstockUpdate<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75ClosingstockUpdate){
 							$Class="SHG";
 						}
+						else{
+							$Class = "Min.Waste";
+						}
 
-					}
+				
 
 					$Closing = array(
 						//'Volume' => $VolumeClosingstockUpdate,
@@ -561,21 +667,24 @@ class Input extends CI_Controller {
 						'AuEq75' => round($AuEq75ClosingstockUpdate,2),
 						'Class' =>$Class,
 						'Tonnes' => round($TonnesClosingstockUpdate,2),
-						'Density' => $DensityClosingstockUpdate,
+						'Density' => round($DensityClosingstockUpdate,2),
 						'Volume' => round($VolumeClosingstockUpdate,2),
 						'Stockpile' => $StockpileClosingstock,
-						'Date' => $date,
+						
 					);
 
-					$this->ClosingStock_model->UpdateClosingStockByDateGrade($Closing,$StockpileClosingstock,$date);
+					$this->ClosingStock_model->UpdateClosingStockGrade($Closing,$IdClosingstockGrade);
+					}
+
+
 
 
 				}
 			}
-			
 
+			// else{
 
-						//$ClosingStockdate = date('Y-m-d', strtotime('-1 day', strtotime($Date)));
+					//$ClosingStockdate = date('Y-m-d', strtotime('-1 day', strtotime($Date)));
 						$Open = $this->ClosingStock_model->GetClosingStockTonnesStockpile($Stockpile);
 						foreach ($Open as $open) {
 							$OpenTonnes = $open->Tonnes;
@@ -601,15 +710,23 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75 && $AuEq75<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75 >= 6.00){
 							$Class="SHG";
 						}
+						else{
+							$Class = "Min.Waste";
+						}
 					$Volume = round(($Tonnes / $Density),2);
+
+
+					$Density = round($this->input->post('Density')*0.8,2);
+					
+					$Volume = $Tonnes/$Density;
 
 					$Temp = $this->Stockpile_model->GetToStockpileCalcStockpile($Stockpile);
 					foreach ($Temp as $temp) {
 						$Tonnes = $temp->Tonnes + $TruckTally;
-						//$Density = (($temp->Density*$temp->Tonnes)+($Density*$TruckTally))/$Tonnes;
+						$Density = (($temp->Density*$temp->Tonnes)+($Density*$TruckTally))/$Tonnes;
 
 						$v_Au = (($temp->Au*$temp->Tonnes)+($Au*$TruckTally))/$Tonnes;
 						$v_Ag = (($temp->Ag*$temp->Tonnes)+($Ag*$TruckTally))/$Tonnes;
@@ -624,8 +741,11 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75 && $AuEq75<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75 >= 6.00){
 							$Class="SHG";
+						}
+						else{
+							$Class = "Min.Waste";
 						}
 						$Volume = round(($Tonnes / $Density),2);
 						$checker = 1;
@@ -695,7 +815,7 @@ class Input extends CI_Controller {
 						$Density = (($temp->Density*$temp->Tonnes)+($Density*$OreminedTonnes))/$Tonnes;
 						$v_Au = (($temp->Au*$temp->Tonnes)+($Au*$OreminedTonnes))/$Tonnes;
 						$v_Ag = (($temp->Ag*$temp->Tonnes)+($Ag*$OreminedTonnes))/$Tonnes;
-						$AuEq75 = round($Au+($Ag/75),2);
+						$AuEq75 = round($v_Au+($v_Ag/75),2);
 						if (0.65<=$AuEq75 && $AuEq75<2.00){
 							$Class="Marginal";
 						}
@@ -705,9 +825,13 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75 && $AuEq75<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75 >= 6.00){
 							$Class="SHG";
 						}
+						else{
+							$Class = "Min.Waste";
+						}
+
 						$Volume = $Tonnes / $Density;
 					}
 
@@ -736,13 +860,15 @@ class Input extends CI_Controller {
 
 					//Check for Closing Stock Grade
 					$Density = round($this->input->post('Density')*0.8,2);
+
 					$Temp = $this->ClosingStock_model->GetClosingStockByStockpileandDateGrade($Stockpile,$Date);
 					foreach ($Temp as $temp) {
+						
 						$Tonnes = $temp->Tonnes + $OreminedTonnes;
 						$Density = (($temp->Density*$temp->Tonnes)+($Density*$OreminedTonnes))/$Tonnes;
 						$v_Au = (($temp->Au*$temp->Tonnes)+($Au*$OreminedTonnes))/$Tonnes;
 						$v_Ag = (($temp->Ag*$temp->Tonnes)+($Ag*$OreminedTonnes))/$Tonnes;
-						$AuEq75 = round($Au+($Ag/75),2);
+						$AuEq75 = round($v_Au+($v_Ag/75),2);
 						if (0.65<=$AuEq75 && $AuEq75<2.00){
 							$Class="Marginal";
 						}
@@ -752,13 +878,44 @@ class Input extends CI_Controller {
 						elseif(4<=$AuEq75 && $AuEq75<6.00){
 							$Class="High Grade";
 						}
-						else{
+						elseif($AuEq75 >= 6.00){
 							$Class="SHG";
 						}
+						else{
+							$Class = "Min.Waste";
+						}
 						$Volume = $Tonnes / $Density;
+
+						$IdClosingstock = $temp->id;
+
+						
+						$Closing = array(
+						'Volume' => $Volume,
+						'Au' => round($v_Au,2),
+						'Ag' => round($v_Ag,2),
+						'AuEq75' => round($AuEq75,2),
+						'Class' =>$Class,
+						'Tonnes' => round($Tonnes,2),
+						'Density' => round($Density,2),
+						'Stockpile' => $this->input->post('Stockpile'),
+						
+						//'Status' => "Pending",
+						);
+
+					$this->ClosingStock_model->UpdateClosingStockGrade($Closing,$IdClosingstock);
+
 					}
 
-					$Closing = array(
+				
+
+					if($Temp){
+						
+						
+					}
+					else{
+						
+					
+						$Closing = array(
 						'Volume' => $Volume,
 						'Au' => round($v_Au,2),
 						'Ag' => round($v_Ag,2),
@@ -770,18 +927,88 @@ class Input extends CI_Controller {
 						'Date' => $Date,
 						//'Status' => "Pending",
 					);
-
-					if($Temp){
-						$this->ClosingStock_model->UpdateClosingStockByDateGrade($Closing,$Stockpile,$Date);
-						
-					}
-					else{
 						$this->ClosingStock_model->InputClosingStockGrade($Closing);
 
 					}
 
+			//end else
+			// }
+		
 
+
+						
+
+
+			//Update Ore Inventory
+			$Block = $this->input->post('Block');
+			$Status = $this->input->post('Status');
+			$Value = $this->input->post('Value');
 			
+
+			if ($Value == "Final Figure"){
+					$Au = $this->input->post('Augt');
+					$Ag = $this->input->post('Aggt');
+					$AuEq75 = $this->input->post('AuEq75gr');
+				}
+			else{
+
+					$Au = $this->input->post('Au');
+					$Ag = $this->input->post('Ag');
+					$AuEq75 = $this->input->post('AuEq75');
+				}
+
+					if (0.65<=$AuEq75 && $AuEq75<2.00){
+							$Class="Marginal";
+						}
+						elseif(2<=$AuEq75 && $AuEq75<4.00){
+							$Class="Medium Grade";
+						}
+						elseif(4<=$AuEq75 && $AuEq75<6.00){
+							$Class="High Grade";
+						}
+						elseif($AuEq75 >= 6.00){
+							$Class="SHG";
+						}
+						else{
+							$Class = "Min.Waste";
+						}
+
+
+			// $CheckBlock = $this->OreInventory_model->getOreInventoryByBlockOnly($Block);
+			// if($CheckBlock != null && $Status == "Completed"){
+			// 	foreach ($CheckBlock as $valueblock) {
+			// 		//Udpdate Inventory
+				
+			// 			$data = array(
+			// 				'Pit' => $valueblock->Pit,
+			// 				'Block' => $valueblock->Block,
+			// 				'RL' => $valueblock->RL,
+			// 				'Type' => $valueblock->Type,
+			// 				'Au' =>$Au,
+			// 				'Ag' =>$Ag,
+			// 				'AuEq75' => $AuEq75,
+			// 				'Class' => $Class,
+			// 				'Dbdensity' => $valueblock->Dbdensity,
+			// 				'DryTonBM' => $valueblock->DryTonBM,
+			// 				'DryTonFF' => $valueblock->DryTonFF,
+			// 				'Start' => $valueblock->Start,
+			// 				'Finish' => $valueblock->Finish,
+			// 				'StartHour' => $valueblock->StartHour,
+			// 				'FinishHour' => $valueblock->FinishHour,
+			// 				'Stockpile' => $valueblock->Stockpile,
+			// 				'Value' => $Value,
+			// 				'Status' => $valueblock->Status,
+			// 				'Achievement' => $valueblock->Achievement,
+			// 				'Density' => $valueblock->Density,
+			// 				'Note' => $valueblock->Note,
+			// 				'usrid' => $this->session->userdata('usernameGradeControl'),
+			// 			);
+
+
+			// 		$this->OreInventory_model->InputOreInventory($data,$valueblock->id);
+
+			// 	}
+			// }
 
 			//Insert ke Inventory Table
 			if ($this->input->post('Type') == "Ore") {
@@ -810,6 +1037,23 @@ class Input extends CI_Controller {
 					$AuEq75 = $this->input->post('AuEq75');
 				}
 
+				if (0.65<=$AuEq75 && $AuEq75<2.00){
+							$Class="Marginal";
+						}
+						elseif(2<=$AuEq75 && $AuEq75<4.00){
+							$Class="Medium Grade";
+						}
+						elseif(4<=$AuEq75 && $AuEq75<6.00){
+							$Class="High Grade";
+						}
+						elseif($AuEq75 >= 6.00){
+							$Class="SHG";
+						}
+						else{
+							$Class = "Min.Waste";
+						}
+
+
 				$data = array(
 				'Pit' => $this->input->post('Pit'),
 				'Block' => $Block,
@@ -818,7 +1062,7 @@ class Input extends CI_Controller {
 				'Au' =>$Au,
 				'Ag' =>$Ag,
 				'AuEq75' => $AuEq75,
-				'Class' => $this->input->post('Class'),
+				'Class' => $Class,
 				'Dbdensity' => $this->input->post('Density'),
 				'DryTonBM' => $this->input->post('DryTonBM'),
 				'DryTonFF' => $this->input->post('DryTonFF'),

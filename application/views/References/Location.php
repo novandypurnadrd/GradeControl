@@ -132,7 +132,7 @@
 							</div><!--end .col -->
 							 <div class="col-sm-6">
                                                  
-                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class=" mdi mdi-delete"></i>Delete</button>
+                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class="md md-delete"></i>Delete</button>
                                                     
                                                 </div>
 							</form>

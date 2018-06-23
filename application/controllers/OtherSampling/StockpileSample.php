@@ -23,7 +23,12 @@ class StockpileSample extends CI_Controller {
 	public function Index(){
     if ($this->session->userdata('GradeControl')) {
 				$data['main'] = "Stockpile Sample";
+			
 				$data['date'] = '';
+				$data['dateStart'] = '';
+				$data['dateEnd'] = '';
+				$data['Prospect'] = $this->Prospect_model->GetProspect();
+				$data['Location'] = $this->Location_model->GetLocation();
 				$data['Table'] = $this->OtherSampling_model->GetStockpileSample();
         		
 		    $this->load->view('OtherSampling/StockpileSample', $data);
@@ -84,6 +89,31 @@ class StockpileSample extends CI_Controller {
             redirect(base_url());
         }
     }
+
+
+
+	public function Filter(){
+		if ($this->session->userdata('GradeControl')) {
+	  $data['main'] = "Face Sample";
+      $data['dateStart'] = $this->input->post('start');
+      $data['dateEnd'] = $this->input->post('end');
+      $data['date'] = '';
+      $data['Prospect'] = $this->Prospect_model->GetProspect();
+	  $data['Location'] = $this->Location_model->GetLocation();
+
+      $dateStart = explode('/',$data['dateStart'])[2].'-'.explode('/',$data['dateStart'])[0].'-'.explode('/',$data['dateStart'])[1];
+      $dateEnd = explode('/',$data['dateEnd'])[2].'-'.explode('/',$data['dateEnd'])[0].'-'.explode('/',$data['dateEnd'])[1];
+    
+      $data['Table'] = $this->OtherSampling_model->GetStockpileSampleRangeDate($dateStart,$dateEnd);
+
+      
+      
+      
+			$this->load->view('OtherSampling/StockpileSample', $data);
+		}else {
+			redirect(base_url());
+		}
+	}
 
 
 }

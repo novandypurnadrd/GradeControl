@@ -54,7 +54,7 @@
                             <div class="col-sm-8">
                               <div class="input-group date" id="demo-date">
                                 <div class="input-group-content">
-                                  <input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php echo $date?>">
+                                  <input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php echo $date?>" required>
                                 </div>
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                               </div>
@@ -87,11 +87,11 @@
                         <br>
                         <div class="form-group">
                           <div class="col-md-3 col-sm-3">
-                            <label for="DryTonFF" class="col-sm-4 control-label">From GS</label>
-                            <div class="col-sm-6">
+                            <label for="DryTonFF" class="col-sm-2 control-label">From GS</label>
+                            <div class="col-sm-8">
                               <div class="input-group">
                                 <div class="input-group-content">
-                                  <input type="text" class="form-control" id="fromgs" name="fromgs">
+                                  <input type="text" class="form-control" id="fromgs" name="fromgs" required="">
                                 </div>
                                 
                               </div>
@@ -99,18 +99,18 @@
                           </div>
                            <div class="col-md-3 col-sm-3">
                             <label for="DryTonFF" class="col-sm-4 control-label">To GS</label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-8">
                               <div class="input-group">
                                 <div class="input-group-content">
-                                  <input type="text" class="form-control" id="togs" name="togs" onkeyup="TotalSample()">
+                                  <input type="text" class="form-control" id="togs" name="togs" onkeyup="TotalSample()" required="">
                                 </div>
                                
                               </div>
                             </div>
                           </div>
                              <div class="col-md-3 col-sm-3">
-                            <label for="totalsample" class="col-sm-6 control-label">Total Sample</label>
-                            <div class="col-sm-6">
+                            <label for="totalsample" class="col-sm-4 control-label">Total Sample</label>
+                            <div class="col-sm-8">
                               <div class="input-group">
                                 <div class="input-group-content">
                                   <input type="text" class="form-control" id="totalsample" name="totalsample" >
@@ -119,9 +119,14 @@
                               </div>
                             </div>
                           </div>
-                           <div class="col-md-3 col-sm-3">
-                            <label for="DryTonFF" class="col-sm-4 control-label">Remarks</label>
-                            <div class="col-sm-6">
+                         
+                        </div>
+                        <br>
+
+                        <div class="form-group">
+                          <div class="col-md-3 col-sm-3">
+                            <label for="DryTonFF" class="col-sm-2 control-label">Remarks</label>
+                            <div class="col-sm-8">
                               <div class="input-group">
                                 <div class="input-group-content">
                                   <textarea rows=2 id="remarks" name="remarks"></textarea>
@@ -130,15 +135,17 @@
                               </div>
                             </div>
                           </div>
+                          <div class="col-md-1 col-sm-1">
+                          </div>
+                          <div class="col-md-3 col-sm-3">
+                          
+                              <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-save"></i> Insert</button>
+                       
+                          </div>
                         </div>
-                                      <br>
-  							<div class= "col-md-5 col-sm-5">
-                </div>			
-  						  <div class="col-md-3 col-sm-3">
-                  <div class="form-group">
-                    <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-save"></i> Insert</button>
-                  </div>
-                </div><!--end .col -->
+
+                <br>
+  						
                  </form>
                     
   										</div>
@@ -155,11 +162,53 @@
                
 
               <!-- BEGIN TABLE -->
+            
+
             <div class="row">
+              <div class="col-md-6 col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+                   <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'OtherSampling/GrabSample/Filter' ?>" method="post">
+                     
+              
+                     <div class="col-md-9 col-lg-9 col-xl-9">
+                        <div class="form-group floating-label">
+                        
+                          <label for="Date" class="col-sm-4 control-label">Date Range</label>
+                            <div class="col-sm-10">
+                              <div class="input-daterange input-group" id="demo-date-range">
+                                <div class="input-group-content">
+                                <input type="text" class="form-control" name="start" id="start" required="" autocomplete="off" value="<?php echo $dateStart ?>" />
+                                
+                                </div>
+                          <span class="input-group-addon">to</span>
+                                <div class="input-group-content">
+                                  <input type="text" class="form-control" name="end" id="end" required autocomplete="off" value="<?php echo $dateEnd ?>" />
+                                  <div class="form-control-line"></div>
+                                </div>
+                              </div>
+                            </div>
+
+                 </div>
+                      </div>
+                     
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <button type="submit" class="btn ink-reaction btn-raised btn-info"><i class="md md-center-focus-strong"></i> Filter</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div><!--end .card-body -->
+                </div><!--end .card -->
+              </div><!--end .col -->
+            </div><!--end .row -->
+
+                <div class="row">
               <div class="col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
                   <div class="card-body">
                     <div class="row">
+
                       <div class="col-md-12 col-lg-12 col-xl-12">
                         <h4>Table</h4>
                       </div><!--end .col -->
@@ -233,7 +282,7 @@
                       </div><!--end .col -->
                         <div class="col-sm-6">
                                                  
-                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class=" mdi mdi-delete"></i>Delete</button>
+                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class="md md-delete"></i>Delete</button>
                                                     
                                                 </div>
                       </form>

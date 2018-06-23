@@ -38,7 +38,13 @@
 
 		function GetClosingStockByStockpileandDateGrade($Stockpile,$Date){
 				$a="'";
-			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date='.$a.$Date.$a.' ORDER BY id DESC limit 1');
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date >='.$a.$Date.$a.' ORDER BY id DESC');
+	    return $view->result();
+		}
+
+		function GetClosingStockByStockpileandDateGradeAll($Stockpile,$Dateblock,$date){
+				$a="'";
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date BETWEEN ('.$a.$Dateblock.$a.') AND ('.$a.$date.$a.') ORDER BY id DESC');
 	    return $view->result();
 		}
 
@@ -47,12 +53,30 @@
 			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' ORDER BY id DESC limit 1');
 	    return $view->result();
 		}
+
+		function GetClosingStockGradeByStockpileandDate($Stockpile,$Date){
+				$a="'";
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile ='.$a.$Stockpile.$a.' AND Date = '.$a.$Date.$a.' ORDER BY id DESC limit 1');
+	    return $view->result();
+		}
 		
 		
 
 		function GetClosingStockByIDForDel($id){
 			$a="'";
 			$view = $this->db->query('SELECT * FROM ClosingStock WHERE id ='.$a.$id.$a);
+	    return $view->result();
+		}
+
+		function getScatbyId($id){
+			$a="'";
+			$view = $this->db->query('SELECT * FROM Scat WHERE id ='.$a.$id.$a);
+	    return $view->result();
+		}
+
+		function getBoulderbyId($id){
+			$a="'";
+			$view = $this->db->query('SELECT * FROM Boulder WHERE id ='.$a.$id.$a);
 	    return $view->result();
 		}
 
@@ -126,6 +150,10 @@
 			$this->db->update('closingstockgrade',$Closing);
 		}
 
+	function UpdateClosingStockGrade($data, $id){
+			$this->db->where('id', $id);
+			$this->db->update('closingstockgrade',$data);
+		}
 
 	function UpdateClosingStockByStockpileGrade($Closing,$Stockpile){
 			$this->db->where('Stockpile', $Stockpile);
@@ -135,6 +163,16 @@
 	function UpdateClosingStockByStockpile($Closing,$Stockpile){
 			$this->db->where('Stockpile', $Stockpile);
 			$this->db->update('ClosingStock',$Closing);
+		}
+
+	function UpdateScat($Scat,$Id){
+			$this->db->where('Id', $Id);
+			$this->db->update('scat',$Scat);
+		}
+
+	function UpdateBoulder($Boulder,$Id){
+			$this->db->where('Id', $Id);
+			$this->db->update('boulder',$Boulder);
 		}
 
 	function InputScat($Scat){
@@ -152,11 +190,32 @@
 		return $sum->row()->SumTon;
 	}
 
+
+	function GetClosingStockRompadDashboard($Date){
+			$a="'";
+			$sum = $this->db->query('SELECT SUM(c.Tonnes) as SumTon FROM stockpile s , closingstockgrade AS c WHERE c.date = (
+    				SELECT MAX(c2.date)
+    				FROM closingstockgrade AS c2
+    				WHERE c.stockpile = c2.stockpile AND c2.date <= '.$a.$Date.$a.'
+      				) AND s.id = c.stockpile AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23 ORDER BY s.id ASC');
+	    	return $sum->row()->SumTon;
+		}
+
 	function GetOpenStockDashboard($Date){
 		$a="'";
 		$sum = $this->db->query('SELECT SUM(Tonnes) as SumTon FROM Closingstock WHERE Date='.$a.$Date.$a);
 		return $sum->row()->SumTon;
 	}
+
+	function GetOpeningStockRompadDashboard($Date){
+			$a="'";
+				$sum = $this->db->query('SELECT SUM(c.Tonnes) as SumTon FROM stockpile s , closingstockgrade AS c WHERE c.date = (
+    				SELECT MAX(c2.date)
+    				FROM closingstockgrade AS c2
+    				WHERE c.stockpile = c2.stockpile AND c2.date < '.$a.$Date.$a.'
+      				) AND s.id = c.stockpile AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23 ORDER BY s.id ASC');
+	    	return $sum->row()->SumTon;
+		}
 
 	function GetOpenStockReport($Date){
 			$a="'";
@@ -176,7 +235,7 @@
     				SELECT MAX(c2.date)
     				FROM closingstockgrade AS c2
     				WHERE c.stockpile = c2.stockpile AND c2.date < '.$a.$Date.$a.'
-      				) AND s.id = c.stockpile  ORDER BY s.id ASC');
+      				) AND s.id = c.stockpile AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23 ORDER BY s.id ASC');
 	    	return $view->result();
 		}
 
@@ -192,7 +251,7 @@
     				SELECT MAX(c2.date)
     				FROM closingstockgrade AS c2
     				WHERE c.stockpile = c2.stockpile AND c2.date <= '.$a.$Date.$a.'
-      				) AND s.id = c.stockpile  ORDER BY s.id ASC');
+      				) AND s.id = c.stockpile AND Stockpile != 20 AND Stockpile != 22 AND Stockpile != 23 ORDER BY s.id ASC');
 	    	return $view->result();
 		}
 
@@ -202,11 +261,24 @@
 	    	return $view->result();
 	}
 
+	function GetScatTonnesReport($Date,$Stockpile){
+			$a="'";
+			$view = $this->db->query('SELECT * FROM orefeed WHERE Date='.$a.$Date.$a.' AND Stockpile='.$a.$Stockpile.$a);
+	    	return $view->result();
+	}
+
 	function GetBoulderTonnes($Date){
 			$a="'";
 			$view = $this->db->query('SELECT * FROM Boulder WHERE Date='.$a.$Date.$a);
 	    	return $view->result();
 	}
+
+	function GetBoulderTonnesReport($Date,$Stockpile){
+			$a="'";
+			$view = $this->db->query('SELECT * FROM orefeed WHERE Date='.$a.$Date.$a.' AND Stockpile='.$a.$Stockpile.$a);
+	    	return $view->result();
+	}
+
 
 	function GetClosingStockTonnesStockpile($Stockpile){
 		$a="'";
@@ -274,6 +346,12 @@
 
 	function GetGrade($Stockpile,$Date){
 		$a="'";
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE stockpile ='.$a.$Stockpile.$a.' AND date >='.$a.$Date.$a);
+	    return $view->result();
+	}
+
+	function GetClosingstockgradesamedate($Stockpile,$Date){
+		$a="'";
 			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE stockpile ='.$a.$Stockpile.$a.' AND date ='.$a.$Date.$a);
 	    return $view->result();
 	}
@@ -329,6 +407,47 @@
       return $view->result();
 
 }
+
+
+	function UpdateValueClosingstock($tonnes,$volume,$stockpile){
+		$a="'";
+		$view = $this->db->query('UPDATE closingstock SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. 'WHERE Stockpile ='.$a.$stockpile.$a);
+	
+	}
+
+	function UpdateValueClosingstockNull($tonnes,$volume,$stockpile,$au,$ag,$aueq,$class,$density){
+		$a="'";
+		$view = $this->db->query('UPDATE closingstock SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. ', Au ='.$a.$au.$a.', Ag ='.$a.$ag.$a.', AuEq75='.$a.$aueq.$a.', Class='.$a.$class.$a.', Density='.$a.$density.$a.' WHERE Stockpile ='.$a.$stockpile.$a);
+	
+	}
+
+
+	function UpdateValueClosingstockGrade($tonnes,$volume,$id){
+		$a="'";
+		$view = $this->db->query('UPDATE closingstockgrade SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. 'WHERE id ='.$a.$id.$a);
+	
+	}
+
+
+	function UpdateValueClosingstockGradeNull($tonnes,$volume,$id,$au,$ag,$aueq,$class,$density){
+		$a="'";
+		$view = $this->db->query('UPDATE closingstockgrade SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. ', Au ='.$a.$au.$a.', Ag ='.$a.$ag.$a.', AuEq75='.$a.$aueq.$a.', Class='.$a.$class.$a.', Density='.$a.$density.$a.' WHERE id ='.$a.$id.$a);
+	
+	}
+
+
+	function GetScatbyDate($Start,$End){
+				$a="'";
+			$view = $this->db->query('SELECT * FROM scat WHERE Date BETWEEN ('.$a.$Start.$a.') AND ('.$a.$End.$a.') ORDER BY id DESC');
+	    return $view->result();
+		}
+
+
+	function GetBoulderbyDate($Start,$End){
+				$a="'";
+			$view = $this->db->query('SELECT * FROM boulder WHERE Date BETWEEN ('.$a.$Start.$a.') AND ('.$a.$End.$a.') ORDER BY id DESC');
+	    return $view->result();
+		}
 
 
 }

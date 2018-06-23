@@ -117,48 +117,59 @@
   						</div><!--end .row -->
 
 
-                <!-- <div class="row">
-
-                <div class="col-md-12 col-sm-12">
-                  <div class="card">
-                    <div class="card-body">
-
-                   
-               
-                      <div class="col-md-5 col-lg-5 col-xl-5">
-                        <div class="form-group">
-                        
-                          <label for="Date" class="col-sm-2 control-label">Date</label>
-                            <div class="col-sm-8">
-                              <div class="input-group date" id="demo-date">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php //echo $date?>">
-                                </div>
-                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                              </div>
-                            </div>
-
-                        </div>
-                      </div>
-
-                      <div class="col-md-3">
-                        <div class="form-group">
-                          <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-center-focus-strong"></i> Filter</button>
-                        </div>
-                      </div>
-                      
-
-                    </div><!--end .card-body -->
-                  <!-- </div>end .card  -->
-                <!-- </div>end .col  -->
-              <!-- </div>end .row  --> 
+            </form>
 
               <!-- BEGIN TABLE -->
+              <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Closingstock/Boulder/Filter' ?>" method="post">
             <div class="row">
               <div class="col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
                   <div class="card-body">
                     <div class="row">
+
+                    <div class="col-md-12 col-lg-12 col-xl-12">
+                      <div class="col-md-4 col-lg-4 col-xl-4">
+                      </div>
+                       <div class="col-md-4 col-lg-4 col-xl-4">
+                        <div class="form-group floating-label">
+                        
+                          <label for="Date" class="col-sm-4 control-label">Date Range</label>
+                            <div class="col-sm-10">
+                              <div class="input-daterange input-group" id="demo-date-range">
+                                <div class="input-group-content">
+                                <input type="text" class="form-control" name="start" id="start" required autocomplete="off" value="<?php echo $dateStart ?>" />
+                                
+                                </div>
+                          <span class="input-group-addon">to</span>
+                                <div class="input-group-content">
+                                  <input type="text" class="form-control" name="end" id="end" required autocomplete="off" value="<?php echo $dateEnd ?>" />
+                                  <div class="form-control-line"></div>
+                                </div>
+                              </div>
+                            </div>
+
+                 </div>
+                      </div>
+
+                      
+                  </div>
+                  <br>
+                  <br>
+                  <br>
+
+                  <div class="col-lg-12 col-sm-12 col-xl-12">
+                    <div class="col-lg-5 col-sm-5 col-xl-5">
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-xl-3">
+                        <div class="form-group">
+                          <button type="submit" class="btn ink-reaction btn-raised btn-info"><i class="md md-center-focus-strong"></i> Filter</button>
+                        </div>
+                      </div>
+                  </div>
+                </form>
+
+
+          
                       <div class="col-md-12 col-lg-12 col-xl-12">
                         <h4>Table</h4>
                       </div><!--end .col -->
@@ -173,7 +184,7 @@
                                 <th>Tonnes</th>
                                 <th>Au</th>
                                 <th>Ag</th>
-                                
+                                <th>AuEq75</th>
                                     
                               </tr>
                             </thead>
@@ -188,7 +199,11 @@
                                         <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#<?php echo $table->Id; ?>"><span class="fa fa-trash"></span>
                                         </button>
                                       </a>
-                                     
+                                       <a href="<?php echo base_url().'ClosingStock/Boulder/index_update/'.$table->Id ?>">
+                                        <button type="button" class="btn btn-xs btn-info"><span class="fa fa-edit"></span>
+                                        </button>
+                                      </a>
+
                                     </center>
                                   </td>
                                   <?php endif; ?>
@@ -198,6 +213,7 @@
                                   <td><?php echo $table->Tonnes; ?></td>
                                   <td><?php echo $table->Au; ?></td>
                                   <td><?php echo $table->Ag; ?></td>
+                                  <td><?php echo $table->AuEq75; ?></td>
 
                                 </tr>
                                 <div class="modal fade" id="<?php echo $table->Id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -226,7 +242,7 @@
             </div><!--end .row -->
             <!-- END TABLE -->
 
-            </form>
+          
 						<!-- END BASIC ELEMENTS -->
 
 					</div><!--end .section-body -->

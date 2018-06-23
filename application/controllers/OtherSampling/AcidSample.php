@@ -24,6 +24,8 @@ class AcidSample extends CI_Controller {
     if ($this->session->userdata('GradeControl')) {
 				$data['main'] = "Acid Sample";
 				$data['date'] = '';
+				$data['dateStart'] = '';
+				$data['dateEnd'] = '';
 				$data['Prospect'] = $this->Prospect_model->GetProspect();
 				$data['Location'] = $this->Location_model->GetLocation();
 				$data['Table'] = $this->OtherSampling_model->GetAcidSample();
@@ -40,6 +42,7 @@ class AcidSample extends CI_Controller {
     		$Date =  $this->input->post('Date');
 
 			$Date = explode('/', $Date)[2].'-'.explode('/', $Date)[0].'-'.explode('/', $Date)[1];
+
 
 			$Prospect = $this->input->post("prospect");
     		$Location = $this->input->post("location");
@@ -100,6 +103,28 @@ class AcidSample extends CI_Controller {
 	}
 
 
+	public function Filter(){
+		if ($this->session->userdata('GradeControl')) {
+	  $data['main'] = "Acid Sample";
+      $data['dateStart'] = $this->input->post('start');
+      $data['dateEnd'] = $this->input->post('end');
+      $data['date'] = '';
+      $data['Prospect'] = $this->Prospect_model->GetProspect();
+	  $data['Location'] = $this->Location_model->GetLocation();
+
+      $dateStart = explode('/',$data['dateStart'])[2].'-'.explode('/',$data['dateStart'])[0].'-'.explode('/',$data['dateStart'])[1];
+      $dateEnd = explode('/',$data['dateEnd'])[2].'-'.explode('/',$data['dateEnd'])[0].'-'.explode('/',$data['dateEnd'])[1];
+    
+      $data['Table'] = $this->OtherSampling_model->GetAcidSampleRangeDate($dateStart,$dateEnd);
+
+      
+      
+      
+			$this->load->view('OtherSampling/AcidSample', $data);
+		}else {
+			redirect(base_url());
+		}
+	}
 
 }
 ?>
