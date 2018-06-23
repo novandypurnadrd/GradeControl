@@ -49,21 +49,21 @@
                       <div class="col-md-1">
 
                       </div>
-                      <!--  <div class="col-md-4 col-lg-4 col-xl-4">
+                       <div class="col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group floating-label">
   											
   												<label for="Date" class="col-sm-2 control-label">Date</label>
 														<div class="col-sm-10">
 															<div class="input-group date" id="demo-date">
 																<div class="input-group-content">
-																	<input type="text" class="form-control" id="Date" name="Date" autocomplete="off" required value="<?php //echo $date?>">
+																	<input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php echo $date?>">
 																</div>
 																<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 															</div>
 														</div>
 
 						     </div>
-                      </div> -->
+                      </div>
                       <div class="col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group floating-label">
   												<select id="select2" name="Stockpile" required class="form-control">
@@ -77,7 +77,7 @@
                       </div>
                       <div class="col-md-3">
                         <div class="form-group">
-                          <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-center-focus-strong"></i> Filter</button>
+                          <button type="submit" class="btn ink-reaction btn-raised btn-info"><i class="md md-center-focus-strong"></i> Filter</button>
                         </div>
                       </div>
 										</form>
@@ -179,16 +179,17 @@
 
 						<!-- BEGIN TABLE -->
 						<div class="row">
-							<div class="col-md-12 col-lg-12 col-xl-12">
+							<div class="col-md-6 col-lg-6 col-xl-6">
 								<div class="card">
 									<div class="card-body">
 										<div class="row">
-											<div class="col-md-12 col-lg-12 col-xl-12">
-												<h4>Table</h4>
+											<div class="col-md-6 col-lg-6 col-xl-6">
+												<h4>Table Oremined</h4>
 											</div><!--end .col -->
-											<div class="col-lg-12">
+											<div class="col-md-12 col-lg-12 col-xl-12">
 												<div class="table-responsive">
-													<table id="datatable1" class="table table-striped table-hover">
+													<!-- <table id="datatable1" class="table table-striped table-hover"> -->
+													<table id="tbl_oremined" class="table table-striped table-hover">
 														<thead>
 															<tr>
 										
@@ -212,10 +213,14 @@
                                   <td><?php echo $Date; ?></td>
 				                  <td><?php echo $table->RL; ?></td>
 				                  
-								  <td><?php echo number_format(round($table->Dbdensity*0.8,2), "2", ".",","); ?></td>
-				                  <td><?php echo number_format($table->DryTonFF, "2", ".",","); ?></td>
-                                  <td><?php echo number_format($table->Au, "2", ".",","); ?></td>
-								  <td><?php echo number_format($table->Ag, "2", ".",","); ?></td>
+								<!--   <td><?php //echo number_format(round($table->Dbdensity*0.8,2), "2", ".",","); ?></td>
+				                  <td><?php //echo number_format($table->DryTonFF, "2", ".",","); ?></td>
+                                  <td><?php //echo number_format($table->Au, "2", ".",","); ?></td>
+								  <td><?php //echo number_format($table->Ag, "2", ".",","); ?></td> -->
+								  <td><?php echo $table->Dbdensity; ?></td>
+								  <td><?php echo $table->DryTonFF; ?></td>
+								  <td><?php echo $table->Au; ?></td>
+								  <td><?php echo $table->Ag; ?></td>
 								  <td><?php echo $table->AuEq75; ?></td>
 								  <td><?php echo $table->Class; ?></td>
 
@@ -230,6 +235,60 @@
 									</div><!--end .card-body -->
 								</div><!--end .card -->
 							</div><!--end .col -->
+
+
+								<div class="col-md-6 col-lg-6 col-xl-6">
+								<div class="card">
+									<div class="card-body">
+										<div class="row">
+											<div class="col-md-6 col-lg-6 col-xl-6">
+												<h4>Table Orefeed</h4>
+											</div><!--end .col -->
+											<div class="col-md-12 col-lg-12 col-xl-12">
+												<div class="table-responsive">
+													<table id="tbl_orefeed" class="table table-striped table-hover">
+														<thead>
+															<tr>
+										
+										<th>Date</th>
+				                        <th>Loader</th>
+				                        <th>Bucket</th>
+				                        <th>Tonnes Crush</th>
+                                		<th>Au (g/t)</th>
+				                        <th>Ag (g/t)</th>
+				                        <th>Adj Au Persen</th>
+				                        <th>Adj Ag Persen</th>
+															</tr>
+														</thead>
+														<tbody>
+															<?php foreach ($TableOrefeed as $table) {
+                                $Date = date("d-F-Y", strtotime($table->Date));
+                                ?>
+																<tr class="gradeX">
+																
+                                  <td><?php echo $Date; ?></td>
+				                  
+								  <td><?php echo $table->Loader; ?></td>
+				                  <td><?php echo $table->Bucket; ?></td>
+                                  <td><?php echo $table->Tonnestocrush; ?></td>
+								  <td><?php echo $table->Au; ?></td>
+								  <td><?php echo $table->Ag; ?></td>
+								  <td><?php echo $table->AdjAuPersen; ?></td>
+								  <td><?php echo $table->AdjAgPersen; ?></td>
+
+																</tr>
+																<?php }
+															?>
+														</tbody>
+													</table>
+												</div><!--end .table-responsive -->
+											</div><!--end .col -->
+										</div><!--end .row -->
+									</div><!--end .card-body -->
+								</div><!--end .card -->
+							</div><!--end .col -->
+
+
 						</div><!--end .row -->
 						<!-- END TABLE -->
 
@@ -273,6 +332,25 @@
 		<script src="<?php echo base_url();?>assets/js/core/demo/DemoTableDynamic.js"></script>
 		<!-- END JAVASCRIPT -->
 		<!-- END FOOTLIB -->
+		<script type="text/javascript">
+
+			$(document).ready(function() {
+				$('#tbl_oremined').dataTable({
+					destroy: true,
+					"aLengthMenu": [[10,50,75,-1], [10,50,75,'All']],
+					"iDisplayLength":10
+				});
+			});
+			
+			$(document).ready(function() {
+				$('#tbl_orefeed').dataTable({
+					destroy: true,
+					"aLengthMenu": [[10,50,75,-1], [10,50,75,'All']],
+					"iDisplayLength":10
+				});
+			});
+
+		</script>
 
 	</body>
 </html>

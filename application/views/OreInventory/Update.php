@@ -95,6 +95,12 @@
                               <input type="text" class="form-control" id="RL" name="RL" autocomplete="off" value="<?php echo $table->RL ?>">
                             </div>
                           </div>
+                          <div class="col-md-6 col-sm-6">
+                            <label for="Au" class="col-sm-4 control-label">Tonnes</label>
+                            <div class="col-sm-8">
+                              <input type="text" class="form-control" id="akumulasitones" name="akumulasitones" readonly="" autocomplete="off">
+                            </div>
+                          </div>
                         </div>
                         <br>
                         <br>
@@ -240,6 +246,8 @@
                       </br>
                       </br>
                       </br>
+                      </br>
+                      </br>
                      
                       </div>
                     </div><!--end .card-body -->
@@ -325,7 +333,8 @@
 
                             <label for="DryTonFF" class="col-sm-4 control-label">Note</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Note" value="<?php echo $table->Note ?>" name="Note" autocomplete="off">
+                              <textarea type="text" class="form-control" id="Note" name="Note" rows="3"><?php echo $table->Note ?></textarea>
+                              
                             </div>
                           
                           </div>
@@ -337,10 +346,20 @@
               </div><!--end .row -->
               <div class="row" style="text-align:center">
                 <div class="col-md-12 col-sm-12">
+                   <div class="form-group">  
+                                        <div class="col-md-12 col-sm-12">
+                            
+                            <div class="col-sm-12">
+                              <input type="text" class="form-control" style="color:red; font-size:100%;text-align: center;" centre="" id="message" name="message" readonly="" autocomplete="off">
+                            </div>
+                          </div>
+ 
+                  </div>
                   <div class="form-group">
-                    <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-system-update-tv"></i> Update</button>
+                    <button type="submit" class="btn ink-reaction btn-raised btn-primary" id="updateButton"><i class="md md-system-update-tv"></i> Update</button>
                     <a class="btn ink-reaction btn-raised btn-information" href="<?php echo base_url().'OreInventory/Table' ?>">Cancel</a>
                   </div>
+                 
                 </div><!--end .col -->
               </div><!--end .row -->
 
@@ -411,6 +430,11 @@
         var Aggr = document.getElementById("Aggr");
         var RL = document.getElementById("RL");
 
+        var Start = document.getElementById("Start");
+
+        var Akumulasitones = document.getElementById("akumulasitones");
+        var akumulasiTonnesValue = 0;
+
         <?php foreach ($Oreline as $oreline): ?>
           if ("<?php echo $oreline->File ?>" == Block.value) {
             <?php foreach ($OreInventory as $oreinventory): ?>
@@ -420,6 +444,31 @@
                 RL.value = "<?php echo $oreinventory->RL ?> ";
                 RL.readonly = true;
               }
+
+               var Tanggal = Start.value;
+               var Tanggal2 = Tanggal.replace(/(..).(..).(....)/, "$3-$1-$2");
+
+              if("<?php echo $oreinventory->Start ?>" < Tanggal2){
+
+                akumulasiTonnesValue = parseInt("<?php echo $oreinventory->DryTonFF ?>") + akumulasiTonnesValue;
+            
+                Akumulasitones.value = akumulasiTonnesValue;
+
+              }
+
+               
+
+              if("<?php echo $oreinventory->Status?>" == "Completed"){
+                document.getElementById("updateButton").disabled = true;
+
+
+                    var message = document.getElementById("message");
+                    message.value = "Tidak bisa update data oreline oremined yang sudah berstatus complete. Hapus Data ini kemudian inputkan data baru untuk melakukan perubahan.";
+                
+
+
+              }
+
             }
              <?php endforeach; ?>
             Au.value = "<?php echo $oreline->Au ?>";
@@ -515,15 +564,25 @@
         var Aggt = document.getElementById("Aggt");
         var AuEq75gr = document.getElementById("AuEq75gr");
         var Achievement = document.getElementById("Achievement");
-         var Class = document.getElementById("Class");
+        var Class = document.getElementById("Class");
 
 
-        var x = Augr / DryTonFF ;
-        var y = Aggr / DryTonFF ;
-        var z = DryTonFF / DryTonBM * 100;
+        var Akumulasitones = document.getElementById("akumulasitones").value;
+      
+        if(Akumulasitones == ""){
+          var aa = parseFloat(DryTonFF);
+        }
+        else{
+          var aa = parseFloat(Akumulasitones)+parseFloat(DryTonFF);
+        }
+
+        var x = Augr / aa;
+        var y = Aggr / aa;
+        
+        var z = (aa / DryTonBM)*100;
         Augt.value = x.toFixed(2);
         Aggt.value = y.toFixed(2);
-        Achievement.value = z.toFixed(0);
+        Achievement.value = z.toFixed(1);
         AuEq75gr.value = parseFloat(x+(y/75)).toFixed(2);
 
          }else{

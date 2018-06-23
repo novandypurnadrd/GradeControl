@@ -36,7 +36,7 @@
             <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'OtherSampling/AugerSample/InputAugerSample' ?>" method="post">
               <div class="row">
                 <div class="col-lg-6">
-                  <h2 class="text-primary">Acid Sample</h2>
+                  <h2 class="text-primary">Auger Sample</h2>
                 </div><!--end .col -->
             
               </div><!--end .row -->
@@ -54,7 +54,7 @@
                             <div class="col-sm-8">
                               <div class="input-group date" id="demo-date">
                                 <div class="input-group-content">
-                                  <input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php echo $date?>">
+                                  <input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php echo $date?>" required>
                                 </div>
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                               </div>
@@ -62,35 +62,8 @@
                           </div>
 
                           <div class="col-md-3 col-sm-3">
-                            <label for="DryTonFF" class="col-sm-4 control-label">From Hole ID</label>
+                            <label for="Aggt" class="col-sm-4 control-label">Prospect</label>
                             <div class="col-sm-6">
-                              <div class="input-group">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" id="fromholeid" name="fromholeid">
-                                </div>
-                               
-                              </div>
-                            </div>
-                          </div>
-                           <div class="col-md-3 col-sm-3">
-                            <label for="DryTonFF" class="col-sm-4 control-label">From Sample</label>
-                            <div class="col-sm-6">
-                              <div class="input-group">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" id="fromsample" name="fromsample">
-                                </div>
-                               
-                              </div>
-                            </div>
-                          </div>
-                       
-                
-                        </div>
-                        <br>
-                        <div class="form-group">
-                        <div class="col-md-3 col-sm-3">
-                            <label for="Aggt" class="col-sm-2 control-label">Prospect</label>
-                            <div class="col-sm-8">
                                <select id="location" name="prospect" class="form-control" required="">
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Prospect as $prospect): ?>
@@ -99,35 +72,10 @@
                               </select>
                             </div>
                           </div>
-                           <div class="col-md-3 col-sm-3">
-                            <label for="DryTonFF" class="col-sm-4 control-label">To Hole ID</label>
-                            <div class="col-sm-6">
-                              <div class="input-group">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" id="toholeid" name="toholeid">
-                                </div>
-                               
-                              </div>
-                            </div>
-                          </div>
-                             <div class="col-md-3 col-sm-3">
-                            <label for="totalsample" class="col-sm-4 control-label">To Sample</label>
-                            <div class="col-sm-6">
-                              <div class="input-group">
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" id="tosample" name="tosample" onkeyup="TotalSample()" >
-                                </div>
-                               
-                              </div>
-                            </div>
-                          </div>
-                         
-                        </div>
-                        <br>
-                        <div class="form-group">
+
                           <div class="col-md-3 col-sm-3">
-                            <label for="Aggt" class="col-sm-2 control-label">Location</label>
-                            <div class="col-sm-8">
+                            <label for="Aggt" class="col-sm-4 control-label">Location</label>
+                            <div class="col-sm-6">
                                <select id="location" name="location" class="form-control" required="">
                                 <option value="">&nbsp;</option>
                                 <?php foreach ($Location as $location): ?>
@@ -136,7 +84,38 @@
                               </select>
                             </div>
                           </div>
+                        
+                       
+                
+                        </div>
+                        <br>
+                        <div class="form-group">
+
+                          <div class="col-md-3 col-sm-3">
+                            <label for="DryTonFF" class="col-sm-2 control-label">From Hole ID</label>
+                            <div class="col-sm-8">
+                              <div class="input-group">
+                                <div class="input-group-content">
+                                  <input type="text" class="form-control" id="fromholeid" name="fromholeid" required>
+                                </div>
+                               
+                              </div>
+                            </div>
+                          </div>
+
                            <div class="col-md-3 col-sm-3">
+                            <label for="DryTonFF" class="col-sm-4 control-label">To Hole ID</label>
+                            <div class="col-sm-6">
+                              <div class="input-group">
+                                <div class="input-group-content">
+                                  <input type="text" class="form-control" id="toholeid" name="toholeid" required="" onkeyup="TotalHole()">
+                                </div>
+                               
+                              </div>
+                            </div>
+                          </div>
+
+                            <div class="col-md-3 col-sm-3">
                             <label for="DryTonFF" class="col-sm-4 control-label">Total Hole</label>
                             <div class="col-sm-6">
                               <div class="input-group">
@@ -147,6 +126,39 @@
                               </div>
                             </div>
                           </div>
+
+
+                           
+                         
+                        </div>
+                        <br>
+                        <div class="form-group">
+
+                          <div class="col-md-3 col-sm-3">
+                            <label for="DryTonFF" class="col-sm-2 control-label">From Sample</label>
+                            <div class="col-sm-8">
+                              <div class="input-group">
+                                <div class="input-group-content">
+                                  <input type="text" class="form-control" id="fromsample" name="fromsample" required="">
+                                </div>
+                               
+                              </div>
+                            </div>
+                          </div>
+
+                           <div class="col-md-3 col-sm-3">
+                            <label for="totalsample" class="col-sm-4 control-label">To Sample</label>
+                            <div class="col-sm-6">
+                              <div class="input-group">
+                                <div class="input-group-content">
+                                  <input type="text" class="form-control" id="tosample" name="tosample" onkeyup="TotalSample()" required="">
+                                </div>
+                               
+                              </div>
+                            </div>
+                          </div>
+
+                          
                              <div class="col-md-3 col-sm-3">
                             <label for="totalsample" class="col-sm-4 control-label">Total Sample</label>
                             <div class="col-sm-6">
@@ -194,6 +206,45 @@
                
 
               <!-- BEGIN TABLE -->
+             <div class="row">
+              <div class="col-md-6 col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+                  <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'OtherSampling/AugerSample/Filter' ?>" method="post">
+                     
+              
+                     <div class="col-md-9 col-lg-9 col-xl-9">
+                        <div class="form-group floating-label">
+                        
+                          <label for="Date" class="col-sm-4 control-label">Date Range</label>
+                            <div class="col-sm-10">
+                              <div class="input-daterange input-group" id="demo-date-range">
+                                <div class="input-group-content">
+                                <input type="text" class="form-control" name="start" id="start" required="" autocomplete="off" value="<?php echo $dateStart ?>" />
+                                
+                                </div>
+                          <span class="input-group-addon">to</span>
+                                <div class="input-group-content">
+                                  <input type="text" class="form-control" name="end" id="end" required autocomplete="off" value="<?php echo $dateEnd ?>" />
+                                  <div class="form-control-line"></div>
+                                </div>
+                              </div>
+                            </div>
+
+                 </div>
+                      </div>
+                     
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <button type="submit" class="btn ink-reaction btn-raised btn-info"><i class="md md-center-focus-strong"></i> Filter</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div><!--end .card-body -->
+                </div><!--end .card -->
+              </div><!--end .col -->
+            </div><!--end .row -->
+
             <div class="row">
               <div class="col-md-12 col-lg-12 col-xl-12">
                 <div class="card">
@@ -223,7 +274,7 @@
                                 <th>From Sample</th>
                                 <th>To Sample</th>
                                 <th>Total Sample</th>
-                             
+                                <th>Remarks</th>
                                 
                                     
                               </tr>
@@ -258,6 +309,7 @@
                                   <td><?php echo $table->FromSample; ?></td>
                                   <td><?php echo $table->ToSample; ?></td>
                                   <td><?php echo $table->TotalSample; ?></td>
+                                  <td><?php echo $table->Remarks; ?></td>
                                  
 
                                 </tr>
@@ -282,7 +334,7 @@
                       </div><!--end .col -->
                         <div class="col-sm-6">
                                                  
-                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class=" mdi mdi-delete"></i>Delete</button>
+                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class="md md-delete"></i>Delete</button>
                                                     
                                                 </div>
                       </form>
@@ -346,6 +398,17 @@
 
         
         TotalSample.value = (parseFloat(To.value - From.value)+1).toFixed(1);
+      }
+
+       function TotalHole(){
+        
+        var From = document.getElementById("fromholeid");
+        var To =  document.getElementById("toholeid");
+        
+        var TotalHole = document.getElementById("totalhole");
+
+        
+        TotalHole.value = (parseFloat(To.value - From.value)+1).toFixed(1);
       }
     </script>
   

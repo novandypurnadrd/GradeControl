@@ -3,9 +3,9 @@
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class UpdateVisual extends CI_Controller {
+class UpdateMinWaste extends CI_Controller {
 
-	public function UpdateVisual(){
+	public function UpdateMinWaste(){
 		parent::__construct();
 		$this->load->helper(array('url','form'));
 		$this->load->model('User_model');
@@ -25,15 +25,15 @@ class UpdateVisual extends CI_Controller {
 				$data['Oreline'] = $this->Oreline_model->getOreline();
 				$data['OreInventory'] = $this->OreInventory_model->getInventory();
         		$data['Stockpile'] = $this->Stockpile_model->getStockpile();
-				$data['Table'] = $this->OreInventory_model->GetOreInventoryforUpdateVisual($data['id']);
+				$data['Table'] = $this->OreInventory_model->GetOreInventoryforUpdateMinWaste($data['id']);
 				$this->session->userdata('update', "");
-		    $this->load->view('OreInventory/UpdateVisual', $data);
+		    $this->load->view('OreInventory/UpdateMinWaste', $data);
     }else {
       redirect(base_url());
     }
 	}
 
-	public function UpdateVisualRecord($id)
+	public function UpdateMinWasteRecord($id)
 	{
 		if ($this->session->userdata('GradeControl')) {
 
@@ -46,7 +46,7 @@ class UpdateVisual extends CI_Controller {
 
 
 		
-		$Au = 0;
+			$Au = 0;
 			$Ag = 0;
 			$Tonnes = 0;
 			$date = 0;
@@ -545,6 +545,8 @@ class UpdateVisual extends CI_Controller {
 
 		}
 
+
+
 			//Update Ore Inventory
 			$DryTonFFInventory = $this->input->post('DryTonFF');
 			$DryTonFFUpdate = $DryTonFFInventory;
@@ -576,7 +578,7 @@ class UpdateVisual extends CI_Controller {
 
 			
 
-			redirect('OreInventory/Table/IndexTableGeneralVisual');
+			redirect('OreInventory/Table/IndexTableGeneralMinWaste');
 		}else {
 			redirect(base_url());
 		}

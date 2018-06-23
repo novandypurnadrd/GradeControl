@@ -63,7 +63,7 @@
                       </div>
                       <div class="col-md-3">
                         <div class="form-group">
-                          <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-center-focus-strong"></i> Filter</button>
+                          <button type="submit" class="btn ink-reaction btn-raised btn-info"><i class="md md-center-focus-strong"></i> Filter</button>
                         </div>
                       </div>
 										</form>
@@ -158,7 +158,7 @@
 											</div><!--end .col -->
 											 <div class="col-sm-6">
                                                  
-                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class=" mdi mdi-delete"></i>Delete</button>
+                                                    <button type="sumbit" class="btn btn-danger btn-bordered"><i class="md md-delete"></i>Delete</button>
                                                     
                                                 </div>
 											</form>

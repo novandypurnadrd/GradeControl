@@ -163,14 +163,19 @@
 
 															foreach ($TableDistinct as $distinct) {
 																$jmltonnes =0;
-																$first = "00-00-0000";
+																$first = "0000-00-00";
 																foreach ($Table as $table) {
 
 																	if($distinct->Block == $table->Block){
 																		$jmltonnes = $jmltonnes + $table->DryTonFF;
 
-																$datestart = $table->Start;
+																		$datestart = $table->Start;
 
+																if($first == "0000-00-00"){
+																	$first = $table->Start;
+																}
+
+																
 																if($first <= $datestart){
 																	$datestart = $first;
 																}

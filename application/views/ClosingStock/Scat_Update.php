@@ -33,7 +33,7 @@
 
 						<!-- BEGIN BASIC ELEMENTS -->
 						<!-- BEGIN TITLE -->
-            <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Closingstock/Scat/InputScat' ?>" method="post">
+         
   						<div class="row">
   							<div class="col-lg-6">
   								<h2 class="text-primary">Scat</h2>
@@ -46,15 +46,19 @@
   							<div class="col-md-12 col-sm-12">
   								<div class="card">
   									<div class="card-body">
+                      <?php foreach ($View as $view) { ?>
   										<div class="form-horizontal">
                       </br>
+
+                       <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'ClosingStock/Boulder/UpdateBoulder/'.$view->Id ?>" method="post">
+                    
   											<div class="form-group">
                           <div class="col-md-3 col-sm-3">
                             <label for="Date" class="col-sm-2 control-label">Date</label>
                             <div class="col-sm-8">
                               <div class="input-group date" id="demo-date">
                                 <div class="input-group-content">
-                                  <input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php echo $date?>">
+                                  <input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php echo explode('-',$view->Date)[1].'/'.explode('-',$view->Date)[2].'/'.explode('-',$view->Date)[0] ?>">
                                 </div>
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                               </div>
@@ -63,13 +67,13 @@
   												<div class="col-md-2 col-sm-2">
   													<label for="DryTonFF" class="col-sm-4 control-label">Volume</label>
   													<div class="col-sm-8">
-  														<input type="text" class="form-control" id="Volume" name="Volume" required="" autocomplete="off">
+  														<input type="text" class="form-control" id="Volume" name="Volume" required="" autocomplete="off" value="<?php echo $view->Volume; ?>">
   													</div>
   												</div>
                           <div class="col-md-2 col-sm-2">
                             <label for="DryTonFF" class="col-sm-4 control-label">Density</label>
                             <div class="col-sm-8">
-                              <input type="text" class="form-control" id="Density" name="Density" required="" autocomplete="off">
+                              <input type="text" class="form-control" id="Density" name="Density" required="" autocomplete="off" value="<?php echo $view->Density; ?>">
                             </div>
                           </div>
                           <div class="col-md-2 col-sm-2">
@@ -77,7 +81,7 @@
   													<div class="col-sm-6">
                               <div class="input-group">
       													<div class="input-group-content">
-      														<input type="text" class="form-control" id="Augt" name="Augt">
+      														<input type="text" class="form-control" id="Augt" name="Augt" value="<?php echo $view->Au; ?>">
       													</div>
       													
       												</div>
@@ -88,7 +92,7 @@
                             <div class="col-sm-6">
                               <div class="input-group">
                                 <div class="input-group-content">
-                                  <input type="text" class="form-control" id="Aggt" name="Aggt">
+                                  <input type="text" class="form-control" id="Aggt" name="Aggt" value="<?php echo $view->Ag; ?>">
                                 </div>
                                
                               </div>
@@ -97,14 +101,17 @@
               
 
   											</div>
+                         <?php } ?>
                 <br>
   							<div class= "col-md-5 col-sm-5">
                 </div>			
   						  <div class="col-md-3 col-sm-3">
                   <div class="form-group">
-                    <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-save"></i> Insert</button>
+                     <a class="btn ink-reaction btn-raised btn-information" href="<?php echo base_url().'ClosingStock/Scat' ?>">Cancel</a>
+                    <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-save"></i>Update</button>
                   </div>
                 </div><!--end .col -->
+              </form>
                     
   										</div>
   									</div><!--end .card-body -->
@@ -117,130 +124,44 @@
   						</div><!--end .row -->
 
 
+                <!-- <div class="row">
 
-              <!-- BEGIN TABLE -->
-               </form>
-            <form class="form" class="form-horizontal" role="form" action="<?php echo base_url().'Closingstock/Scat/Filter' ?>" method="post">
-            <div class="row">
-              <div class="col-md-12 col-lg-12 col-xl-12">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
+                <div class="col-md-12 col-sm-12">
+                  <div class="card">
+                    <div class="card-body">
 
-                    <div class="col-md-12 col-lg-12 col-xl-12">
-                      <div class="col-md-4 col-lg-4 col-xl-4">
-                      </div>
-                       <div class="col-md-4 col-lg-4 col-xl-4">
-                        <div class="form-group floating-label">
+                   
+               
+                      <div class="col-md-5 col-lg-5 col-xl-5">
+                        <div class="form-group">
                         
-                          <label for="Date" class="col-sm-4 control-label">Date Range</label>
-                            <div class="col-sm-10">
-                              <div class="input-daterange input-group" id="demo-date-range">
+                          <label for="Date" class="col-sm-2 control-label">Date</label>
+                            <div class="col-sm-8">
+                              <div class="input-group date" id="demo-date">
                                 <div class="input-group-content">
-                                <input type="text" class="form-control" name="start" id="start" required="" autocomplete="off" value="<?php echo $dateStart ?>" />
-                                
+                                  <input type="text" class="form-control" id="Date" name="Date" autocomplete="off" value="<?php //echo $date?>">
                                 </div>
-                          <span class="input-group-addon">to</span>
-                                <div class="input-group-content">
-                                  <input type="text" class="form-control" name="end" id="end" required autocomplete="off" value="<?php echo $dateEnd ?>" />
-                                  <div class="form-control-line"></div>
-                                </div>
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                               </div>
                             </div>
 
-                 </div>
-                      </div>
-
-                      
-                  </div>
-                  <br>
-                  <br>
-                  <br>
-
-                  <div class="col-lg-12 col-sm-12 col-xl-12">
-                    <div class="col-lg-5 col-sm-5 col-xl-5">
-                    </div>
-                    <div class="col-md-3 col-lg-3 col-xl-3">
-                        <div class="form-group">
-                          <button type="submit" class="btn ink-reaction btn-raised btn-info"><i class="md md-center-focus-strong"></i> Filter</button>
                         </div>
                       </div>
-                  </div>
-                </form>
 
-                      <div class="col-md-12 col-lg-12 col-xl-12">
-                        <h4>Table</h4>
-                      </div><!--end .col -->
-                      <div class="col-lg-12">
-                        <div class="table-responsive">
-                          <table id="datatable1" class="table table-striped table-hover">
-                            <thead>
-                              <tr>
-                                <th>Action</th>
-                                <th>Date</th>
-                                <th>Stockpile</th> 
-                                <th>Tonnes</th>
-                                <th>Au</th>
-                                <th>Ag</th>
-                                <th>AuEq75</th>
-                                    
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <?php foreach ($Table as $table) { $Date = date("d-F-Y", strtotime($table->Date));
-                              ?>
-                                <tr class="gradeX">
-                                  <?php if ($this->session->userdata('roleGradeControl') == "Admin" || $this->session->userdata('GE')): ?>
-                                    <td class="center">
-                                    <center>
-                                      <a>
-                                        <button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#<?php echo $table->Id; ?>"><span class="fa fa-trash"></span>
-                                        </button>
-                                      </a>
-                                      <a href="<?php echo base_url().'ClosingStock/Scat/index_update/'.$table->Id ?>">
-                                        <button type="button" class="btn btn-xs btn-info"><span class="fa fa-edit"></span>
-                                        </button>
-                                      </a>
-                                     
-                                    </center>
-                                  </td>
-                                  <?php endif; ?>
-                                  <td><?php echo $Date; ?></td>
-                                  <td><?php echo $table->Stockpile; ?></td>
-                  
-                                  <td><?php echo $table->Tonnes; ?></td>
-                                  <td><?php echo $table->Au; ?></td>
-                                  <td><?php echo $table->Ag; ?></td>
-                                  <td><?php echo $table->AuEq75; ?></td>
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-center-focus-strong"></i> Filter</button>
+                        </div>
+                      </div>
+                      
 
-                                </tr>
-                                <div class="modal fade" id="<?php echo $table->Id; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                                  <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                      <div class="modal-body">
-                                        <h3>Are you sure? </h3>
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                        <a> <?php echo anchor('Closingstock/Scat/DeleteScat/'.$table->Id,'<button type="button" class="btn btn-danger">Delete</button>') ?></a>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <?php }
-                              ?>
-                            </tbody>
-                          </table>
-                        </div><!--end .table-responsive -->
-                      </div><!--end .col -->
-                    </div><!--end .row -->
-                  </div><!--end .card-body -->
-                </div><!--end .card -->
-              </div><!--end .col -->
-            </div><!--end .row -->
-            <!-- END TABLE -->
+                    </div><!--end .card-body -->
+                  <!-- </div>end .card  -->
+                <!-- </div>end .col  -->
+              <!-- </div>end .row  --> 
 
-           
+
+            
 						<!-- END BASIC ELEMENTS -->
 
 					</div><!--end .section-body -->

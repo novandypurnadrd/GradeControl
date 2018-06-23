@@ -6,15 +6,15 @@ class Profile extends CI_Controller {
 
 	public function Profile(){
 		parent::__construct();
-		$this->load->helper(array('url','form'));
-		$this->load->model('User_model');
-		$this->load->library('session');
-		 $this->load->library('upload');
+			$this->load->helper(array('url','form'));
+			$this->load->model('User_model');
+			$this->load->library('session');
+			$this->load->library('upload');
 	}
 
 	public function Index(){
     if ($this->session->userdata('GradeControl')) {
-      $this->User_model->GetUser($this->session->userdata('usernameGradeControl'), $this->session->userdata('passwordCSR'));
+      $this->User_model->GetUser($this->session->userdata('usernameGradeControl'), $this->session->userdata('passwordGradeControl'));
       $data['User'] = '';
       $data['main'] = "";
       $data['sub'] = "";

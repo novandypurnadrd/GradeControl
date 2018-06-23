@@ -35,7 +35,7 @@
 						<!-- BEGIN INTRO -->
 						<div class="row">
 							<div class="col-lg-12">
-								<h1 class="text-primary">General Record Visual</h1>
+								<h1 class="text-primary">General Record Mineralized Waste</h1>
 							</div><!--end .col -->
 						</div><!--end .row -->
 						<!-- END INTRO -->
@@ -45,7 +45,7 @@
 							<div class="col-md-12 col-sm-12">
 								<div class="card">
 									<div class="card-body">
-										<form class="form" role="form" action="<?php echo base_url().'OreInventory/Table/FilterGeneralVisual' ?>" method="post">
+										<form class="form" role="form" action="<?php echo base_url().'OreInventory/Table/FilterGeneralMinWaste' ?>" method="post">
                         <div class="col-md-4 col-lg-4 col-xl-4">
                         <div class="form-group floating-label">
   											
@@ -145,7 +145,7 @@
 																				<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#<?php echo $table->id; ?>"><span class="fa fa-trash"></span>
 																				</button>
 																			</a>
-																			<a href="<?php echo base_url().'OreInventory/Table/UpdateVisual/'.$table->id ?>">
+																			<a href="<?php echo base_url().'OreInventory/Table/UpdateMinWaste/'.$table->id ?>">
 																			 	<button type="button" class="btn btn-xs btn-info"><span class="fa fa-edit"></span>
 																				</button>
 																			</a>

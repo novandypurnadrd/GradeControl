@@ -13,6 +13,12 @@
 	    return $view->result();
 		}
 
+		function GetStockpileNoScatBoulder(){
+			$a = "'";
+			$view = $this->db->query('SELECT * from Stockpile where id != 20 AND id != 22');
+			return $view->result();
+		}
+
 		function StockpileDistinct(){
 			$a = "'";
 			$view = $this->db->query('SELECT id,Nama FROM Stockpile');
@@ -47,6 +53,12 @@
 			return $view->result();
 		}
 
+		function TotalToStockpileByStockpilebyDate($stockpile,$date){
+			$a = "'";
+			$view = $this->db->query('SELECT * FROM closingstockgrade WHERE Stockpile = '.$a.$stockpile.$a.' AND Date <='.$a.$date.$a.' ORDER BY DATE DESC limit 1');
+			return $view->result();
+		}
+
 
 	
 
@@ -58,7 +70,28 @@
 
 		function getActivityStockpileByStockpile($stockpile){
 			$a = "'";
-			$view = $this->db->query('SELECT * FROM oreinventory WHERE Stockpile = '.$a.$stockpile.$a);
+			$view = $this->db->query('SELECT * FROM oreinventory WHERE Stockpile = '.$a.$stockpile.$a.' ORDER by Start DESC');
+			return $view->result();
+		}
+
+
+		function getActivityStockpileByStockpileByDate($stockpile,$date){
+			$a = "'";
+			$view = $this->db->query('SELECT * FROM oreinventory WHERE Stockpile = '.$a.$stockpile.$a.' AND start = '.$a.$date.$a.' ORDER by Start DESC');
+			return $view->result();
+		}
+
+
+		function getOrefeedStockpileByStockpile($stockpile){
+			$a = "'";
+			$view = $this->db->query('SELECT * FROM orefeed WHERE Stockpile = '.$a.$stockpile.$a.' ORDER by Date DESC');
+			return $view->result();
+		}
+
+
+		function getOrefeedStockpileByStockpileByDate($stockpile,$date){
+			$a = "'";
+			$view = $this->db->query('SELECT * FROM orefeed WHERE Stockpile = '.$a.$stockpile.$a.' AND Date = '.$a.$date.$a.' ORDER by Date DESC');
 			return $view->result();
 		}
 
@@ -167,6 +200,27 @@
 			$array = array('Stockpile' => $stockpile);
 			$this->db->where($array);
 			$this->db->update('ToStockpile',$data);
+		}
+
+
+		function UpdateValueToStockpile($tonnes,$volume,$stockpile){
+		$a="'";
+		$view = $this->db->query('UPDATE tostockpile SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. 'WHERE Stockpile ='.$a.$stockpile.$a);
+	
+	}
+
+	function UpdateValueToStockpileNull($tonnes,$volume,$stockpile,$au,$ag,$aueq,$class,$density){
+		$a="'";
+		$view = $this->db->query('UPDATE tostockpile SET Tonnes ='.$a.$tonnes.$a. ', Volume ='.$a.$volume.$a. ', Au ='.$a.$au.$a.', Ag ='.$a.$ag.$a.', AuEq75='.$a.$aueq.$a.', Class='.$a.$class.$a.', Density='.$a.$density.$a.' WHERE Stockpile ='.$a.$stockpile.$a);
+	
+	}
+
+		function getScatId($stockpile){
+		$a = "'";
+		
+		$view = $this->db->query('SELECT * FROM Stockpile WHERE Nama = '.$a.$stockpile.$a);
+	    return $view->result();
+		
 		}
 
 	}

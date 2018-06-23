@@ -106,7 +106,7 @@
                       </div>
                       <div class="col-md-3">
                         <div class="form-group">
-                          <button type="submit" class="btn ink-reaction btn-raised btn-primary"><i class="md md-center-focus-strong"></i> Filter</button>
+                          <button type="submit" class="btn ink-reaction btn-raised btn-info"><i class="md md-center-focus-strong"></i> Filter</button>
                         </div>
                       </div>
 										</form>
@@ -159,10 +159,10 @@
 																				<button type="button" class="btn btn-xs btn-danger" data-toggle="modal" data-target="#<?php echo $table->id; ?>"><span class="fa fa-trash"></span>
 																				</button>
 																			</a>
-																			<!-- <a href="<?php //echo base_url().'OreFeed/Table/Update/'.$table->id ?>">
+																			<a href="<?php echo base_url().'OreFeed/Table/Update/'.$table->id ?>">
 																			 	<button type="button" class="btn btn-xs btn-info"><span class="fa fa-edit"></span>
 																				</button>
-																			</a> -->
+																			</a>
 																		</center>
 																	</td>
 																	<?php endif; ?>
